@@ -67,7 +67,7 @@ document.addEventListener('submit', async function (event) {
 
     try {
         // Petición a api.php
-        const respuesta = await fetch(`api.php?accion=${accionInsertar}`, {
+        const respuesta = await fetch(`insercion.php?accion=${accionInsertar}`, {
             method: 'POST',
             body: formData
         });
@@ -138,7 +138,7 @@ document.getElementById('tabla-destino').addEventListener('click', async functio
         if (!confirm(`¿Eliminar el registro ID: ${idRegistro}?`)) return;
 
         try {
-            const respuesta = await fetch(`api.php?accion=${configuracion.accionEliminar}&id=${idRegistro}`, {
+            const respuesta = await fetch(`eliminacion.php?accion=${configuracion.accionEliminar}&id=${idRegistro}`, {
                 method: 'POST'
             });
 
@@ -181,7 +181,7 @@ document.getElementById('tabla-destino').addEventListener('click', async functio
         });
 
         try {
-            const respuesta = await fetch(`api.php?accion=${configuracion.accionActualizar}`, {
+            const respuesta = await fetch(`actualizacion.php?accion=${configuracion.accionActualizar}`, {
                 method: 'POST',
                 body: datosModificados
             });

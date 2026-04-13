@@ -1,6 +1,8 @@
 <?php include ("conexion.php");?>
 
 <?php
+$accion = $_POST['accion'];
+
 if ($accion == 'insert_precio') {
     $precio_mano_obra = $_POST['precio_mano_obra'];
     $precio_rep = $_POST['precio_rep'];
@@ -62,6 +64,5 @@ if ($accion == 'insert_localidad') {
         echo json_encode(['estado' => 'error', 'mensaje' => 'Error al insertar']);
     }
 }
-
 
 ?>

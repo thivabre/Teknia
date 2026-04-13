@@ -1,13 +1,19 @@
 <?php
-$ubicacion="172.16.15.203";
-$usuario="root";
-$clave="";
-$base="servicio_tecnico_db";
-$BD=new mysqli($ubicacion,$usuario,$clave,$base);
-if($BD->connect_error){
-    die(" Error".$BD->connect_error);
-}
-else{
-    echo "Conexion exitosa";
+$ubicacion = "172.16.15.203";
+$usuario = "root";
+$clave = "";
+$base = "servicio_tecnico_db";
+
+try {
+    $BD = new mysqli($ubicacion, $usuario, $clave, $base);
+
+    if ($BD->connect_error) {
+        throw new Exception("Error de conexión: " . $BD->connect_error);
+    }
+
+    echo "Conexión exitosa";
+
+} catch (Exception $e) {
+    echo "Excepción capturada: " . $e->getMessage();
 }
 ?>

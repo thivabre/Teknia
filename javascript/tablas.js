@@ -141,7 +141,6 @@ document.addEventListener('submit', async function (event) {
             if (respuesta.ok) {
                 alert("¡Registro guardado!");
                 actualizarVistaTabla(nombreTabla);
-                cerrarModal();
             }
         } catch (error) {
             console.error("Error al insertar:", error);

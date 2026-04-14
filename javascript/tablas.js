@@ -185,9 +185,9 @@ document.addEventListener('click', async function (event) {
             const formData = new FormData();
             formData.append(nombreId, idRegistro);
 
-            const res = await fetch(
-                `eliminacion.php?accion=${configuracion.accionEliminar}`,{ method: 'POST', body: formData }
-            );
+            formData.append('accion', configuracion.accionEliminar);
+            const res = await fetch(`eliminacion.php`, { method: 'POST', body: formData }
+);
             if (res.ok) filaElemento.remove();
         } catch (e) { console.error(e); }
     }
@@ -214,10 +214,8 @@ document.addEventListener('click', async function (event) {
         });
 
         try {
-            const res = await fetch(`actualizacion.php?accion=${configuracion.accionActualizar}`, {
-                method: 'POST',
-                body: datos
-            });
+            datos.append('accion', configuracion.accionActualizar);
+            const res=await fetch(`actualizacion.php`, { method: 'POST', body: datos });
             if (res.ok) {
                 alert("Actualizado con éxito");
                 actualizarVistaTabla(nombreTabla);

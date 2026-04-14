@@ -119,3 +119,9 @@ tr:has(.btn-guardar) .btn-eliminar {
 }
 
 
+
+/* Ocultar columna ID — necesaria en el DOM para editar/eliminar, pero no visible */
+td[class^="col-id_"],
+th[class^="col-id_"] {
+    display: none;
+}

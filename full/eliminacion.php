@@ -1,6 +1,9 @@
 <?php include ("conexion.php");?>
 
 <?php
+
+header('Content-Type: application/json');
+
 if ($accion == 'delete_localidad') {
     $id_localidad = $_POST['id_localidad'];
     $sql = "DELETE FROM localidad WHERE id_localidad = '$id_localidad'";

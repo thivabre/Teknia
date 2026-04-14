@@ -1,6 +1,6 @@
 const configTablas = {
     'sueldo': {
-        campos: ['id_sueldo', 'sueldo_hora', 'sueldo_hora_ext', 'forma_pag'],
+        campos: ['id_sueldo', 'sueldo_hora', 'sueldo_hora_ext', 'forma_pago'],
         accionInsertar: 'insert_sueldo',
         accionActualizar: 'update_sueldo',
         accionEliminar: 'delete_sueldo',
@@ -32,7 +32,7 @@ const configTablas = {
         accionInsertar: 'insert_garantia_servicio',
         accionActualizar: 'update_garantia_servicio',
         accionEliminar: 'delete_garantia_servicio',
-        accionConsutar: 'consulta_garantia_servicio'
+        accionConsutar: 'consulta_garantia'
     },
     'localidad': {
         campos: ['id_localidad', 'pais', 'provincia', 'ciudad', 'barrio'],
@@ -42,14 +42,14 @@ const configTablas = {
         accionConsutar: 'consulta_localidad'
     },
     'impuestos': {
-        campos: ['id_impuestos', 'tipo_imp', 'nonto_imp'],
+        campos: ['id_impuestos', 'tipo_imp', 'monto_imp'],
         accionInsertar: 'insert_impuestos',
         accionActualizar: 'update_impuestos',
         accionEliminar: 'delete_impuestos',
-        accionConsutar: 'consulta_impuestos'
+        accionConsutar: 'consulta_impuesto'
     },
     'seguro': {
-        campos: ['id_seguro', 'tipo_seg', 'nombre_seg', 'monto_seg'],
+        campos: ['id_seguro', 'tipo_seg', 'nombre_aseg', 'monto_aseg'],
         accionInsertar: 'insert_seguro',
         accionActualizar: 'update_seguro',
         accionEliminar: 'delete_seguro',
@@ -59,7 +59,18 @@ const configTablas = {
 
 let tablaActiva = '';
 
-// INSERTAR DATOS
+// ─── CARGA INICIAL ────────────────────────────────────────────────────────────
+// Detecta qué tablas existen en el HTML actual y las carga automáticamente.
+// Así no hace falta tocar este archivo al agregar tablas nuevas al HTML.
+document.addEventListener('DOMContentLoaded', function () {
+    Object.keys(configTablas).forEach(nombreTabla => {
+        if (document.getElementById(nombreTabla)) {
+            actualizarVistaTabla(nombreTabla);
+        }
+    });
+});
+
+// ─── INSERTAR DATOS ───────────────────────────────────────────────────────────
 document.addEventListener('submit', async function (event) {
     event.preventDefault();
     const formulario = event.target;
@@ -79,7 +90,7 @@ document.addEventListener('submit', async function (event) {
 
         if (respuesta.ok) {
             alert("¡Registro guardado!");
-            actualizarVistaTabla(); 
+            actualizarVistaTabla(tablaActiva);
             formulario.reset();
         }
     } catch (error) {
@@ -87,34 +98,44 @@ document.addEventListener('submit', async function (event) {
     }
 });
 
-// ACTUALIZAR ESTADO DE LA TABLA
-async function actualizarVistaTabla() {
-    const conf = configTablas[tablaActiva];
+// ─── ACTUALIZAR ESTADO DE LA TABLA ───────────────────────────────────────────
+// Ahora recibe la tabla como parámetro para evitar problemas con la variable global.
+async function actualizarVistaTabla(nombreTabla) {
+    if (!nombreTabla || !configTablas[nombreTabla]) {
+        console.error("actualizarVistaTabla: tabla inválida →", nombreTabla);
+        return;
+    }
+
+    const conf = configTablas[nombreTabla];
     try {
         const res = await fetch(`consulta.php?accion=${conf.accionConsutar}`);
+        if (!res.ok) {
+            console.error(`Error HTTP ${res.status} al consultar ${nombreTabla}`);
+            return;
+        }
         const datos = await res.json();
-        renderizarTabla(datos, tablaActiva);
+        renderizarTabla(datos, nombreTabla);
     } catch (e) {
         console.error("Error al recargar tabla:", e);
     }
 }
 
-// RENDERIZAR TABLA
+// ─── RENDERIZAR TABLA ─────────────────────────────────────────────────────────
 function renderizarTabla(listaDatos, nombreTabla) {
     const contenedor = document.getElementById(nombreTabla);
-    const molde = document.getElementById('molde-fila-${nombreTabla}');
+    const molde = document.getElementById(`molde-fila-${nombreTabla}`);
     if (!contenedor || !molde) return;
 
     contenedor.innerHTML = "";
     const camposTabla = configTablas[nombreTabla].campos;
 
     listaDatos.forEach(item => {
-    const copia = molde.content.cloneNode(true);
-    const fila = copia.querySelector('tr');
-    if (!fila) return; 
-    const celdaAcciones = fila.querySelector('.acciones');
+        const copia = molde.content.cloneNode(true);
+        const fila = copia.querySelector('tr');
+        if (!fila) return;
+        const celdaAcciones = fila.querySelector('.acciones');
 
-    fila.innerHTML = "";
+        fila.innerHTML = "";
 
         camposTabla.forEach(campo => {
             const td = document.createElement('td');
@@ -131,17 +152,29 @@ function renderizarTabla(listaDatos, nombreTabla) {
     });
 }
 
-// EVENTOS EDITAR / ELIMINAR / GUARDAR
-document.getElementById('tabla-destino').addEventListener('click', async function(event) {
+// ─── EVENTOS EDITAR / ELIMINAR / GUARDAR ──────────────────────────────────────
+document.addEventListener('click', async function (event) {
     const boton = event.target;
-    const filaElemento = boton.closest('tr');
-    if (!filaElemento || !tablaActiva) return;
 
-    const configuracion = configTablas[tablaActiva];
+    if (!boton.classList.contains('btn-eliminar') &&
+        !boton.classList.contains('btn-editar') &&
+        !boton.classList.contains('btn-guardar')) return;
+
+    const filaElemento = boton.closest('tr');
+    if (!filaElemento) return;
+
+    // Detectar a qué tabla pertenece la fila buscando el tbody padre
+    const tbody = filaElemento.closest('tbody');
+    if (!tbody) return;
+    const nombreTabla = tbody.id;
+    if (!configTablas[nombreTabla]) return;
+
+    tablaActiva = nombreTabla;
+    const configuracion = configTablas[nombreTabla];
     const nombreId = configuracion.campos[0];
     const celdaId = filaElemento.querySelector(`.col-${nombreId}`);
     if (!celdaId) return;
-    
+
     const idRegistro = celdaId.textContent;
 
     // ELIMINAR
@@ -158,6 +191,7 @@ document.getElementById('tabla-destino').addEventListener('click', async functio
         configuracion.campos.forEach((campo, index) => {
             if (index > 0) {
                 const td = filaElemento.querySelector(`.col-${campo}`);
+                if (!td) return;
                 const val = td.textContent;
                 td.innerHTML = `<input type="text" value="${val}" class="edit-input" data-campo="${campo}" style="width:100%">`;
             }
@@ -170,19 +204,19 @@ document.getElementById('tabla-destino').addEventListener('click', async functio
     else if (boton.classList.contains('btn-guardar')) {
         const datos = new FormData();
         datos.append(nombreId, idRegistro);
-        
+
         filaElemento.querySelectorAll('.edit-input').forEach(input => {
             datos.append(input.dataset.campo, input.value);
         });
 
         try {
-            const res = await fetch(`actualizacion.php?accion=${configuracion.accionActualizar}`, { 
-                method: 'POST', 
-                body: datos 
+            const res = await fetch(`actualizacion.php?accion=${configuracion.accionActualizar}`, {
+                method: 'POST',
+                body: datos
             });
             if (res.ok) {
                 alert("Actualizado con éxito");
-                actualizarVistaTabla();
+                actualizarVistaTabla(nombreTabla);
             }
         } catch (e) { console.error(e); }
     }

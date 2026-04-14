@@ -1,94 +1,68 @@
-<?php include ("conexion.php");?>
-
 <?php
-$accion = $_GET['accion']; // Leemos el parámetro de la URL
+ini_set('display_errors', 0);
+error_reporting(0);
 
-if ($accion == 'consulta_seguro') {
-    $resultado = $BD->query("SELECT tipo_seg, nombre_aseg, monto_aseg FROM seguro ORDER BY nombre_aseg ASC");
+header('Content-Type: application/json');
+
+include("conexion.php");
+
+if (!isset($BD) || $BD->connect_error) {
+    echo json_encode(['error' => 'Error de conexión: ' . ($BD->connect_error ?? 'variable $BD no definida')]);
+    exit();
+}
+
+if (!isset($_GET['accion'])) {
+    echo json_encode(['error' => 'Parámetro accion no recibido']);
+    exit();
+}
+
+$accion = $_GET['accion'];
+
+function consultarYResponder($BD, $sql) {
+    $resultado = $BD->query($sql);
+    if (!$resultado) {
+        echo json_encode(['error' => 'Error en query: ' . $BD->error]);
+        exit();
+    }
     $datos = [];
     while ($fila = $resultado->fetch_assoc()) {
         $datos[] = $fila;
     }
     echo json_encode($datos);
     exit();
+}
+
+if ($accion == 'consulta_seguro') {
+    consultarYResponder($BD, "SELECT id_seguro, tipo_seg, nombre_aseg, monto_aseg FROM seguro ORDER BY nombre_aseg ASC");
 }
 
 if ($accion == 'consulta_sueldo') {
-    $resultado = $BD->query("SELECT sueldo_hora, sueldo_hora_ext, forma_pago FROM sueldo ORDER BY forma_pago ASC");
-    $datos = [];
-    while ($fila = $resultado->fetch_assoc()) {
-        $datos[] = $fila;
-    }
-    echo json_encode($datos);
-    exit();
+    consultarYResponder($BD, "SELECT id_sueldo, sueldo_hora, sueldo_hora_ext, forma_pago FROM sueldo ORDER BY forma_pago ASC");
 }
 
 if ($accion == 'consulta_impuesto') {
-    $resultado = $BD->query("SELECT tipo_imp, monto_imp FROM impuestos ORDER BY tipo_imp ASC");
-    $datos = [];
-    while ($fila = $resultado->fetch_assoc()) {
-        $datos[] = $fila;
-    }
-    echo json_encode($datos);
-    exit();
+    consultarYResponder($BD, "SELECT id_impuestos, tipo_imp, monto_imp FROM impuestos ORDER BY tipo_imp ASC");
 }
 
 if ($accion == 'consulta_garantia') {
-    $resultado = $BD->query("SELECT tipo_garantia, tiempo_garantia FROM garantia_servicio ORDER BY tipo_garantia ASC");
-    $datos = [];
-    while ($fila = $resultado->fetch_assoc()) {
-        $datos[] = $fila;
-    }
-    echo json_encode($datos);
-    exit();
+    consultarYResponder($BD, "SELECT id_garantia_servicio, tipo_garantia, tiempo_garantia FROM garantia_servicio ORDER BY tipo_garantia ASC");
 }
 
 if ($accion == 'consulta_precio') {
-    $resultado = $BD->query("SELECT precio_mano_obra, precio_rep FROM precio ORDER BY precio_mano_obra ASC");
-    $datos = [];
-
-    while ($fila = $resultado->fetch_assoc()) {
-        $datos[] = $fila;
-    }
-
-    echo json_encode($datos);
-    exit();
+    consultarYResponder($BD, "SELECT id_precio, precio_mano_obra, precio_rep FROM precio ORDER BY precio_mano_obra ASC");
 }
 
 if ($accion == 'consulta_articulo_reparar') {
-    $resultado = $BD->query("SELECT nombre_art_rep, tipo_art_rep, fallas FROM articulo_reparar ORDER BY nombre_art_rep ASC");
-    $datos = [];
-
-    while ($fila = $resultado->fetch_assoc()) {
-        $datos[] = $fila;
-    }
-
-    echo json_encode($datos);
-    exit();
+    consultarYResponder($BD, "SELECT id_articulo_reparar, nombre_art_rep, tipo_art_rep, fallas FROM articulo_reparar ORDER BY nombre_art_rep ASC");
 }
 
 if ($accion == 'consulta_pago') {
-    $resultado = $BD->query("SELECT nombre_banco, numero_cuenta, comprobante FROM pago ORDER BY nombre_banco ASC");
-    $datos = [];
-
-    while ($fila = $resultado->fetch_assoc()) {
-        $datos[] = $fila;
-    }
-
-    echo json_encode($datos);
-    exit();
+    consultarYResponder($BD, "SELECT id_pago, nombre_banco, numero_cuenta, comprobante FROM pago ORDER BY nombre_banco ASC");
 }
 
 if ($accion == 'consulta_localidad') {
-    $resultado = $BD->query("SELECT pais, provincia, ciudad, barrio FROM localidad ORDER BY pais ASC");
-    $datos = [];
-
-    while ($fila = $resultado->fetch_assoc()) {
-        $datos[] = $fila;
-    }
-
-    echo json_encode($datos);
-    exit();
+    consultarYResponder($BD, "SELECT id_localidad, pais, provincia, ciudad, barrio FROM localidad ORDER BY pais ASC");
 }
 
+echo json_encode(['error' => "Acción desconocida: $accion"]);
 ?>

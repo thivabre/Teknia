@@ -1,6 +1,8 @@
 <?php include("conexion.php"); ?>
 <?php
 
+header('Content-Type: application/json');
+
 try {
     if (!isset($_POST['accion'])) {
         throw new Exception("No se recibió ninguna acción");

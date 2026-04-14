@@ -1,7 +1,10 @@
 // precio, articulo reparar, pago, localidad
 
+
 <?php include("conexion.php"); ?>
 <?php
+
+header('Content-Type: application/json');
 
 try {
     if (!isset($_POST['accion'])) {

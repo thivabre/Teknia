@@ -59,6 +59,61 @@ const configTablas = {
 
 let tablaActiva = '';
 
+// ─── FORULARIO ─────────────────────────────────────────────────────────────
+const contenedorForm = document.querySelector('.contenedor-form-desactivado') || document.querySelector('.contenedor-form-activado');
+const formularioInsert = document.querySelector('.form-insert');
+
+// 1. ESCUCHAR CLIC EN BOTONES "AGREGAR"
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('btn-agregar')) {
+        const contenedorTabla = e.target.closest('.contenedor-tablas');
+        const tablaId = contenedorTabla.querySelector('tbody').id;
+        
+        abrirModalInsertar(tablaId);
+    }
+});
+
+// 2. FUNCIÓN PARA CONSTRUIR EL FORMULARIO SEGÚN LA TABLA
+function abrirModalInsertar(nombreTabla) {
+    const conf = configTablas[nombreTabla];
+    if (!conf) return;
+
+    formularioInsert.name = nombreTabla; 
+    
+    const titulo = formularioInsert.querySelector('h2');
+    titulo.textContent = `Insertar ${nombreTabla}`;
+
+    const camposViejos = formularioInsert.querySelectorAll('.campo-ingreso, .btn-guardar-nuevo');
+    camposViejos.forEach(el => el.remove());
+
+    conf.campos.forEach((campo, index) => {
+        if (index === 0) return;
+
+        const divCampo = document.createElement('div');
+        divCampo.className = 'campo-ingreso';
+        divCampo.innerHTML = `
+            <label>${campo.replace(/_/g, ' ')}</label>
+            <input type="text" name="${campo}" required placeholder="Escriba aquí...">
+        `;
+        formularioInsert.appendChild(divCampo);
+    });
+
+    // Añadimos el botón de acción
+    const btnSubmit = document.createElement('button');
+    btnSubmit.type = 'submit';
+    btnSubmit.className = 'btn-guardar-nuevo';
+    btnSubmit.textContent = 'Guardar Registro';
+    formularioInsert.appendChild(btnSubmit);
+
+    // ACTIVAR VISIBILIDAD
+    contenedorForm.classList.replace('contenedor-form-desactivado', 'contenedor-form-activado');
+}
+
+// CERRAR FORM
+function cerrarModal() {
+    contenedorForm.classList.replace('contenedor-form-activado', 'contenedor-form-desactivado');
+}
+
 // ─── CARGA INICIAL ────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', function () {
     Object.keys(configTablas).forEach(nombreTabla => {
@@ -70,29 +125,27 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // ─── INSERTAR DATOS ───────────────────────────────────────────────────────────
 document.addEventListener('submit', async function (event) {
-    event.preventDefault();
-    const formulario = event.target;
-    const nombreFormulario = formulario.name;
+    if (event.target.classList.contains('form-insert')) {
+        event.preventDefault();
+        
+        const nombreTabla = event.target.name;
+        const conf = configTablas[nombreTabla];
+        const formData = new FormData(event.target);
 
-    if (!configTablas[nombreFormulario]) return;
+        try {
+            const respuesta = await fetch(`insercion.php?accion=${conf.accionInsertar}`, {
+                method: 'POST',
+                body: formData
+            });
 
-    tablaActiva = nombreFormulario;
-    const formData = new FormData(formulario);
-    const conf = configTablas[tablaActiva];
-
-    try {
-        const respuesta = await fetch(`insercion.php?accion=${conf.accionInsertar}`, {
-            method: 'POST',
-            body: formData
-        });
-
-        if (respuesta.ok) {
-            alert("¡Registro guardado!");
-            actualizarVistaTabla(tablaActiva);
-            formulario.reset();
+            if (respuesta.ok) {
+                alert("¡Registro guardado!");
+                actualizarVistaTabla(nombreTabla);
+                cerrarModal();
+            }
+        } catch (error) {
+            console.error("Error al insertar:", error);
         }
-    } catch (error) {
-        console.error("Error al enviar:", error);
     }
 });
 

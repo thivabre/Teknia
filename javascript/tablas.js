@@ -1,198 +1,227 @@
-/**
- * 1. EL "DICCIONARIO" DE CONFIGURACIÓN
- * Aquí defines cómo se llama la tabla, qué columnas tiene y qué acciones ejecuta en el PHP.
- */
 const configTablas = {
     'sueldo': {
-        campos: ['id_sueldo', 'sueldo_hora', 'sueldo_hora_ext', 'forma_pag'],
-        accionInsertar: 'insertar_sueldo',
-        accionActualizar: 'actualizar_sueldo',
-        accionEliminar: 'eliminar_sueldo'
+        campos: ['id_sueldo', 'sueldo_hora', 'sueldo_hora_ext', 'forma_pago'],
+        accionInsertar: 'insert_sueldo',
+        accionActualizar: 'update_sueldo',
+        accionEliminar: 'delete_sueldo',
+        accionConsutar: 'consulta_sueldo'
     },
     'precio': {
         campos: ['id_precio', 'precio_mano_obra', 'precio_rep'],
-        accionInsertar: 'insertar_precio',
-        accionActualizar: 'actualizar_precio',
-        accionEliminar: 'eliminar_precio'
+        accionInsertar: 'insert_precio',
+        accionActualizar: 'update_precio',
+        accionEliminar: 'delete_precio',
+        accionConsutar: 'consulta_precio'
     },
     'articulo_reparar': {
         campos: ['id_articulo_reparar', 'nombre_art_rep', 'tipo_art_rep', 'fallas'],
-        accionInsertar: 'insertar_articulo_reparar',
-        accionActualizar: 'actualizar_articulo_reparar',
-        accionEliminar: 'eliminar_articulo_reparar'
+        accionInsertar: 'insert_articulo_reparar',
+        accionActualizar: 'update_articulo_reparar',
+        accionEliminar: 'delete_articulo_reparar',
+        accionConsutar: 'consulta_articulo_reparar'
     },
     'pago': {
         campos: ['id_pago', 'nombre_banco', 'numero_cuenta', 'comprobante'],
-        accionInsertar: 'insertar_pago',
-        accionActualizar: 'actualizar_pago',
-        accionEliminar: 'eliminar_pago'
+        accionInsertar: 'insert_pago',
+        accionActualizar: 'update_pago',
+        accionEliminar: 'delete_pago',
+        accionConsutar: 'consulta_pago'
     },
     'garantia_servicio': {
-        campos: ['id_garantia_servicio', 'tiempo_garantia', 'tipo_garantia',],
-        accionInsertar: 'insertar_garantia_servicio',
-        accionActualizar: 'actualizar_garantia_servicio',
-        accionEliminar: 'eliminar_garantia_servicio'
+        campos: ['id_garantia_servicio', 'tiempo_garantia', 'tipo_garantia'],
+        accionInsertar: 'insert_garantia_servicio',
+        accionActualizar: 'update_garantia_servicio',
+        accionEliminar: 'delete_garantia_servicio',
+        accionConsutar: 'consulta_garantia_servicio'
     },
     'localidad': {
         campos: ['id_localidad', 'pais', 'provincia', 'ciudad', 'barrio'],
-        accionInsertar: 'insertar_localidad',
-        accionActualizar: 'actualizar_localidad',
-        accionEliminar: 'eliminar_localidad'
+        accionInsertar: 'insert_localidad',
+        accionActualizar: 'update_localidad',
+        accionEliminar: 'delete_localidad',
+        accionConsutar: 'consulta_localidad'
+    },
+    'impuestos': {
+        campos: ['id_impuestos', 'tipo_imp', 'monto_imp'],
+        accionInsertar: 'insert_impuestos',
+        accionActualizar: 'update_impuestos',
+        accionEliminar: 'delete_impuestos',
+        accionConsutar: 'consulta_impuesto'
+    },
+    'seguro': {
+        campos: ['id_seguro', 'tipo_seg', 'nombre_aseg', 'monto_aseg'],
+        accionInsertar: 'insert_seguro',
+        accionActualizar: 'update_seguro',
+        accionEliminar: 'delete_seguro',
+        accionConsutar: 'consulta_seguro'
     },
 };
 
-// Variable para recordar qué tabla estamos viendo actualmente
 let tablaActiva = '';
 
-/**
- * 2. DETECCIÓN DEL SUBMIT (INSERTAR DATOS)
- */
+// ─── CARGA INICIAL ────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function () {
+    Object.keys(configTablas).forEach(nombreTabla => {
+        if (document.getElementById(nombreTabla)) {
+            actualizarVistaTabla(nombreTabla);
+        }
+    });
+});
+
+// ─── INSERTAR DATOS ───────────────────────────────────────────────────────────
 document.addEventListener('submit', async function (event) {
     event.preventDefault();
-
     const formulario = event.target;
     const nombreFormulario = formulario.name;
 
-    // Verificamos si la tabla existe en nuestro diccionario
-    if (!configTablas[nombreFormulario]) {
-        console.error(`El formulario "${nombreFormulario}" no está en el diccionario.`);
-        return;
-    }
+    if (!configTablas[nombreFormulario]) return;
 
-    // Actualizamos la tabla activa
     tablaActiva = nombreFormulario;
-    
     const formData = new FormData(formulario);
-    const accionInsertar = configTablas[tablaActiva].accionInsertar;
+    const conf = configTablas[tablaActiva];
 
     try {
-        // Petición a api.php
-        const respuesta = await fetch(`insercion.php?accion=${accionInsertar}`, {
+        const respuesta = await fetch(`insercion.php?accion=${conf.accionInsertar}`, {
             method: 'POST',
             body: formData
         });
 
         if (respuesta.ok) {
-            const nuevosDatos = await respuesta.json(); // Esperamos que PHP devuelva la tabla actualizada
-            alert("¡Registro guardado con éxito!");
-            
-            renderizarTabla(nuevosDatos, tablaActiva);
+            alert("¡Registro guardado!");
+            actualizarVistaTabla(tablaActiva);
             formulario.reset();
-        } else {
-            throw new Error("Error en el servidor al guardar.");
         }
     } catch (error) {
-        console.error("Hubo un error al enviar:", error);
+        console.error("Error al enviar:", error);
     }
 });
 
-/**
- * 3. RENDERIZAR TABLA CON EL TEMPLATE HTML
- */
+// ─── ACTUALIZAR ESTADO DE LA TABLA ───────────────────────────────────────────
+async function actualizarVistaTabla(nombreTabla) {
+    if (!nombreTabla || !configTablas[nombreTabla]) {
+        console.error("actualizarVistaTabla: tabla inválida →", nombreTabla);
+        return;
+    }
+
+    const conf = configTablas[nombreTabla];
+    try {
+        const res = await fetch(`consulta.php?accion=${conf.accionConsutar}`);
+        if (!res.ok) {
+            console.error(`Error HTTP ${res.status} al consultar ${nombreTabla}`);
+            return;
+        }
+        const datos = await res.json();
+        renderizarTabla(datos, nombreTabla);
+    } catch (e) {
+        console.error("Error al recargar tabla:", e);
+    }
+}
+
+// ─── RENDERIZAR TABLA ─────────────────────────────────────────────────────────
 function renderizarTabla(listaDatos, nombreTabla) {
-    const contenedor = document.getElementById('tabla-destino');
-    const molde = document.getElementById('molde-fila');
-    
+    const contenedor = document.getElementById(nombreTabla);
+    const molde = document.getElementById(`molde-fila-${nombreTabla}`);
     if (!contenedor || !molde) return;
 
-    contenedor.innerHTML = ""; // Limpiamos la tabla
-    const camposTabla = configTablas[nombreTabla].campos; // Sacamos los campos del diccionario
+    contenedor.innerHTML = "";
+    const camposTabla = configTablas[nombreTabla].campos;
 
     listaDatos.forEach(item => {
         const copia = molde.content.cloneNode(true);
         const fila = copia.querySelector('tr');
-        
-        // Guardamos las acciones (botones) para ponerlos al final
-        const celdaAcciones = fila.querySelector('.acciones');
-        fila.innerHTML = ""; 
+        if (!fila) return;
 
-        // Creamos las celdas dinámicamente según el diccionario
+        const celdaAcciones = fila.querySelector('.acciones');
+
+        fila.innerHTML = "";
+
         camposTabla.forEach(campo => {
             const td = document.createElement('td');
             td.classList.add(`col-${campo}`);
-            td.textContent = item[campo] || '';
+            td.textContent = item[campo] ?? '';
             fila.appendChild(td);
         });
 
-        // Re-insertamos los botones
-        fila.appendChild(celdaAcciones);
-        contenedor.appendChild(copia);
+        if (celdaAcciones) {
+            fila.appendChild(celdaAcciones);
+        }
+
+        contenedor.appendChild(fila);
     });
 }
 
-/**
- * 4. DELEGACIÓN DE EVENTOS PARA ELIMINAR Y EDITAR
- */
-document.getElementById('tabla-destino').addEventListener('click', async function(event) {
+// ─── EVENTOS EDITAR / ELIMINAR / GUARDAR ──────────────────────────────────────
+document.addEventListener('click', async function (event) {
     const boton = event.target;
+
+    if (!boton.classList.contains('btn-eliminar') &&
+        !boton.classList.contains('btn-editar') &&
+        !boton.classList.contains('btn-guardar')) return;
+
     const filaElemento = boton.closest('tr');
-    
-    if (!filaElemento || !tablaActiva) return;
+    if (!filaElemento) return;
 
-    // Asumimos que el ID siempre está en la clase .col-id
-    const idRegistro = filaElemento.querySelector('.col-id').textContent;
-    const configuracion = configTablas[tablaActiva];
+    const tbody = filaElemento.closest('tbody');
+    if (!tbody) return;
+    const nombreTabla = tbody.id;
+    if (!configTablas[nombreTabla]) return;
 
-    // --- ACCIÓN: ELIMINAR ---
+    tablaActiva = nombreTabla;
+    const configuracion = configTablas[nombreTabla];
+    const nombreId = configuracion.campos[0];
+    const celdaId = filaElemento.querySelector(`.col-${nombreId}`);
+    if (!celdaId) return;
+
+    // FIX: leer el ID desde el input si ya está en modo edición, o desde textContent si no
+    const idRegistro = celdaId.querySelector('input')
+        ? celdaId.querySelector('input').value
+        : celdaId.textContent;
+
+    // ELIMINAR
     if (boton.classList.contains('btn-eliminar')) {
-        if (!confirm(`¿Eliminar el registro ID: ${idRegistro}?`)) return;
-
+        if (!confirm(`¿Eliminar ID: ${idRegistro}?`)) return;
         try {
-            const respuesta = await fetch(`eliminacion.php?accion=${configuracion.accionEliminar}&id=${idRegistro}`, {
-                method: 'POST'
-            });
 
-            if (respuesta.ok) {
-                filaElemento.remove(); // Borramos la fila de la pantalla
-            }
-        } catch (error) {
-            console.error("Error al eliminar:", error);
-        }
+            const formData = new FormData();
+            formData.append(nombreId, idRegistro);
+
+            const res = await fetch(
+                `eliminacion.php?accion=${configuracion.accionEliminar}`,{ method: 'POST', body: formData }
+            );
+            if (res.ok) filaElemento.remove();
+        } catch (e) { console.error(e); }
     }
 
-    // --- ACCIÓN: EDITAR ---
-    if (boton.classList.contains('btn-editar')) {
-        const campos = configuracion.campos;
-        
-        // Convertimos las celdas en inputs (excepto el ID)
-        campos.forEach(campo => {
-            if (campo !== configTablas[tablaActiva].campos[0]) {
-                const td = filaElemento.querySelector(`.col-${campo}`);
-                const valorActual = td.textContent;
-                td.innerHTML = `<input type="text" value="${valorActual}" class="edit-input" data-campo="${campo}">`;
-            }
+    // EDITAR
+    else if (boton.classList.contains('btn-editar')) {
+        configuracion.campos.forEach((campo) => {
+            const td = filaElemento.querySelector(`.col-${campo}`);
+            if (!td) return;
+            const val = td.textContent;
+            td.innerHTML = `<input type="text" value="${val}" class="edit-input" data-campo="${campo}" style="width:100%">`;
         });
-
-        // Cambiamos el botón
         boton.textContent = "Guardar";
         boton.classList.replace('btn-editar', 'btn-guardar');
     }
 
-    // --- ACCIÓN: GUARDAR CAMBIOS ---
-    if (boton.classList.contains('btn-guardar')) {
-        const datosModificados = new FormData();
-        datosModificados.append('id', idRegistro);
+    // GUARDAR CAMBIOS
+    else if (boton.classList.contains('btn-guardar')) {
+        const datos = new FormData();
+        datos.append(nombreId, idRegistro);
 
-        // Recolectamos los valores de los inputs nuevos
-        const inputs = filaElemento.querySelectorAll('.edit-input');
-        inputs.forEach(input => {
-            const nombreCampo = input.getAttribute('data-campo');
-            datosModificados.append(nombreCampo, input.value);
+        filaElemento.querySelectorAll('.edit-input').forEach(input => {
+            datos.append(input.dataset.campo, input.value);
         });
 
         try {
-            const respuesta = await fetch(`actualizacion.php?accion=${configuracion.accionActualizar}`, {
+            const res = await fetch(`actualizacion.php?accion=${configuracion.accionActualizar}`, {
                 method: 'POST',
-                body: datosModificados
+                body: datos
             });
-
-            if (respuesta.ok) {
-                const nuevosDatos = await respuesta.json();
-                renderizarTabla(nuevosDatos, tablaActiva); // Dibujamos la tabla limpia
-                alert("Cambios aplicados.");
+            if (res.ok) {
+                alert("Actualizado con éxito");
+                actualizarVistaTabla(nombreTabla);
             }
-        } catch (error) {
-            console.error("Error al actualizar:", error);
-        }
+        } catch (e) { console.error(e); }
     }
 });

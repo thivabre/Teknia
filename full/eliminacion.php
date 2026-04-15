@@ -1,8 +1,8 @@
-<?php include ("conexion.php");?>
-
-<?php
+<?php include ("conexion.php");
 
 header('Content-Type: application/json');
+
+$accion = $_POST['accion'];
 
 if ($accion == 'delete_localidad') {
     $id_localidad = $_POST['id_localidad'];

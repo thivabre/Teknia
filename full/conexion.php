@@ -1,5 +1,5 @@
 <?php
-$ubicacion = "172.16.15.203";
+$ubicacion = "127.0.0.1:3307";
 $usuario = "root";
 $clave = "";
 $base = "servicio_tecnico_db";

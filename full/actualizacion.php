@@ -36,7 +36,7 @@ try {
         $nombre_art_rep = $_POST['nombre_art_rep'];
         $tipo_art_rep = $_POST['tipo_art_rep'];
         $fallas = $_POST['fallas'];
-
+        
         $resultado_anterior = $BD->query("SELECT nombre_art_rep, tipo_art_rep, fallas FROM articulo_reparar");
         if (!$resultado_anterior) throw new Exception("Error al consultar artículo: " . $BD->error);
 

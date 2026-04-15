@@ -54,6 +54,48 @@ try {
         if (!$resultado) throw new Exception("Error al insertar localidad: " . $BD->error);
         echo json_encode(['estado' => 'ok', 'mensaje' => 'Localidad insertada correctamente']);
 
+    } elseif ($accion == 'insert_garantia_servicio') {
+        $tiempo_garantia = $_POST['tiempo_garantia'];
+        $tipo_garantia = $_POST['tipo_garantia'];
+
+        $sql = "INSERT INTO garantia_servicio (tiempo_garantia, tipo_garantia) VALUES ('$tiempo_garantia', '$tipo_garantia')";
+        $resultado = $BD->query($sql);
+
+        if (!$resultado) throw new Exception("Error al insertar garantía: " . $BD->error);
+        echo json_encode(['estado' => 'ok', 'mensaje' => 'Garantía insertada correctamente']);
+
+    } elseif ($accion == 'insert_sueldo') {
+        $sueldo_hora = $_POST['sueldo_hora'];
+        $sueldo_hora_ext = $_POST['sueldo_hora_ext'];
+        $forma_pago = $_POST['forma_pago'];
+
+        $sql = "INSERT INTO sueldo (sueldo_hora, sueldo_hora_ext, forma_pago) VALUES ('$sueldo_hora', '$sueldo_hora_ext', '$forma_pago')";
+        $resultado = $BD->query($sql);
+
+        if (!$resultado) throw new Exception("Error al insertar sueldo: " . $BD->error);
+        echo json_encode(['estado' => 'ok', 'mensaje' => 'Sueldo insertado correctamente']);
+
+    } elseif ($accion == 'insert_impuestos') {
+        $tipo_imp = $_POST['tipo_imp'];
+        $monto_imp = $_POST['monto_imp'];
+
+        $sql = "INSERT INTO impuestos (tipo_imp, monto_imp) VALUES ('$tipo_imp', '$monto_imp')";
+        $resultado = $BD->query($sql);
+
+        if (!$resultado) throw new Exception("Error al insertar impuesto: " . $BD->error);
+        echo json_encode(['estado' => 'ok', 'mensaje' => 'Impuesto insertado correctamente']);
+
+    } elseif ($accion == 'insert_seguro') {
+        $tipo_seg = $_POST['tipo_seg'];
+        $nombre_aseg = $_POST['nombre_aseg'];
+        $monto_aseg = $_POST['monto_aseg'];
+
+        $sql = "INSERT INTO seguro (tipo_seg, nombre_aseg, monto_aseg) VALUES ('$tipo_seg', '$nombre_aseg', '$monto_aseg')";
+        $resultado = $BD->query($sql);
+
+        if (!$resultado) throw new Exception("Error al insertar seguro: " . $BD->error);
+        echo json_encode(['estado' => 'ok', 'mensaje' => 'Seguro insertado correctamente']);
+
     } else {
         throw new Exception("Acción no reconocida: $accion");
     }

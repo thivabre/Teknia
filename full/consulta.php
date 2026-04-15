@@ -44,7 +44,7 @@ if ($accion == 'consulta_impuesto') {
     consultarYResponder($BD, "SELECT id_impuestos, tipo_imp, monto_imp FROM impuestos ORDER BY tipo_imp ASC");
 }
 
-if ($accion == 'consulta_garantia') {
+if ($accion == 'consulta_garantia_servicio') {
     consultarYResponder($BD, "SELECT id_garantia_servicio, tipo_garantia, tiempo_garantia FROM garantia_servicio ORDER BY tipo_garantia ASC");
 }
 

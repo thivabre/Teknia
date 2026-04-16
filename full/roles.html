@@ -4,29 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teknia - crear cuenta</title>
-    <link rel="stylesheet" href="estilos_cuenta.css">
+    <link rel="stylesheet" href="estilo_roles.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
     <form class="formulario" action="index.html" method="get">
-        <h2>Seleccione su </h2>
+        <h2>Seleccione su tipo de usuario</h2>
         <div class="campo">
-            <label for="nombre">Nombre:</label>
-            <input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre:" required>
+            <label for="nombre">Cliente:</label>
+            <input type="radio" id="cliente" name="cliente" checked required>
         </div>
         <div class="campo">
-            <label for="Apellido">Apellido:</label>
-            <input type="text" id="apellido" name="Apellido" placeholder="Ingrese su apellido:" required>
+            <label for="nombre">Empleado:</label>
+            <input type="radio" id="empleado" name="cliente" required>
         </div>
         <div class="campo">
-            <label for="dni">DNI:</label>
-            <input type="text" id="dni" name="dni" placeholder="Ingrese su numero de DNI:" required>
+            <label for="nombre">Jefe de sucursal:</label>
+            <input type="radio" id="jefe" name="cliente" required>
         </div>
-        <div class="campo">
-            <label for="telefono">Telefono:</label>
-            <input type="text" id="telefono" name="telefono" placeholder="Ingrese su numero de telefono:" required>
-        </div>
-        <button type="submit" class="iniciar">Crear cuenta</button>
+        <button type="submit" class="iniciar">Siguiente</button>
     </form>
 </body>
 </html>

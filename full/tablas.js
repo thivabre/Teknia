@@ -32,7 +32,7 @@ const configTablas = {
         accionInsertar: 'insert_garantia_servicio',
         accionActualizar: 'update_garantia_servicio',
         accionEliminar: 'delete_garantia_servicio',
-        accionConsutar: 'consulta_garantia'
+        accionConsutar: 'consulta_garantia_servicio'
     },
     'localidad': {
         campos: ['id_localidad', 'pais', 'provincia', 'ciudad', 'barrio'],
@@ -59,10 +59,73 @@ const configTablas = {
 
 let tablaActiva = '';
 
+// ─── FORULARIO ─────────────────────────────────────────────────────────────
+const contenedorForm = document.querySelector('.contenedor-form-desactivado') || document.querySelector('.contenedor-form-activado');
+const formularioInsert = document.querySelector('.form-insert');
+
+// 1. ESCUCHAR CLIC EN BOTONES "AGREGAR"
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('btn-agregar')) {
+        const contenedorTabla = e.target.closest('.contenedor-tablas');
+        const tablaId = contenedorTabla.querySelector('tbody').id;
+        
+        abrirModalInsertar(tablaId);
+    }
+});
+
+// 2. FUNCIÓN PARA CONSTRUIR EL FORMULARIO SEGÚN LA TABLA
+function abrirModalInsertar(nombreTabla) {
+    const conf = configTablas[nombreTabla];
+    if (!conf) return;
+
+    const contenedorForm = document.querySelector('.contenedor-form-desactivado, .contenedor-form-activado');
+
+    formularioInsert.name = nombreTabla; 
+    
+    const titulo = formularioInsert.querySelector('h2');
+    titulo.textContent = `Insertar ${nombreTabla}`;
+
+    // Limpiar campos y botón anteriores
+    const camposViejos = formularioInsert.querySelectorAll('.campo-ingreso .campo, .btn-guardar-nuevo');
+    camposViejos.forEach(el => el.remove());
+
+    const contenedorCampos = formularioInsert.querySelector('.campo-ingreso');
+    if (!contenedorCampos) return;
+
+    conf.campos.forEach((campo, index) => {
+        if (index === 0) return;
+
+        const divCampo = document.createElement('div');
+        divCampo.className = 'campo';
+
+        const label = document.createElement('label');
+        label.textContent = campo.replace(/_/g, ' ');
+
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.name = campo;
+        input.required = true;
+        input.placeholder = 'Escriba aquí...';
+
+        divCampo.appendChild(label);
+        divCampo.appendChild(input);
+        contenedorCampos.appendChild(divCampo);
+    });
+
+    contenedorForm.classList.replace('contenedor-form-desactivado', 'contenedor-form-activado');
+}
+
+// CERRAR FORM
+function cerrarModal() {
+    const contenedorForm = document.querySelector('.contenedor-form-desactivado, .contenedor-form-activado');
+    contenedorForm.classList.replace('contenedor-form-activado', 'contenedor-form-desactivado');
+}
+
 // ─── CARGA INICIAL ────────────────────────────────────────────────────────────
-// Detecta qué tablas existen en el HTML actual y las carga automáticamente.
-// Así no hace falta tocar este archivo al agregar tablas nuevas al HTML.
 document.addEventListener('DOMContentLoaded', function () {
+    document.querySelector('.cerrar').addEventListener('click', function() {
+        cerrarModal();
+    });
     Object.keys(configTablas).forEach(nombreTabla => {
         if (document.getElementById(nombreTabla)) {
             actualizarVistaTabla(nombreTabla);
@@ -72,34 +135,32 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // ─── INSERTAR DATOS ───────────────────────────────────────────────────────────
 document.addEventListener('submit', async function (event) {
-    event.preventDefault();
-    const formulario = event.target;
-    const nombreFormulario = formulario.name;
+    if (event.target.classList.contains('form-insert')) {
+        event.preventDefault();
+        
+        const nombreTabla = event.target.name;
+        const conf = configTablas[nombreTabla];
+        const formData = new FormData(event.target);
 
-    if (!configTablas[nombreFormulario]) return;
+        try {
+            formData.append('accion', conf.accionInsertar);
+            const respuesta = await fetch(`insercion.php`, {
+                method: 'POST',
+                body: formData
+            });
 
-    tablaActiva = nombreFormulario;
-    const formData = new FormData(formulario);
-    const conf = configTablas[tablaActiva];
-
-    try {
-        const respuesta = await fetch(`insercion.php?accion=${conf.accionInsertar}`, {
-            method: 'POST',
-            body: formData
-        });
-
-        if (respuesta.ok) {
-            alert("¡Registro guardado!");
-            actualizarVistaTabla(tablaActiva);
-            formulario.reset();
+            if (respuesta.ok) {
+                alert("¡Registro guardado!");
+                actualizarVistaTabla(nombreTabla);
+                cerrarModal();
+            }
+        } catch (error) {
+            console.error("Error al insertar:", error);
         }
-    } catch (error) {
-        console.error("Error al enviar:", error);
     }
 });
 
 // ─── ACTUALIZAR ESTADO DE LA TABLA ───────────────────────────────────────────
-// Ahora recibe la tabla como parámetro para evitar problemas con la variable global.
 async function actualizarVistaTabla(nombreTabla) {
     if (!nombreTabla || !configTablas[nombreTabla]) {
         console.error("actualizarVistaTabla: tabla inválida →", nombreTabla);
@@ -133,6 +194,7 @@ function renderizarTabla(listaDatos, nombreTabla) {
         const copia = molde.content.cloneNode(true);
         const fila = copia.querySelector('tr');
         if (!fila) return;
+
         const celdaAcciones = fila.querySelector('.acciones');
 
         fila.innerHTML = "";
@@ -140,7 +202,7 @@ function renderizarTabla(listaDatos, nombreTabla) {
         camposTabla.forEach(campo => {
             const td = document.createElement('td');
             td.classList.add(`col-${campo}`);
-            td.textContent = item[campo] || '';
+            td.textContent = item[campo] ?? '';
             fila.appendChild(td);
         });
 
@@ -148,7 +210,7 @@ function renderizarTabla(listaDatos, nombreTabla) {
             fila.appendChild(celdaAcciones);
         }
 
-        contenedor.appendChild(copia);
+        contenedor.appendChild(fila);
     });
 }
 
@@ -163,7 +225,6 @@ document.addEventListener('click', async function (event) {
     const filaElemento = boton.closest('tr');
     if (!filaElemento) return;
 
-    // Detectar a qué tabla pertenece la fila buscando el tbody padre
     const tbody = filaElemento.closest('tbody');
     if (!tbody) return;
     const nombreTabla = tbody.id;
@@ -175,28 +236,35 @@ document.addEventListener('click', async function (event) {
     const celdaId = filaElemento.querySelector(`.col-${nombreId}`);
     if (!celdaId) return;
 
-    const idRegistro = celdaId.textContent;
+    // FIX: leer el ID desde el input si ya está en modo edición, o desde textContent si no
+    const idRegistro = celdaId.querySelector('input')
+        ? celdaId.querySelector('input').value
+        : celdaId.textContent;
 
     // ELIMINAR
     if (boton.classList.contains('btn-eliminar')) {
         if (!confirm(`¿Eliminar ID: ${idRegistro}?`)) return;
         try {
-            const res = await fetch(`eliminacion.php?accion=${configuracion.accionEliminar}&id=${idRegistro}`, { method: 'POST' });
+
+            const formData = new FormData();
+            formData.append(nombreId, idRegistro);
+
+            formData.append('accion', configuracion.accionEliminar);
+            const res = await fetch(`eliminacion.php`, { method: 'POST', body: formData }
+);
             if (res.ok) filaElemento.remove();
         } catch (e) { console.error(e); }
     }
 
     // EDITAR
-    if (boton.classList.contains('btn-editar')) {
-        configuracion.campos.forEach((campo, index) => {
-            if (index > 0) {
-                const td = filaElemento.querySelector(`.col-${campo}`);
-                if (!td) return;
-                const val = td.textContent;
-                td.innerHTML = `<input type="text" value="${val}" class="edit-input" data-campo="${campo}" style="width:100%">`;
-            }
+    else if (boton.classList.contains('btn-editar')) {
+        configuracion.campos.forEach((campo) => {
+            const td = filaElemento.querySelector(`.col-${campo}`);
+            if (!td) return;
+            const val = td.textContent;
+            td.innerHTML = `<input type="text" value="${val}" class="edit-input" data-campo="${campo}" style="width:100%">`;
         });
-        boton.textContent = "Guardar";
+        boton.textContent = "✔️";
         boton.classList.replace('btn-editar', 'btn-guardar');
     }
 
@@ -210,10 +278,8 @@ document.addEventListener('click', async function (event) {
         });
 
         try {
-            const res = await fetch(`actualizacion.php?accion=${configuracion.accionActualizar}`, {
-                method: 'POST',
-                body: datos
-            });
+            datos.append('accion', configuracion.accionActualizar);
+            const res=await fetch(`actualizacion.php`, { method: 'POST', body: datos });
             if (res.ok) {
                 alert("Actualizado con éxito");
                 actualizarVistaTabla(nombreTabla);
@@ -221,3 +287,81 @@ document.addEventListener('click', async function (event) {
         } catch (e) { console.error(e); }
     }
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//el backend estuvo aqui

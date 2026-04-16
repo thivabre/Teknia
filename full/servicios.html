@@ -6,7 +6,7 @@
     <title>Servicios</title>
     <link rel="stylesheet" href="estilos.css">
     <link rel="stylesheet" href="estilo_tabla_estatica.css">
-    <script src="tablas.js"></script>
+    <link rel="stylesheet" href="estilo_form_insert.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
@@ -14,9 +14,9 @@
         <ul>
             <li><a href="index.html">Inicio</a></li>
             <li><a href="servicios.html">Servicios</a></li>
-            <li><a href="#">Sucursales</a></li>
-            <li><a href="#">Inventario</a></li>
-            <li><a href="#">Administración</a></li>
+            <li><a href="sucursales.html">Sucursales</a></li>
+            <li><a href="inventario.html">Inventario</a></li>
+            <li><a href="administracion.html">Administración</a></li>
             <li class="nav-auth">
                 <a href="inicio_sesion.html" class="btn-sesion">Iniciar sesion</a>
                 <a href="#" class="btn-cuenta">Crear cuenta</a>
@@ -56,6 +56,18 @@
     </table>
     </div>
     </div>
+
+    <div class="blurr"></div>
+    <div class="contenedor-form-desactivado">
+        <button class="cerrar">❌</button>
+        <form class="form-insert">
+            <h2>Nombre insercion</h2>
+            <div class="campo-ingreso">
+            </div>
+            <button type="submit" class="envio-insert">Insertar</button>
+        </form>
+    </div>
+
     <template id="molde-fila-pago">
         <tr>
             <td class="acciones">
@@ -64,6 +76,7 @@
             </td>
         </tr>
     </template>
+    
     <template id="molde-fila-garantia_servicio">
         <tr>
             <td class="acciones">
@@ -72,5 +85,6 @@
             </td>
         </tr>
     </template>
+    <script src="tablas.js"></script>
 </body>
 </html>

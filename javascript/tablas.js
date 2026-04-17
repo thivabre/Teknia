@@ -78,44 +78,54 @@ function abrirModalInsertar(nombreTabla) {
     const conf = configTablas[nombreTabla];
     if (!conf) return;
 
+    const contenedorForm = document.querySelector('.contenedor-form-desactivado, .contenedor-form-activado');
+
     formularioInsert.name = nombreTabla; 
     
     const titulo = formularioInsert.querySelector('h2');
     titulo.textContent = `Insertar ${nombreTabla}`;
 
-    const camposViejos = formularioInsert.querySelectorAll('.campo-ingreso, .btn-guardar-nuevo');
+    // Limpiar campos y botón anteriores
+    const camposViejos = formularioInsert.querySelectorAll('.campo-ingreso .campo, .btn-guardar-nuevo');
     camposViejos.forEach(el => el.remove());
+
+    const contenedorCampos = formularioInsert.querySelector('.campo-ingreso');
+    if (!contenedorCampos) return;
 
     conf.campos.forEach((campo, index) => {
         if (index === 0) return;
 
         const divCampo = document.createElement('div');
-        divCampo.className = 'campo-ingreso';
-        divCampo.innerHTML = `
-            <label>${campo.replace(/_/g, ' ')}</label>
-            <input type="text" name="${campo}" required placeholder="Escriba aquí...">
-        `;
-        formularioInsert.appendChild(divCampo);
+        divCampo.className = 'campo';
+
+        const label = document.createElement('label');
+        label.textContent = campo.replace(/_/g, ' ');
+
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.name = campo;
+        input.required = true;
+        input.placeholder = 'Escriba aquí...';
+
+        divCampo.appendChild(label);
+        divCampo.appendChild(input);
+        contenedorCampos.appendChild(divCampo);
     });
 
-    // Añadimos el botón de acción
-    const btnSubmit = document.createElement('button');
-    btnSubmit.type = 'submit';
-    btnSubmit.className = 'btn-guardar-nuevo';
-    btnSubmit.textContent = 'Guardar Registro';
-    formularioInsert.appendChild(btnSubmit);
-
-    // ACTIVAR VISIBILIDAD
     contenedorForm.classList.replace('contenedor-form-desactivado', 'contenedor-form-activado');
 }
 
 // CERRAR FORM
 function cerrarModal() {
+    const contenedorForm = document.querySelector('.contenedor-form-desactivado, .contenedor-form-activado');
     contenedorForm.classList.replace('contenedor-form-activado', 'contenedor-form-desactivado');
 }
 
 // ─── CARGA INICIAL ────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', function () {
+    document.querySelector('.cerrar').addEventListener('click', function() {
+        cerrarModal();
+    });
     Object.keys(configTablas).forEach(nombreTabla => {
         if (document.getElementById(nombreTabla)) {
             actualizarVistaTabla(nombreTabla);
@@ -133,7 +143,8 @@ document.addEventListener('submit', async function (event) {
         const formData = new FormData(event.target);
 
         try {
-            const respuesta = await fetch(`insercion.php?accion=${conf.accionInsertar}`, {
+            formData.append('accion', conf.accionInsertar);
+            const respuesta = await fetch(`insercion.php`, {
                 method: 'POST',
                 body: formData
             });
@@ -141,6 +152,7 @@ document.addEventListener('submit', async function (event) {
             if (respuesta.ok) {
                 alert("¡Registro guardado!");
                 actualizarVistaTabla(nombreTabla);
+                cerrarModal();
             }
         } catch (error) {
             console.error("Error al insertar:", error);
@@ -252,7 +264,7 @@ document.addEventListener('click', async function (event) {
             const val = td.textContent;
             td.innerHTML = `<input type="text" value="${val}" class="edit-input" data-campo="${campo}" style="width:100%">`;
         });
-        boton.textContent = "Guardar";
+        boton.textContent = "✔️";
         boton.classList.replace('btn-editar', 'btn-guardar');
     }
 

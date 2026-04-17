@@ -11,7 +11,7 @@ try {
         throw new Exception("Error de conexión: " . $BD->connect_error);
     }
 
-    echo "Conexión exitosa";
+
 
 } catch (Exception $e) {
     echo "Excepción capturada: " . $e->getMessage();

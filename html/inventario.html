@@ -24,43 +24,19 @@
         </ul>
     </nav>
 
-    <nav>
-        <ul>
-            <li>Realizar orden de servicio</li>
-            <li>Historial de ordenes de servicio</li>
-            <li>Historial de facturas de servicio</li>
-            <li>Historial de presupuestos</li>
-        </ul>
-    </nav>
-
     <div class="contenedor-padre">
     <div class="contenedor-tablas">
     <button class="btn-agregar">➕</button>
     <table>
-        <caption class="titulo">Pagos realizados</caption>
+        <caption class="titulo">Articulos a reparar</caption>
         <thead>
             <tr>
-                <th>Nombre del banco</th>
-                <th>Numero de cuenta</th>
-                <th>Comprobante</th>
+                <th>Nombre del articulo</th>
+                <th>Tipo del articulo</th>
+                <th>Fallas</th>
             </tr>
         </thead>
-        <tbody id="pago">
-        </tbody>
-    </table>
-    </div>
-
-    <div class="contenedor-tablas">
-    <button class="btn-agregar">➕</button>
-    <table>
-        <caption class="titulo">Garantías</caption>
-        <thead>
-            <tr>
-                <th>Tipo de garantía</th>
-                <th>Tiempo de la garantía</th>
-            </tr>
-        </thead>
-        <tbody id="garantia_servicio">
+        <tbody id="articulo_reparar">
         </tbody>
     </table>
     </div>
@@ -77,16 +53,7 @@
         </form>
     </div>
 
-    <template id="molde-fila-pago">
-        <tr>
-            <td class="acciones">
-                <button class="btn-editar">✏️</button>
-                <button class="btn-eliminar">❌</button>
-            </td>
-        </tr>
-    </template>
-    
-    <template id="molde-fila-garantia_servicio">
+    <template id="molde-fila-articulo_reparar">
         <tr>
             <td class="acciones">
                 <button class="btn-editar">✏️</button>

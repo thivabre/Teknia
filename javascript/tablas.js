@@ -6,6 +6,7 @@ const configTablas = {
         accionEliminar: 'delete_sueldo',
         accionConsutar: 'consulta_sueldo'
     },
+    
     'precio': {
         campos: ['id_precio', 'precio_mano_obra', 'precio_rep'],
         accionInsertar: 'insert_precio',
@@ -13,6 +14,7 @@ const configTablas = {
         accionEliminar: 'delete_precio',
         accionConsutar: 'consulta_precio'
     },
+    
     'articulo_reparar': {
         campos: ['id_articulo_reparar', 'nombre_art_rep', 'tipo_art_rep', 'fallas'],
         accionInsertar: 'insert_articulo_reparar',
@@ -20,6 +22,7 @@ const configTablas = {
         accionEliminar: 'delete_articulo_reparar',
         accionConsutar: 'consulta_articulo_reparar'
     },
+    
     'pago': {
         campos: ['id_pago', 'nombre_banco', 'numero_cuenta', 'comprobante'],
         accionInsertar: 'insert_pago',
@@ -27,6 +30,7 @@ const configTablas = {
         accionEliminar: 'delete_pago',
         accionConsutar: 'consulta_pago'
     },
+    
     'garantia_servicio': {
         campos: ['id_garantia_servicio', 'tiempo_garantia', 'tipo_garantia'],
         accionInsertar: 'insert_garantia_servicio',
@@ -34,6 +38,7 @@ const configTablas = {
         accionEliminar: 'delete_garantia_servicio',
         accionConsutar: 'consulta_garantia_servicio'
     },
+    
     'localidad': {
         campos: ['id_localidad', 'pais', 'provincia', 'ciudad', 'barrio'],
         accionInsertar: 'insert_localidad',
@@ -41,6 +46,7 @@ const configTablas = {
         accionEliminar: 'delete_localidad',
         accionConsutar: 'consulta_localidad'
     },
+    
     'impuestos': {
         campos: ['id_impuestos', 'tipo_imp', 'monto_imp'],
         accionInsertar: 'insert_impuestos',
@@ -48,6 +54,7 @@ const configTablas = {
         accionEliminar: 'delete_impuestos',
         accionConsutar: 'consulta_impuesto'
     },
+    
     'seguro': {
         campos: ['id_seguro', 'tipo_seg', 'nombre_aseg', 'monto_aseg'],
         accionInsertar: 'insert_seguro',
@@ -55,6 +62,142 @@ const configTablas = {
         accionEliminar: 'delete_seguro',
         accionConsutar: 'consulta_seguro'
     },
+    
+    'direccion_empleado': {
+        campos: ['id_direccion_empleado', 'calle', 'numero', 'ciudad', 'provincia', 'codigo_postal', 'id_empleado'],
+        accionInsertar: 'insert_direccion_empleado',
+        accionActualizar: 'update_direccion_empleado',
+        accionEliminar: 'delete_direccion_empleado',
+        accionConsutar: 'consulta_direccion_empleado'
+    },
+
+    'direccion_cliente': {
+        campos: ['id_direccion_cliente', 'calle', 'numero', 'ciudad', 'provincia', 'codigo_postal', 'id_cliente'],
+        accionInsertar: 'insert_direccion_cliente',
+        accionActualizar: 'update_direccion_cliente',
+        accionEliminar: 'delete_direccion_cliente',
+        accionConsutar: 'consulta_direccion_cliente'
+    },
+
+    'direccion_sucursal': {
+        campos: ['id_direccion_sucursal', 'calle', 'numero', 'ciudad', 'provincia', 'codigo_postal', 'id_sucursal'],
+        accionInsertar: 'insert_direccion_sucursal',
+        accionActualizar: 'update_direccion_sucursal',
+        accionEliminar: 'delete_direccion_sucursal',
+        accionConsutar: 'consulta_direccion_sucursal'
+    },
+
+    'direccion_proveedor': {
+        campos: ['id_direccion_proveedor', 'calle', 'numero', 'ciudad', 'provincia', 'codigo_postal', 'id_proveedor'],
+        accionInsertar: 'insert_direccion_proveedor',
+        accionActualizar: 'update_direccion_proveedor',
+        accionEliminar: 'delete_direccion_proveedor',
+        accionConsutar: 'consulta_direccion_proveedor'
+    },
+
+    'inventario_productos': {
+        campos: ['id_inventario_producto', 'id_producto', 'stock', 'precio', 'id_sucursal'],
+        accionInsertar: 'insert_inventario_productos',
+        accionActualizar: 'update_inventario_productos',
+        accionEliminar: 'delete_inventario_productos',
+        accionConsutar: 'consulta_inventario_productos'
+    },
+
+    'contrato_empleado': {
+        campos: ['id_contrato', 'fecha_inicio', 'fecha_fin', 'tipo_contrato', 'id_empleado'],
+        accionInsertar: 'insert_contrato_empleado',
+        accionActualizar: 'update_contrato_empleado',
+        accionEliminar: 'delete_contrato_empleado',
+        accionConsutar: 'consulta_contrato_empleado'
+    },
+
+    'repuestos': {
+        campos: ['id_repuesto', 'nombre', 'descripcion', 'precio'],
+        accionInsertar: 'insert_repuestos',
+        accionActualizar: 'update_repuestos',
+        accionEliminar: 'delete_repuestos',
+        accionConsutar: 'consulta_repuestos'
+    },
+
+    'factura_servicio': {
+        campos: ['id_factura', 'fecha', 'total', 'id_cliente', 'id_orden_servicio'],
+        accionInsertar: 'insert_factura_servicio',
+        accionActualizar: 'update_factura_servicio',
+        accionEliminar: 'delete_factura_servicio',
+        accionConsutar: 'consulta_factura_servicio'
+    },
+
+    'proveedor': {
+        campos: ['id_proveedor', 'nombre', 'telefono', 'email'],
+        accionInsertar: 'insert_proveedor',
+        accionActualizar: 'update_proveedor',
+        accionEliminar: 'delete_proveedor',
+        accionConsutar: 'consulta_proveedor'
+    },
+
+    'inventario_repuestos': {
+        campos: ['id_inventario_repuesto', 'id_repuesto', 'stock', 'id_sucursal'],
+        accionInsertar: 'insert_inventario_repuestos',
+        accionActualizar: 'update_inventario_repuestos',
+        accionEliminar: 'delete_inventario_repuestos',
+        accionConsutar: 'consulta_inventario_repuestos'
+    },
+
+    'presupuestos': {
+        campos: ['id_presupuesto', 'fecha', 'total', 'id_cliente'],
+        accionInsertar: 'insert_presupuestos',
+        accionActualizar: 'update_presupuestos',
+        accionEliminar: 'delete_presupuestos',
+        accionConsutar: 'consulta_presupuestos'
+    },
+
+    'sucursales': {
+        campos: ['id_sucursal', 'nombre', 'telefono'],
+        accionInsertar: 'insert_sucursales',
+        accionActualizar: 'update_sucursales',
+        accionEliminar: 'delete_sucursales',
+        accionConsutar: 'consulta_sucursales'
+    },
+
+    'empleado': {
+        campos: ['id_empleado', 'nombre', 'apellido', 'dni', 'telefono', 'email'],
+        accionInsertar: 'insert_empleado',
+        accionActualizar: 'update_empleado',
+        accionEliminar: 'delete_empleado',
+        accionConsutar: 'consulta_empleado'
+    },
+
+    'sucursales_proveedor': {
+        campos: ['id_sucursal', 'id_proveedor'],
+        accionInsertar: 'insert_sucursales_proveedor',
+        accionActualizar: 'update_sucursales_proveedor',
+        accionEliminar: 'delete_sucursales_proveedor',
+        accionConsutar: 'consulta_sucursales_proveedor'
+    },
+
+    'orden_servicio': {
+        campos: ['id_orden_servicio', 'fecha', 'estado', 'id_cliente', 'id_empleado'],
+        accionInsertar: 'insert_orden_servicio',
+        accionActualizar: 'update_orden_servicio',
+        accionEliminar: 'delete_orden_servicio',
+        accionConsutar: 'consulta_orden_servicio'
+    },
+
+    'cliente': {
+        campos: ['id_cliente', 'nombre', 'apellido', 'telefono', 'email'],
+        accionInsertar: 'insert_cliente',
+        accionActualizar: 'update_cliente',
+        accionEliminar: 'delete_cliente',
+        accionConsutar: 'consulta_cliente'
+    },
+
+    'orden_entrega': {
+        campos: ['id_orden_entrega', 'fecha_entrega', 'estado', 'id_orden_servicio'],
+        accionInsertar: 'insert_orden_entrega',
+        accionActualizar: 'update_orden_entrega',
+        accionEliminar: 'delete_orden_entrega',
+        accionConsutar: 'consulta_orden_entrega'
+    }
 };
 
 let tablaActiva = '';

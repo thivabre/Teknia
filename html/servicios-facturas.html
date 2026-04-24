@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servicios</title>
+    <link rel="stylesheet" href="estilos.css">
+    <link rel="stylesheet" href="estilo_tabla_estatica.css">
+    <link rel="stylesheet" href="estilo_form_insert.css">
+</head>
+<body>
+    <div class="contenedor-grid">
+
+    <!-- ── TOP NAVBAR ── -->
+    <nav class="navbar">
+        <ul>
+            <div class="logo">
+                <div class="logo-icon">T</div>
+                <span class="logo-name">Teknia</span>
+            </div>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="servicios.html" class="activo">Servicios</a></li>
+            <li><a href="sucursales.html">Sucursales</a></li>
+            <li><a href="inventario.html">Inventario</a></li>
+            <li><a href="administracion.html">Administración</a></li>
+            <li class="nav-auth">
+                <a href="inicio_sesion.html" class="btn-sesion">Iniciar sesión</a>
+                <a href="crear_cuenta.html" class="btn-cuenta">Crear cuenta</a>
+            </li>
+        </ul>
+    </nav>
+
+    <nav class="side-navbar">
+        <span class="seccion-label">Servicios</span>
+        <ul>
+            <li><a href="servicios-crear_oden.html">Nueva orden</a></li>
+            <li><a href="servicios-ordenes_activas.html">Ordenes activas</a></li>
+            <li><a href="servicios-historial_ordenes.html">Historial de ordenes</a></li>
+        </ul>
+        <span class="seccion-label">Facturacion</span> 
+        <ul>
+            <li><a href="servicios-facturas.html" class="activo">Facturas</a></li>
+            <li><a href="servicios-presupuestos.html">Presupuestos</a></li>
+        </ul>
+    </nav>
+
+    <div class="contenedor-padre">
+
+        <div class="contenedor-tablas">
+            <button class="btn-agregar">➕</button>
+            <table>
+                <caption class="titulo">Pagos realizados</caption>
+                <thead>
+                    <tr>
+                        <th>Nombre del banco</th>
+                        <th>Número de cuenta</th>
+                        <th>Comprobante</th>
+                        <th>Monto</th>
+                    </tr>
+                </thead>
+                <tbody id="pago"></tbody>
+            </table>
+        </div>
+
+    </div><!-- /contenedor-padre -->
+    </div><!-- /contenedor-grid -->
+
+    <div class="blurr"></div>
+    <div class="contenedor-form-desactivado">
+        <button class="cerrar">❌</button>
+        <form class="form-insert">
+            <h2>Insertar registro</h2>
+            <div class="campo-ingreso"></div>
+            <button type="submit" class="envio-insert">Insertar</button>
+        </form>
+    </div>
+
+    <template id="molde-fila-pago">
+        <tr>
+            <td class="acciones">
+                <button class="btn-editar">✏️</button>
+                <button class="btn-eliminar">❌</button>
+            </td>
+        </tr>
+    </template>
+    <template id="molde-fila-garantia_servicio">
+        <tr>
+            <td class="acciones">
+                <button class="btn-editar">✏️</button>
+                <button class="btn-eliminar">❌</button>
+            </td>
+        </tr>
+    </template>
+
+    <script src="tablas.js"></script>
+</body>
+</html>

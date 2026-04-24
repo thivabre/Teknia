@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servicios</title>
+    <link rel="stylesheet" href="estilos.css">
+    <link rel="stylesheet" href="estilo_tabla_estatica.css">
+    <link rel="stylesheet" href="estilo_form_insert.css">
+</head>
+<body>
+    <div class="contenedor-grid">
+
+    <!-- ── TOP NAVBAR ── -->
+    <nav class="navbar">
+        <ul>
+            <div class="logo">
+                <div class="logo-icon">T</div>
+                <span class="logo-name">Teknia</span>
+            </div>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="servicios.html" class="activo">Servicios</a></li>
+            <li><a href="sucursales.html">Sucursales</a></li>
+            <li><a href="inventario.html">Inventario</a></li>
+            <li><a href="administracion.html">Administración</a></li>
+            <li class="nav-auth">
+                <a href="inicio_sesion.html" class="btn-sesion">Iniciar sesión</a>
+                <a href="crear_cuenta.html" class="btn-cuenta">Crear cuenta</a>
+            </li>
+        </ul>
+    </nav>
+
+    <nav class="side-navbar">
+        <span class="seccion-label">Servicios</span>
+        <ul>
+            <li><a href="servicios-crear_oden.html">Nueva orden</a></li>
+            <li><a href="servicios-ordenes_activas.html" class="activo">Ordenes activas</a></li>
+            <li><a href="servicios-historial_ordenes.html">Historial de ordenes</a></li>
+        </ul>
+        <span class="seccion-label">Facturacion</span> 
+        <ul>
+            <li><a href="servicios-facturas.html">Facturas</a></li>
+            <li><a href="servicios-presupuestos.html">Presupuestos</a></li>
+        </ul>
+    </nav>
+
+    <div class="contenedor-padre">
+
+        <div class="contenedor-tablas">
+            <table>
+                <caption class="titulo">Ordenes activas</caption>
+                <thead>
+                    <tr>
+                        <th>Nombre del articulo</th>
+                        <th>Tipo de articulo</th>
+                        <th>Fallas</th>
+                        <th>Fecha de creacion</th>
+                        <th>Fecha estimada de finalizacion</th>
+                        <th>N° sucursal a cargo</th>
+                    </tr>
+                </thead>
+                <tbody id="orden_servicio_activas"></tbody>
+            </table>
+        </div>
+
+    </div><!-- /contenedor-padre -->
+    </div><!-- /contenedor-grid -->
+
+    <template id="molde-fila-orden_servicio_activas">
+        <tr>
+            <td class="acciones">
+                <button class="entregar">✔️</button>
+            </td>
+        </tr>
+    </template>
+
+    <script src="tablas.js"></script>
+</body>
+</html>

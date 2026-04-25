@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servicios</title>
+    <link rel="stylesheet" href="estilos.css">
+    <link rel="stylesheet" href="estilo_tabla_estatica.css">
+    <link rel="stylesheet" href="estilo_form_insert.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <div class="contenedor-grid">
+
+    <nav class="navbar">
+        <ul>
+            <div class="logo">
+                <div class="logo-icon">T</div>
+                <span class="logo-name">Teknia</span>
+            </div>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="servicios-crear_oden.html">Servicios</a></li>
+            <li><a href="sucursales-ubicacion.html">Sucursales</a></li>
+            <li><a href="inventario-repuestos.html">Inventario</a></li>
+            <li><a href="finanzas-garantias.html" class="activo">Finanzas</a></li>
+            <li><a href="personal-clientes.html">Personal</a></li>
+            <li><a href="administracion-contratos.html">Administración</a></li>
+            <li class="nav-auth">
+                <a href="inicio_sesion.html" class="btn-sesion">Iniciar sesion</a>
+                <a href="#" class="btn-cuenta">Crear cuenta</a>
+            </li>
+        </ul>
+    </nav>
+
+    <nav class="side-navbar">
+        <span class="seccion-label">Finanzas</span>
+        <ul>
+            <li><a href="finanzas-garantias.html">Garantias</a></li>
+            <li><a href="finanzas-impuestos.html">Impuestos</a></li>
+            <li><a href="finanzas-precios.html" class="activo">Precios</a></li>
+        </ul>
+    </nav>
+
+    <div class="contenedor-padre">
+    <div class="contenedor-tablas">
+        <button class="btn-agregar">➕</button>
+        <table>
+        <caption class="titulo">Precios</caption>
+        <thead>
+            <tr>
+                <th>Precio por mano de obra</th>
+                <th>Precio por unidad</th>
+            </tr>
+        </thead>
+        <tbody id="precio">
+        </tbody>
+    </table>
+    </div>
+    </div>
+    </div>
+
+    <div class="blurr"></div>
+    <div class="contenedor-form-desactivado">
+        <button class="cerrar">❌</button>
+        <form class="form-insert">
+            <h2>Nombre insercion</h2>
+            <div class="campo-ingreso">
+            </div>
+            <button type="submit" class="envio-insert">Insertar</button>
+        </form>
+    </div>
+
+    <template id="molde-fila-precio">
+        <tr>
+            <td class="acciones">
+                <button class="btn-editar">✏️</button>
+                <button class="btn-eliminar">❌</button>
+            </td>
+        </tr>
+    </template>
+
+    <script src="tablas.js"></script>
+</body>
+</html>

@@ -38,7 +38,7 @@
 }
 
 .contenedor-form-desactivado { bottom: -900px; }
-.contenedor-form-activado    { bottom: 40px;   }
+.contenedor-form-activado    { bottom: 250px; }
 
 /* ── FORM INTERIOR ───────────────────────────────────────── */
 .form-insert {

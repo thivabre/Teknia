@@ -149,12 +149,15 @@ if ($accion == 'delete_inventario_productos') {
 
 if ($accion == 'delete_inventario_repuestos') {
     $id_inv_repuestos = $_POST['id_inv_repuestos'];
-    $sql = "DELETE FROM inventario_repuestos WHERE id_inv_repuestos = '$id_inv_repuestos'";
-    $resultado = $BD->query($sql);
-    if ($resultado) {
+    $BD->begin_transaction();
+    $sql1 = "DELETE FROM intermedia_inv_rep WHERE id_inv_repuestos = '$id_inv_repuestos'";
+    $sql2 = "DELETE FROM inventario_repuestos WHERE id_inv_repuestos = '$id_inv_repuestos'";
+    if ($BD->query($sql1) && $BD->query($sql2)) {
+        $BD->commit();
         echo json_encode(['estado' => 'ok', 'mensaje' => 'Registro eliminado correctamente']);
     } else {
-        echo json_encode(['estado' => 'error', 'mensaje' => 'Error al eliminar']);
+        $BD->rollback();
+        echo json_encode(['estado' => 'error', 'mensaje' => 'Error al eliminar: ' . $BD->error]);
     }
 }
 
@@ -204,12 +207,15 @@ if ($accion == 'delete_proveedor') {
 
 if ($accion == 'delete_presupuestos') {
     $id_presupuesto = $_POST['id_presupuesto'];
-    $sql = "DELETE FROM presupuestos WHERE id_presupuesto = '$id_presupuesto'";
-    $resultado = $BD->query($sql);
-    if ($resultado) {
+    $BD->begin_transaction();
+    $sql1 = "DELETE FROM intermedia_rep_pres WHERE id_presupuesto = '$id_presupuesto'";
+    $sql2 = "DELETE FROM presupuestos WHERE id_presupuesto = '$id_presupuesto'";
+    if ($BD->query($sql1) && $BD->query($sql2)) {
+        $BD->commit();
         echo json_encode(['estado' => 'ok', 'mensaje' => 'Registro eliminado correctamente']);
     } else {
-        echo json_encode(['estado' => 'error', 'mensaje' => 'Error al eliminar']);
+        $BD->rollback();
+        echo json_encode(['estado' => 'error', 'mensaje' => 'Error al eliminar: ' . $BD->error]);
     }
 }
 
@@ -272,6 +278,30 @@ if ($accion == 'delete_cliente') {
 if ($accion == 'delete_orden_entrega') {
     $id_orden_entrega = $_POST['id_orden_entrega'];
     $sql = "DELETE FROM orden_entrega WHERE id_orden_entrega = '$id_orden_entrega'";
+    $resultado = $BD->query($sql);
+    if ($resultado) {
+        echo json_encode(['estado' => 'ok', 'mensaje' => 'Registro eliminado correctamente']);
+    } else {
+        echo json_encode(['estado' => 'error', 'mensaje' => 'Error al eliminar']);
+    }
+}
+
+if ($accion == 'delete_intermedia_inv_rep') {
+    $id_inv_repuestos = $_POST['id_inv_repuestos'];
+    $id_repuesto = $_POST['id_repuesto'];
+    $sql = "DELETE FROM intermedia_inv_rep WHERE id_inv_repuestos = '$id_inv_repuestos' AND id_repuesto = '$id_repuesto'";
+    $resultado = $BD->query($sql);
+    if ($resultado) {
+        echo json_encode(['estado' => 'ok', 'mensaje' => 'Registro eliminado correctamente']);
+    } else {
+        echo json_encode(['estado' => 'error', 'mensaje' => 'Error al eliminar']);
+    }
+}
+
+if ($accion == 'delete_intermedia_rep_pres') {
+    $id_presupuesto = $_POST['id_presupuesto'];
+    $id_repuesto = $_POST['id_repuesto'];
+    $sql = "DELETE FROM intermedia_rep_pres WHERE id_presupuesto = '$id_presupuesto' AND id_repuesto = '$id_repuesto'";
     $resultado = $BD->query($sql);
     if ($resultado) {
         echo json_encode(['estado' => 'ok', 'mensaje' => 'Registro eliminado correctamente']);

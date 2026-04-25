@@ -128,12 +128,28 @@ try {
         if (!$resultado) throw new Exception("Error al insertar inventario productos: " . $BD->error);
         echo json_encode(['estado' => 'ok', 'mensaje' => 'Inventario productos insertado correctamente']);
 
+
+
+
+
+
     } elseif ($accion == 'insert_inventario_repuestos') {
         $cantidad_rep = $_POST['cantidad_rep'];
-        $id_repuesto = $_POST['id_repuesto'];
-        $sql = "INSERT INTO inventario_repuestos (cantidad_rep, id_repuesto) VALUES ('$cantidad_rep', '$id_repuesto')";
+        $id_repuesto   = $_POST['id_repuesto'];
+
+        $BD->begin_transaction();
+
+        $sql = "INSERT INTO inventario_repuestos (cantidad_rep) VALUES ('$cantidad_rep')";
         $resultado = $BD->query($sql);
-        if (!$resultado) throw new Exception("Error al insertar inventario repuestos: " . $BD->error);
+        if (!$resultado) { $BD->rollback(); throw new Exception("Error al insertar inventario repuestos: " . $BD->error); }
+
+        $id_inv_repuestos = $BD->insert_id;
+
+        $sql2 = "INSERT INTO intermedia_inv_rep (id_inv_repuestos, id_repuesto) VALUES ('$id_inv_repuestos', '$id_repuesto')";
+        $resultado2 = $BD->query($sql2);
+        if (!$resultado2) { $BD->rollback(); throw new Exception("Error al insertar relación inventario-repuesto: " . $BD->error); }
+
+        $BD->commit();
         echo json_encode(['estado' => 'ok', 'mensaje' => 'Inventario repuestos insertado correctamente']);
 
     } elseif ($accion == 'insert_contrato_empleado') {
@@ -172,12 +188,27 @@ try {
         if (!$resultado) throw new Exception("Error al insertar proveedor: " . $BD->error);
         echo json_encode(['estado' => 'ok', 'mensaje' => 'Proveedor insertado correctamente']);
 
+
+
+
+
     } elseif ($accion == 'insert_presupuestos') {
         $precio_reparacion_tot = $_POST['precio_reparacion_tot'];
         $id_repuesto = $_POST['id_repuesto'];
-        $sql = "INSERT INTO presupuestos (precio_reparacion_tot, id_repuesto) VALUES ('$precio_reparacion_tot', '$id_repuesto')";
+
+        $BD->begin_transaction();
+
+        $sql = "INSERT INTO presupuestos (precio_reparacion_tot) VALUES ('$precio_reparacion_tot')";
         $resultado = $BD->query($sql);
-        if (!$resultado) throw new Exception("Error al insertar presupuesto: " . $BD->error);
+        if (!$resultado) { $BD->rollback(); throw new Exception("Error al insertar presupuesto: " . $BD->error); }
+
+        $id_presupuesto = $BD->insert_id;
+
+        $sql2 = "INSERT INTO intermedia_rep_pres (id_presupuesto, id_repuesto) VALUES ('$id_presupuesto', '$id_repuesto')";
+        $resultado2 = $BD->query($sql2);
+        if (!$resultado2) { $BD->rollback(); throw new Exception("Error al insertar relación presupuesto-repuesto: " . $BD->error); }
+
+        $BD->commit();
         echo json_encode(['estado' => 'ok', 'mensaje' => 'Presupuesto insertado correctamente']);
 
     } elseif ($accion == 'insert_sucursales') {
@@ -192,6 +223,9 @@ try {
         if (!$resultado) throw new Exception("Error al insertar sucursal: " . $BD->error);
         echo json_encode(['estado' => 'ok', 'mensaje' => 'Sucursal insertada correctamente']);
 
+
+
+
     } elseif ($accion == 'insert_empleado') {
         $nombre_emple = $_POST['nombre_emple'];
         $apellido_emple = $_POST['apellido_emple'];
@@ -199,11 +233,13 @@ try {
         $telefono_emple = $_POST['telefono_emple'];
         $horas_trabajdas = $_POST['horas_trabajdas'];
         $horas_extra = $_POST['horas_extra'];
+        $jefe_sucursal = $_POST['jefe_sucursal'];
+        $jefe_general = $_POST['jefe_general'];
         $id_dire_empleado = $_POST['id_dire_empleado'];
         $id_contrato_emple = $_POST['id_contrato_emple'];
         $id_sucursal = $_POST['id_sucursal'];
         $id_seguro = $_POST['id_seguro'];
-        $sql = "INSERT INTO empleado (nombre_emple, apellido_emple, dni_emple, telefono_emple, horas_trabajdas, horas_extra, id_dire_empleado, id_contrato_emple, id_sucursal, id_seguro) VALUES ('$nombre_emple', '$apellido_emple', '$dni_emple', '$telefono_emple', '$horas_trabajdas', '$horas_extra', '$id_dire_empleado', '$id_contrato_emple', '$id_sucursal', '$id_seguro')";
+        $sql = "INSERT INTO empleado (nombre_emple, apellido_emple, dni_emple, telefono_emple, horas_trabajdas, horas_extra, jefe_sucursal, jefe_general, id_dire_empleado, id_contrato_emple, id_sucursal, id_seguro) VALUES ('$nombre_emple', '$apellido_emple', '$dni_emple', '$telefono_emple', '$horas_trabajdas', '$horas_extra', '$jefe_sucursal', '$jefe_general', '$id_dire_empleado', '$id_contrato_emple', '$id_sucursal', '$id_seguro')";
         $resultado = $BD->query($sql);
         if (!$resultado) throw new Exception("Error al insertar empleado: " . $BD->error);
         echo json_encode(['estado' => 'ok', 'mensaje' => 'Empleado insertado correctamente']);
@@ -216,13 +252,17 @@ try {
         if (!$resultado) throw new Exception("Error al insertar sucursal_proveedor: " . $BD->error);
         echo json_encode(['estado' => 'ok', 'mensaje' => 'Sucursal-Proveedor insertado correctamente']);
 
+
+
+
     } elseif ($accion == 'insert_orden_servicio') {
         $fecha_orden = $_POST['fecha_orden'];
         $fecha_est_fin = $_POST['fecha_est_fin'];
         $id_sucursal = $_POST['id_sucursal'];
         $id_articulo_reparar = $_POST['id_articulo_reparar'];
         $id_presupuesto = $_POST['id_presupuesto'];
-        $sql = "INSERT INTO orden_servicio (fecha_orden, fecha_est_fin, id_sucursal, id_articulo_reparar, id_presupuesto) VALUES ('$fecha_orden', '$fecha_est_fin', '$id_sucursal', '$id_articulo_reparar', '$id_presupuesto')";
+        $id_cliente = $_POST['id_cliente'];
+        $sql = "INSERT INTO orden_servicio (fecha_orden, fecha_est_fin, id_sucursal, id_articulo_reparar, id_presupuesto, id_cliente) VALUES ('$fecha_orden', '$fecha_est_fin', '$id_sucursal', '$id_articulo_reparar', '$id_presupuesto', '$id_cliente')";
         $resultado = $BD->query($sql);
         if (!$resultado) throw new Exception("Error al insertar orden de servicio: " . $BD->error);
         echo json_encode(['estado' => 'ok', 'mensaje' => 'Orden de servicio insertada correctamente']);
@@ -247,6 +287,25 @@ try {
         $resultado = $BD->query($sql);
         if (!$resultado) throw new Exception("Error al insertar orden de entrega: " . $BD->error);
         echo json_encode(['estado' => 'ok', 'mensaje' => 'Orden de entrega insertada correctamente']);
+
+
+
+
+    } elseif ($accion == 'insert_intermedia_inv_rep') {
+        $id_inv_repuestos = $_POST['id_inv_repuestos'];
+        $id_repuesto = $_POST['id_repuesto'];
+        $sql = "INSERT INTO intermedia_inv_rep (id_inv_repuestos, id_repuesto) VALUES ('$id_inv_repuestos', '$id_repuesto')";
+        $resultado = $BD->query($sql);
+        if (!$resultado) throw new Exception("Error al insertar intermedia_inv_rep: " . $BD->error);
+        echo json_encode(['estado' => 'ok', 'mensaje' => 'Relación inventario-repuesto insertada correctamente']);
+
+    } elseif ($accion == 'insert_intermedia_rep_pres') {
+        $id_presupuesto = $_POST['id_presupuesto'];
+        $id_repuesto = $_POST['id_repuesto'];
+        $sql = "INSERT INTO intermedia_rep_pres (id_presupuesto, id_repuesto) VALUES ('$id_presupuesto', '$id_repuesto')";
+        $resultado = $BD->query($sql);
+        if (!$resultado) throw new Exception("Error al insertar intermedia_rep_pres: " . $BD->error);
+        echo json_encode(['estado' => 'ok', 'mensaje' => 'Relación presupuesto-repuesto insertada correctamente']);
 
     } else {
         throw new Exception("Acción no reconocida: $accion");

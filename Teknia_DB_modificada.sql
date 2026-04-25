@@ -191,6 +191,8 @@ create table empleado(
     telefono_emple varchar(11) not null,
     horas_trabajdas int not null,
     horas_extra int not null,
+    jefe_sucursal bool not null,
+    jefe_general bool not null,
     id_dire_empleado int not null,
     id_contrato_emple int not null unique,
     id_sucursal int not null,

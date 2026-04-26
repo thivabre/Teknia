@@ -70,8 +70,8 @@ if ($accion == 'insert_cliente') {
 
     // 3. Insertar cliente
     // id_orden_servicio se inicializa en 0: será actualizado cuando el cliente genere su primera orden
-    $BD->query("INSERT INTO cliente (nombre_cli, apellido_cli, dni_cli, telefono_cli, id_dire_cliente, id_orden_servicio)
-                VALUES ('$nombre_cli', '$apellido_cli', $dni_cli, '$telefono_cli', $id_dire_cliente, 0)");
+    $BD->query("INSERT INTO cliente (nombre_cli, apellido_cli, dni_cli, telefono_cli, id_dire_cliente)
+                VALUES ('$nombre_cli', '$apellido_cli', $dni_cli, '$telefono_cli', $id_dire_cliente)");
     if ($BD->error) {
         $BD->rollback();
         echo json_encode(['estado' => 'error', 'mensaje' => 'Error al guardar cliente: ' . $BD->error]);

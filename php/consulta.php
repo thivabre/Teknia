@@ -136,6 +136,18 @@ if ($accion == 'consulta_intermedia_inv_rep') {
     consultarYResponder($BD, "SELECT id_inv_repuestos, id_repuesto FROM intermedia_inv_rep ORDER BY id_inv_repuestos ASC");
 }
 
+if ($accion == 'consulta_repuestos_nombre') {
+    consultarYResponder($BD, "SELECT nombre_rep FROM repuestos");
+}
+
+if ($accion == 'consulta_sucursales_id') {
+    consultarYResponder($BD, "SELECT id_sucursal FROM sucursales");
+}
+
+if ($accion == 'consulta_tipo_impuesto') {
+    consultarYResponder($BD, "SELECT tipo_imp FROM impuestos");
+}
+
 if ($accion == 'consulta_intermedia_rep_pres') {
     consultarYResponder($BD, "SELECT id_presupuesto, id_repuesto FROM intermedia_rep_pres ORDER BY id_presupuesto ASC");
 }

@@ -202,16 +202,113 @@ const configTablas = {
 
 let tablaActiva = '';
 
-// ─── FORULARIO ─────────────────────────────────────────────────────────────
-const contenedorForm = document.querySelector('.contenedor-form-desactivado') || document.querySelector('.contenedor-form-activado');
+// ─── ROL Y SESIÓN ────────────────────────────────────────────────────────────
+
+/**
+ * Consulta get_rol.php y devuelve { rol, nombre } o null si no hay sesión.
+ * Si no hay sesión activa redirige al login automáticamente.
+ */
+async function verificarSesion() {
+    try {
+        const res = await fetch('get_rol.php');
+        const datos = await res.json();
+
+        if (datos.estado !== 'ok') {
+            window.location.href = 'inicio_sesion.html';
+            return null;
+        }
+
+        return datos;
+
+    } catch (e) {
+        console.error('Error al verificar sesión:', e);
+        window.location.href = 'inicio_sesion.html';
+        return null;
+    }
+}
+
+/**
+ * Muestra las secciones que corresponden al rol y oculta el resto.
+ * Marca con data-rol="cliente empleado jefe_sucursal jefe_general" cada elemento
+ * listando los roles que tienen acceso.
+ */
+function aplicarRol(rol) {
+    // Ocultar todo lo que tiene restricción de rol
+    document.querySelectorAll('[data-rol]').forEach(el => {
+        el.style.display = 'none';
+    });
+
+    // Mostrar solo las secciones que incluyen el rol actual
+    document.querySelectorAll(`[data-rol*="${rol}"]`).forEach(el => {
+        el.style.display = '';
+    });
+}
+
+/**
+ * Actualiza el área de autenticación del navbar:
+ * - Si hay sesión: muestra nombre del usuario y botón de logout
+ * - Si no hay sesión: muestra botones de login y crear cuenta (estado por defecto del HTML)
+ */
+function actualizarNavAuth(sesion) {
+    const navAuth = document.getElementById('nav-auth-area');
+    if (!navAuth) return;
+
+    if (sesion) {
+        const rolLabel = {
+            'cliente':         'Cliente',
+            'empleado':        'Empleado',
+            'jefe_sucursal':   'Jefe de sucursal',
+            'jefe_general':    'Jefe general'
+        }[sesion.rol] || sesion.rol;
+
+        navAuth.innerHTML = `
+            <span style="
+                color: rgba(255,255,255,0.6);
+                font-size: 12px;
+                padding: 0 10px;
+                line-height: 1.3;
+                display: flex;
+                flex-direction: column;
+                align-items: flex-end;
+            ">
+                <span style="color:#fff;font-weight:600">${sesion.nombre}</span>
+                <span style="font-size:10px;opacity:.7">${rolLabel}</span>
+            </span>
+            <button id="btn-logout" class="btn-sesion" style="
+                cursor: pointer;
+                border: none;
+                height: 34px !important;
+                padding: 0 14px !important;
+                border-radius: 15px !important;
+                font-size: 12px !important;
+                font-weight: 600 !important;
+                background: rgba(255,255,255,0.08) !important;
+                color: rgba(255,255,255,0.65) !important;
+            ">
+                Cerrar sesión
+            </button>
+        `;
+
+        document.getElementById('btn-logout').addEventListener('click', async function () {
+            const fd = new FormData();
+            fd.append('accion', 'logout');
+            await fetch('login_proceso.php', { method: 'POST', body: fd });
+            window.location.href = 'inicio_sesion.html';
+        });
+    }
+}
+
+// ─── FORMULARIO ──────────────────────────────────────────────────────────────
 const formularioInsert = document.querySelector('.form-insert');
 
 // 1. ESCUCHAR CLIC EN BOTONES "AGREGAR"
 document.addEventListener('click', function(e) {
     if (e.target.classList.contains('btn-agregar')) {
         const contenedorTabla = e.target.closest('.contenedor-tablas');
-        const tablaId = contenedorTabla.querySelector('tbody').id;
-        
+        if (!contenedorTabla) return;
+        const tbody = contenedorTabla.querySelector('tbody');
+        if (!tbody) return;
+        const tablaId = tbody.id;
         abrirModalInsertar(tablaId);
     }
 });
@@ -222,13 +319,14 @@ function abrirModalInsertar(nombreTabla) {
     if (!conf) return;
 
     const contenedorForm = document.querySelector('.contenedor-form-desactivado, .contenedor-form-activado');
+    if (!contenedorForm || !formularioInsert) return;
 
-    formularioInsert.name = nombreTabla; 
-    
+    formularioInsert.name = nombreTabla;
+
     const titulo = formularioInsert.querySelector('h2');
-    titulo.textContent = `Insertar ${nombreTabla}`;
+    if (titulo) titulo.textContent = `Insertar ${nombreTabla}`;
 
-    // Limpiar campos y botón anteriores
+    // Limpiar campos anteriores
     const camposViejos = formularioInsert.querySelectorAll('.campo-ingreso .campo, .btn-guardar-nuevo');
     camposViejos.forEach(el => el.remove());
 
@@ -236,7 +334,7 @@ function abrirModalInsertar(nombreTabla) {
     if (!contenedorCampos) return;
 
     conf.campos.forEach((campo, index) => {
-        if (index === 0) return;
+        if (index === 0) return; // saltar PK
 
         const divCampo = document.createElement('div');
         divCampo.className = 'campo';
@@ -261,14 +359,39 @@ function abrirModalInsertar(nombreTabla) {
 // CERRAR FORM
 function cerrarModal() {
     const contenedorForm = document.querySelector('.contenedor-form-desactivado, .contenedor-form-activado');
-    contenedorForm.classList.replace('contenedor-form-activado', 'contenedor-form-desactivado');
+    if (contenedorForm) {
+        contenedorForm.classList.replace('contenedor-form-activado', 'contenedor-form-desactivado');
+    }
 }
 
 // ─── CARGA INICIAL ────────────────────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', function () {
-    document.querySelector('.cerrar').addEventListener('click', function() {
-        cerrarModal();
-    });
+document.addEventListener('DOMContentLoaded', async function () {
+    // 1. Verificar sesión antes de mostrar nada
+    const sesion = await verificarSesion();
+    if (!sesion) return;
+
+    // 2. Mostrar nombre del usuario en el encabezado (si existe el elemento)
+    const elNombre = document.getElementById('nombre-usuario');
+    if (elNombre) elNombre.textContent = sesion.nombre;
+
+    // 3. Actualizar el área de auth del navbar (nombre + logout)
+    actualizarNavAuth(sesion);
+
+    // 4. Mostrar/ocultar secciones según el rol
+    aplicarRol(sesion.rol);
+
+    // 4b. Quitar la clase que oculta todo antes de cargar el rol (anti-flash)
+    document.body.classList.remove('cargando-rol');
+
+    // 5. Cerrar modal (con guard)
+    const btnCerrar = document.querySelector('.cerrar');
+    if (btnCerrar) {
+        btnCerrar.addEventListener('click', function () {
+            cerrarModal();
+        });
+    }
+
+    // 6. Cargar datos de las tablas visibles en la página
     Object.keys(configTablas).forEach(nombreTabla => {
         if (document.getElementById(nombreTabla)) {
             actualizarVistaTabla(nombreTabla);
@@ -280,25 +403,26 @@ document.addEventListener('DOMContentLoaded', function () {
 document.addEventListener('submit', async function (event) {
     if (event.target.classList.contains('form-insert')) {
         event.preventDefault();
-        
+
         const nombreTabla = event.target.name;
         const conf = configTablas[nombreTabla];
+        if (!conf) return;
         const formData = new FormData(event.target);
 
         try {
             formData.append('accion', conf.accionInsertar);
-            const respuesta = await fetch(`insercion.php`, {
+            const respuesta = await fetch('insercion.php', {
                 method: 'POST',
                 body: formData
             });
 
             if (respuesta.ok) {
-                alert("¡Registro guardado!");
+                alert('¡Registro guardado!');
                 actualizarVistaTabla(nombreTabla);
                 cerrarModal();
             }
         } catch (error) {
-            console.error("Error al insertar:", error);
+            console.error('Error al insertar:', error);
         }
     }
 });
@@ -306,7 +430,7 @@ document.addEventListener('submit', async function (event) {
 // ─── ACTUALIZAR ESTADO DE LA TABLA ───────────────────────────────────────────
 async function actualizarVistaTabla(nombreTabla) {
     if (!nombreTabla || !configTablas[nombreTabla]) {
-        console.error("actualizarVistaTabla: tabla inválida →", nombreTabla);
+        console.error('actualizarVistaTabla: tabla inválida →', nombreTabla);
         return;
     }
 
@@ -320,7 +444,7 @@ async function actualizarVistaTabla(nombreTabla) {
         const datos = await res.json();
         renderizarTabla(datos, nombreTabla);
     } catch (e) {
-        console.error("Error al recargar tabla:", e);
+        console.error('Error al recargar tabla:', e);
     }
 }
 
@@ -330,7 +454,7 @@ function renderizarTabla(listaDatos, nombreTabla) {
     const molde = document.getElementById(`molde-fila-${nombreTabla}`);
     if (!contenedor || !molde) return;
 
-    contenedor.innerHTML = "";
+    contenedor.innerHTML = '';
     const camposTabla = configTablas[nombreTabla].campos;
 
     listaDatos.forEach(item => {
@@ -340,7 +464,7 @@ function renderizarTabla(listaDatos, nombreTabla) {
 
         const celdaAcciones = fila.querySelector('.acciones');
 
-        fila.innerHTML = "";
+        fila.innerHTML = '';
 
         camposTabla.forEach(campo => {
             const td = document.createElement('td');
@@ -379,7 +503,6 @@ document.addEventListener('click', async function (event) {
     const celdaId = filaElemento.querySelector(`.col-${nombreId}`);
     if (!celdaId) return;
 
-    // FIX: leer el ID desde el input si ya está en modo edición, o desde textContent si no
     const idRegistro = celdaId.querySelector('input')
         ? celdaId.querySelector('input').value
         : celdaId.textContent;
@@ -388,13 +511,10 @@ document.addEventListener('click', async function (event) {
     if (boton.classList.contains('btn-eliminar')) {
         if (!confirm(`¿Eliminar ID: ${idRegistro}?`)) return;
         try {
-
             const formData = new FormData();
             formData.append(nombreId, idRegistro);
-
             formData.append('accion', configuracion.accionEliminar);
-            const res = await fetch(`eliminacion.php`, { method: 'POST', body: formData }
-);
+            const res = await fetch('eliminacion.php', { method: 'POST', body: formData });
             if (res.ok) filaElemento.remove();
         } catch (e) { console.error(e); }
     }
@@ -407,7 +527,7 @@ document.addEventListener('click', async function (event) {
             const val = td.textContent;
             td.innerHTML = `<input type="text" value="${val}" class="edit-input" data-campo="${campo}" style="width:100%">`;
         });
-        boton.textContent = "✔️";
+        boton.textContent = '✔️';
         boton.classList.replace('btn-editar', 'btn-guardar');
     }
 
@@ -422,9 +542,9 @@ document.addEventListener('click', async function (event) {
 
         try {
             datos.append('accion', configuracion.accionActualizar);
-            const res=await fetch(`actualizacion.php`, { method: 'POST', body: datos });
+            const res = await fetch('actualizacion.php', { method: 'POST', body: datos });
             if (res.ok) {
-                alert("Actualizado con éxito");
+                alert('Actualizado con éxito');
                 actualizarVistaTabla(nombreTabla);
             }
         } catch (e) { console.error(e); }

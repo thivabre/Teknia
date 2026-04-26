@@ -28,6 +28,10 @@ html, body {
   color: var(--t1);
 }
 
+/* Ocultar por defecto todos los elementos restringidos por rol
+   hasta que tablas.js aplique el rol correcto (evita el flash inicial) */
+body.cargando-rol [data-rol] { display: none; }
+
 /* ── GRID PRINCIPAL ──────────────────────────────────────── */
 /*
   Columnas: 15% sidebar | 85% contenido

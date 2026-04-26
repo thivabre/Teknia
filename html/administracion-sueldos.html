@@ -1,88 +1,85 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Servicios</title>
-    <link rel="stylesheet" href="estilos.css">
-    <link rel="stylesheet" href="estilo_tabla_estatica.css">
-    <link rel="stylesheet" href="estilo_form_insert.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Servicios</title>
+<link href="estilos.css" rel="stylesheet"/>
+<link href="estilo_tabla_estatica.css" rel="stylesheet"/>
+<link href="estilo_form_insert.css" rel="stylesheet"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 </head>
-<body>
-    <div class="contenedor-grid">
-    <nav class="navbar">
-        <ul>
-            <div class="logo">
-                <div class="logo-icon">T</div>
-                <span class="logo-name">Teknia</span>
-            </div>
-            <li><a href="index.html">Inicio</a></li>
-            <li><a href="servicios-crear_oden.html">Servicios</a></li>
-            <li><a href="sucursales-ubicacion.html">Sucursales</a></li>
-            <li><a href="inventario-repuestos.html">Inventario</a></li>
-            <li><a href="finanzas-garantias.html">Finanzas</a></li>
-            <li><a href="personal-clientes.html">Personal</a></li>
-            <li><a href="administracion-contratos.html" class="activo">Administración</a></li>
-            <li class="nav-auth">
-                <a href="inicio_sesion.html" class="btn-sesion">Iniciar sesion</a>
-                <a href="#" class="btn-cuenta">Crear cuenta</a>
-            </li>
-        </ul>
-    </nav>
-
-    <nav class="side-navbar">
-        <span class="seccion-label">Administracion - empresa</span>
-        <ul>
-            <li><a href="administracion-contratos.html">Contratos</a></li>
-            <li><a href="administracion-seguros.html">Seguros</a></li>
-            <li><a href="administracion-sueldos.html" class="activo">Sueldos</a></li>
-        </ul>
-        <span class="seccion-label">Administracion - general</span>
-        <ul>
-            <li><a href="administracion-localidades.html">Localidades</a></li>
-        </ul>
-    </nav>
-
-    <div class="contenedor-padre">
-    <div class="contenedor-tablas">
-    <button class="btn-agregar">➕</button>
-    <table>
-        <caption class="titulo">Sueldos</caption>
-        <thead>
-            <tr>
-                <th>Sueldo por hora</th>
-                <th>Sueldo por hora extra</th>
-                <th>Forma de pago</th>
-            </tr>
-        </thead>
-        <tbody id="sueldo">
-        </tbody>
-    </table>
-    </div>
-    </div>
-    </div>
-
-    <div class="blurr"></div>
-    <div class="contenedor-form-desactivado">
-        <button class="cerrar">❌</button>
-        <form class="form-insert">
-            <h2>Nombre insercion</h2>
-            <div class="campo-ingreso">
-            </div>
-            <button type="submit" class="envio-insert">Insertar</button>
-        </form>
-    </div>
-
-    <template id="molde-fila-sueldo">
-        <tr>
-            <td class="acciones">
-                <button class="btn-editar">✏️</button>
-                <button class="btn-eliminar">❌</button>
-            </td>
-        </tr>
-    </template>
-
-    <script src="tablas.js"></script>
+<body class="cargando-rol">
+<div class="contenedor-grid">
+<nav class="navbar">
+<ul>
+<div class="logo">
+<div class="logo-icon">T</div>
+<span class="logo-name">Teknia</span>
+</div>
+<li><a href="index.html">Inicio</a></li>
+<li data-rol="cliente empleado jefe_sucursal jefe_general"><a href="servicios-crear_oden.html">Servicios</a></li>
+<li data-rol="cliente empleado jefe_sucursal jefe_general"><a href="sucursales-ubicacion.html">Sucursales</a></li>
+<li data-rol="empleado jefe_sucursal jefe_general"><a href="inventario-repuestos.html">Inventario</a></li>
+<li data-rol="jefe_sucursal jefe_general"><a href="finanzas-garantias.html">Finanzas</a></li>
+<li data-rol="empleado jefe_sucursal jefe_general"><a href="personal-clientes.html">Personal</a></li>
+<li data-rol="jefe_general"><a class="activo" href="administracion-contratos.html">Administración</a></li>
+<li class="nav-auth" id="nav-auth-area"><a class="btn-sesion" href="inicio_sesion.html">Iniciar sesión</a><a class="btn-cuenta" href="crear_cuenta.html">Crear cuenta</a></li>
+</ul>
+</nav>
+<nav class="side-navbar">
+<div data-rol="jefe_general">
+<span class="seccion-label">Administracion - empresa</span>
+<ul>
+<li data-rol="jefe_general"><a href="administracion-contratos.html">Contratos</a></li>
+<li data-rol="jefe_general"><a href="administracion-seguros.html">Seguros</a></li>
+<li data-rol="jefe_general"><a class="activo" href="administracion-sueldos.html">Sueldos</a></li>
+</ul>
+</div>
+<div data-rol="jefe_general">
+<span class="seccion-label">Administracion - general</span>
+<ul>
+<li data-rol="jefe_general"><a href="administracion-localidades.html">Localidades</a></li>
+</ul>
+</div>
+</nav>
+<div class="contenedor-padre">
+<div class="contenedor-tablas">
+<button class="btn-agregar">➕</button>
+<table>
+<caption class="titulo">Sueldos</caption>
+<thead>
+<tr>
+<th>Sueldo por hora</th>
+<th>Sueldo por hora extra</th>
+<th>Forma de pago</th>
+</tr>
+</thead>
+<tbody id="sueldo">
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="blurr"></div>
+<div class="contenedor-form-desactivado">
+<button class="cerrar">❌</button>
+<form class="form-insert">
+<h2>Nombre insercion</h2>
+<div class="campo-ingreso">
+</div>
+<button class="envio-insert" type="submit">Insertar</button>
+</form>
+</div>
+<template id="molde-fila-sueldo">
+<tr>
+<td class="acciones">
+<button class="btn-editar">✏️</button>
+<button class="btn-eliminar">❌</button>
+</td>
+</tr>
+</template>
+<script src="tablas.js"></script>
 </body>
 </html>

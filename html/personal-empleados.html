@@ -1,56 +1,49 @@
 <!DOCTYPE html>
+
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Servicios</title>
-    <link rel="stylesheet" href="estilos.css">
-    <link rel="stylesheet" href="estilo_tabla_estatica.css">
-    <link rel="stylesheet" href="estilo_form_insert.css">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Servicios</title>
+<link href="estilos.css" rel="stylesheet"/>
+<link href="estilo_tabla_estatica.css" rel="stylesheet"/>
+<link href="estilo_form_insert.css" rel="stylesheet"/>
 </head>
-<body>
-    <div class="contenedor-grid">
-
-    <!-- ── TOP NAVBAR ── -->
-    <nav class="navbar">
-        <ul>
-            <div class="logo">
-                <div class="logo-icon">T</div>
-                <span class="logo-name">Teknia</span>
-            </div>
-            <li><a href="index.html">Inicio</a></li>
-            <li><a href="servicios-crear_oden.html">Servicios</a></li>
-            <li><a href="sucursales-ubicacion.html">Sucursales</a></li>
-            <li><a href="inventario-repuestos.html">Inventario</a></li>
-            <li><a href="finanzas-garantias.html">Finanzas</a></li>
-            <li><a href="personal-clientes.html" class="activo">Personal</a></li>
-            <li><a href="administracion-contratos.html">Administración</a></li>
-            <li class="nav-auth">
-                <a href="inicio_sesion.html" class="btn-sesion">Iniciar sesión</a>
-                <a href="crear_cuenta.html" class="btn-cuenta">Crear cuenta</a>
-            </li>
-        </ul>
-    </nav>
-
-    <nav class="side-navbar">
-        <span class="seccion-label">Personal</span>
-        <ul>
-            <li><a href="personal-clientes.html">Clientes</a></li>
-            <li><a href="personal-empleados.html" class="activo">Empleados</a></li>
-            <li><a href="personal-jefes_sucursal.html">Jefes de sucursal</a></li>
-            <li><a href="personal-jefes.html">Jefes</a></li>
-        </ul>
-    </nav>
-
-    <div class="contenedor-padre">
-
-        <div class="contenedor-tablas">
-            
-        </div>
-
-    </div><!-- /contenedor-padre -->
-    </div><!-- /contenedor-grid -->
-
-    <script src="tablas.js"></script>
+<body class="cargando-rol">
+<div class="contenedor-grid">
+<!-- ── TOP NAVBAR ── -->
+<nav class="navbar">
+<ul>
+<div class="logo">
+<div class="logo-icon">T</div>
+<span class="logo-name">Teknia</span>
+</div>
+<li><a href="index.html">Inicio</a></li>
+<li data-rol="cliente empleado jefe_sucursal jefe_general"><a href="servicios-crear_oden.html">Servicios</a></li>
+<li data-rol="cliente empleado jefe_sucursal jefe_general"><a href="sucursales-ubicacion.html">Sucursales</a></li>
+<li data-rol="empleado jefe_sucursal jefe_general"><a href="inventario-repuestos.html">Inventario</a></li>
+<li data-rol="jefe_sucursal jefe_general"><a href="finanzas-garantias.html">Finanzas</a></li>
+<li data-rol="empleado jefe_sucursal jefe_general"><a class="activo" href="personal-clientes.html">Personal</a></li>
+<li data-rol="jefe_general"><a href="administracion-contratos.html">Administración</a></li>
+<li class="nav-auth" id="nav-auth-area"><a class="btn-sesion" href="inicio_sesion.html">Iniciar sesión</a><a class="btn-cuenta" href="crear_cuenta.html">Crear cuenta</a></li>
+</ul>
+</nav>
+<nav class="side-navbar">
+<div data-rol="empleado jefe_sucursal jefe_general">
+<span class="seccion-label">Personal</span>
+<ul>
+<li data-rol="empleado jefe_sucursal jefe_general"><a href="personal-clientes.html">Clientes</a></li>
+<li data-rol="jefe_sucursal jefe_general"><a class="activo" href="personal-empleados.html">Empleados</a></li>
+<li data-rol="jefe_general"><a href="personal-jefes_sucursal.html">Jefes de sucursal</a></li>
+<li data-rol="jefe_general"><a href="personal-jefes.html">Jefes</a></li>
+</ul>
+</div>
+</nav>
+<div class="contenedor-padre">
+<div class="contenedor-tablas">
+</div>
+</div><!-- /contenedor-padre -->
+</div><!-- /contenedor-grid -->
+<script src="tablas.js"></script>
 </body>
 </html>

@@ -103,8 +103,14 @@ create table direccion_proveedor(
 
 create table inventario_productos(
 	id_inv_productos int not null auto_increment primary key,
-    cantidad_prod int not null,
+    cantidad_prod int not null
+);
+
+create table intermedia_inv_prod(
+	id_inv_productos int not null,
     id_articulo_reparar int not null,
+    primary key (id_inv_productos, id_articulo_reparar),
+    foreign key (id_inv_productos) references inventario_productos(id_inv_productos),
     foreign key (id_articulo_reparar) references articulo_reparar(id_articulo_reparar)
 );
 
@@ -129,8 +135,10 @@ create table factura_servicio(
     fecha_factura date not null,
     id_pago int unique,
     id_garantia_servicio int not null unique,
+    id_presupuesto int not null unique,
     foreign key (id_pago) references pago(id_pago),
-    foreign key (id_garantia_servicio) references garantia_servicio(id_garantia_servicio)
+    foreign key (id_garantia_servicio) references garantia_servicio(id_garantia_servicio),
+    foreign key (id_presupuesto) references presupuestos(id_presupuesto)
 );
 
 create table proveedor(
@@ -165,7 +173,6 @@ create table cliente(
     dni_cli int(8) not null,
     telefono_cli varchar(11) not null,
     id_dire_cliente int not null,
-    id_orden_servicio int not null,
     foreign key (id_dire_cliente) references direccion_cliente(id_dire_cliente)
 );
 

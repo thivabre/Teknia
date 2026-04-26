@@ -307,6 +307,44 @@ try {
         $BD->commit();
         echo json_encode(['estado' => 'ok', 'mensaje' => 'Relación presupuesto-repuesto actualizada correctamente']);
 
+    } elseif ($accion == 'update_jefe_sucursal') {
+        $id_empleado = $_POST['id_empleado'];
+
+        // Verificar que el empleado no sea ya jefe_general
+        $sqlCheck = "SELECT jefe_general FROM empleado WHERE id_empleado = '$id_empleado'";
+        $resCheck = $BD->query($sqlCheck);
+        if (!$resCheck) throw new Exception("Error al verificar empleado: " . $BD->error);
+        $row = $resCheck->fetch_assoc();
+        if (!$row) throw new Exception("Empleado no encontrado.");
+        if ($row['jefe_general'] == 1) {
+            throw new Exception("No se puede asignar como jefe de sucursal: el empleado ya es jefe general.");
+        }
+
+        $sql = "UPDATE empleado SET jefe_sucursal = 1 WHERE id_empleado = '$id_empleado'";
+        $resultado = $BD->query($sql);
+        if (!$resultado) throw new Exception("Error al actualizar jefe de sucursal: " . $BD->error);
+        echo json_encode(['estado' => 'ok', 'mensaje' => 'Empleado asignado como jefe de sucursal correctamente']);
+
+    } elseif ($accion == 'update_jefe_general') {
+        $id_empleado = $_POST['id_empleado'];
+
+        // Verificar si el empleado es jefe_sucursal; si lo es, quitarle ese rol antes de asignar jefe_general
+        $sqlCheck = "SELECT jefe_sucursal FROM empleado WHERE id_empleado = '$id_empleado'";
+        $resCheck = $BD->query($sqlCheck);
+        if (!$resCheck) throw new Exception("Error al verificar empleado: " . $BD->error);
+        $row = $resCheck->fetch_assoc();
+        if (!$row) throw new Exception("Empleado no encontrado.");
+
+        if ($row['jefe_sucursal'] == 1) {
+            $sql = "UPDATE empleado SET jefe_sucursal = 0, jefe_general = 1 WHERE id_empleado = '$id_empleado'";
+        } else {
+            $sql = "UPDATE empleado SET jefe_general = 1 WHERE id_empleado = '$id_empleado'";
+        }
+
+        $resultado = $BD->query($sql);
+        if (!$resultado) throw new Exception("Error al actualizar jefe general: " . $BD->error);
+        echo json_encode(['estado' => 'ok', 'mensaje' => 'Empleado asignado como jefe general correctamente']);
+
     } else {
         throw new Exception("Acción no reconocida: $accion");
     }

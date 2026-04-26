@@ -198,6 +198,72 @@ try {
         if (!$resultado) throw new Exception("Error al insertar orden de servicio: " . $BD->error);
         echo json_encode(['estado' => 'ok', 'mensaje' => 'Orden de servicio insertada correctamente']);
 
+    } elseif ($accion == 'crear_orden_completa') {
+
+        $nombre_art_rep   = $BD->real_escape_string($_POST['nombre_art_rep']  ?? '');
+        $tipo_art_rep     = $BD->real_escape_string($_POST['tipo_art_rep']    ?? '');
+        $fallas           = $BD->real_escape_string($_POST['fallas']          ?? '');
+        $precio_mano_obra = intval($_POST['precio_mano_obra'] ?? 0);
+        $id_repuesto_1    = intval($_POST['id_repuesto_1']    ?? 0);
+        $id_repuesto_2    = intval($_POST['id_repuesto_2']    ?? 0);
+        $id_repuesto_3    = intval($_POST['id_repuesto_3']    ?? 0);
+        $id_sucursal      = intval($_POST['id_sucursal']      ?? 0);
+        $id_cliente       = intval($_POST['id_cliente']       ?? 0);
+
+        if (!$nombre_art_rep || !$tipo_art_rep || !$id_repuesto_1 || !$id_sucursal || !$id_cliente) {
+            throw new Exception("Faltan campos requeridos: nombre_art_rep, tipo_art_rep, id_repuesto_1, id_sucursal, id_cliente");
+        }
+
+        // Armar lista de repuestos válidos (sin duplicados ni ceros)
+        $ids_repuestos = array_unique(array_filter([$id_repuesto_1, $id_repuesto_2, $id_repuesto_3]));
+        $ids_str = implode(',', $ids_repuestos);
+
+        // Calcular total de precios de repuestos en PHP
+        $res_precios = $BD->query("SELECT SUM(p.precio_rep) AS total_rep
+        FROM repuestos r
+        JOIN precio p ON r.id_precio = p.id_precio
+        WHERE r.id_repuesto IN ($ids_str)");
+        if (!$res_precios) throw new Exception("Error al calcular precios: " . $BD->error);
+        $fila_precio = $res_precios->fetch_assoc();
+        $precio_reparacion_tot = $precio_mano_obra + intval($fila_precio['total_rep']);
+
+        $BD->begin_transaction();
+
+        // 1. Insertar artículo a reparar
+        $BD->query("INSERT INTO articulo_reparar (nombre_art_rep, tipo_art_rep, fallas)
+        VALUES ('$nombre_art_rep', '$tipo_art_rep', '$fallas')");
+        if ($BD->error) { $BD->rollback(); throw new Exception("Error al insertar artículo: " . $BD->error); }
+        $id_articulo_reparar = $BD->insert_id;
+
+        // 2. Insertar presupuesto con el total calculado
+        $BD->query("INSERT INTO presupuestos (precio_reparacion_tot) VALUES ($precio_reparacion_tot)");
+        if ($BD->error) { $BD->rollback(); throw new Exception("Error al insertar presupuesto: " . $BD->error); }
+        $id_presupuesto = $BD->insert_id;
+
+        // 3. Relacionar presupuesto con cada repuesto (tabla intermedia)
+        foreach ($ids_repuestos as $id_rep) {
+            $BD->query("INSERT INTO intermedia_rep_pres (id_presupuesto, id_repuesto) VALUES ($id_presupuesto, $id_rep)");
+            if ($BD->error) { $BD->rollback(); throw new Exception("Error al relacionar presupuesto-repuesto: " . $BD->error); }
+        }
+
+        // 4. Insertar orden de servicio: fecha actual y estimado +3 días
+        $BD->query("INSERT INTO orden_servicio (fecha_orden, fecha_est_fin, id_sucursal, id_articulo_reparar, id_presupuesto, id_cliente)
+        VALUES (CURDATE(), DATE_ADD(CURDATE(), INTERVAL 3 DAY), $id_sucursal, $id_articulo_reparar, $id_presupuesto, $id_cliente)");
+        if ($BD->error) { $BD->rollback(); throw new Exception("Error al insertar orden de servicio: " . $BD->error); }
+        $id_orden_servicio = $BD->insert_id;
+
+        $BD->commit();
+        echo json_encode([
+            'estado'                => 'ok',
+            'mensaje'               => 'Orden creada correctamente',
+            'id_orden_servicio'     => $id_orden_servicio,
+            'id_articulo_reparar'   => $id_articulo_reparar,
+            'id_presupuesto'        => $id_presupuesto,
+            'precio_reparacion_tot' => $precio_reparacion_tot,
+            'fecha_orden'           => date('Y-m-d'),
+                         'fecha_est_fin'         => date('Y-m-d', strtotime('+3 days'))
+        ]);
+
     } elseif ($accion == 'insert_cliente') {
         $nombre_cli      = $_POST['nombre_cli'];
         $apellido_cli    = $_POST['apellido_cli'];
@@ -227,6 +293,79 @@ try {
         echo json_encode(['estado' => 'ok', 'mensaje' => 'Relación presupuesto-repuesto insertada correctamente']);
 
 
+
+    } elseif ($accion == 'crear_sucursal_nueva') {
+
+        $cant_empleados      = intval($_POST['cant_empleados']      ?? 0);
+        $reparaciones_hechas = intval($_POST['reparaciones_hechas'] ?? 0);
+        $tipo_imp            = $BD->real_escape_string($_POST['tipo_imp']    ?? '');
+        $calle_suc           = $BD->real_escape_string($_POST['calle_suc']   ?? '');
+        $altura_suc          = intval($_POST['altura_suc']          ?? 0);
+        $cod_postal_suc      = intval($_POST['cod_postal_suc']      ?? 0);
+        $pais                = $BD->real_escape_string($_POST['pais']        ?? '');
+        $provincia           = $BD->real_escape_string($_POST['provincia']   ?? '');
+        $ciudad              = $BD->real_escape_string($_POST['ciudad']      ?? '');
+        $barrio              = $BD->real_escape_string($_POST['barrio']      ?? '');
+
+        if (!$tipo_imp || !$calle_suc || !$pais || !$provincia || !$ciudad || !$barrio) {
+            throw new Exception("Faltan campos requeridos: tipo_imp, calle_suc, pais, provincia, ciudad, barrio");
+        }
+
+        // Buscar id_impuestos por nombre de tipo
+        $res_imp = $BD->query("SELECT id_impuestos FROM impuestos WHERE tipo_imp = '$tipo_imp' LIMIT 1");
+        if (!$res_imp || $res_imp->num_rows === 0) {
+            throw new Exception("No se encontró un impuesto con tipo: $tipo_imp");
+        }
+        $id_impuestos = $res_imp->fetch_assoc()['id_impuestos'];
+
+        $BD->begin_transaction();
+
+        // Buscar localidad existente; crearla si no existe
+        $res_loc = $BD->query("SELECT id_localidad FROM localidad
+        WHERE pais='$pais' AND provincia='$provincia' AND ciudad='$ciudad' AND barrio='$barrio' LIMIT 1");
+        if (!$res_loc) { $BD->rollback(); throw new Exception("Error al buscar localidad: " . $BD->error); }
+        if ($res_loc->num_rows > 0) {
+            $id_localidad = $res_loc->fetch_assoc()['id_localidad'];
+        } else {
+            $BD->query("INSERT INTO localidad (pais, provincia, ciudad, barrio)
+            VALUES ('$pais', '$provincia', '$ciudad', '$barrio')");
+            if ($BD->error) { $BD->rollback(); throw new Exception("Error al insertar localidad: " . $BD->error); }
+            $id_localidad = $BD->insert_id;
+        }
+
+        // Insertar dirección de sucursal
+        $BD->query("INSERT INTO direccion_sucursal (calle_suc, altura_suc, cod_postal_suc, id_localidad)
+        VALUES ('$calle_suc', $altura_suc, $cod_postal_suc, $id_localidad)");
+        if ($BD->error) { $BD->rollback(); throw new Exception("Error al insertar dirección sucursal: " . $BD->error); }
+        $id_dire_sucursal = $BD->insert_id;
+
+        // Crear inventario de repuestos en 0
+        $BD->query("INSERT INTO inventario_repuestos (cantidad_rep) VALUES (0)");
+        if ($BD->error) { $BD->rollback(); throw new Exception("Error al crear inventario repuestos: " . $BD->error); }
+        $id_inv_repuestos = $BD->insert_id;
+
+        // Crear inventario de productos en 0
+        $BD->query("INSERT INTO inventario_productos (cantidad_prod) VALUES (0)");
+        if ($BD->error) { $BD->rollback(); throw new Exception("Error al crear inventario productos: " . $BD->error); }
+        $id_inv_productos = $BD->insert_id;
+
+        // Insertar sucursal vinculando todos los recursos creados
+        $BD->query("INSERT INTO sucursales (cant_empleados, reparaciones_hechas, id_dire_sucursal, id_inv_repuestos, id_inv_productos, id_impuestos)
+        VALUES ($cant_empleados, $reparaciones_hechas, $id_dire_sucursal, $id_inv_repuestos, $id_inv_productos, $id_impuestos)");
+        if ($BD->error) { $BD->rollback(); throw new Exception("Error al insertar sucursal: " . $BD->error); }
+        $id_sucursal = $BD->insert_id;
+
+        $BD->commit();
+        echo json_encode([
+            'estado'           => 'ok',
+            'mensaje'          => 'Sucursal creada correctamente',
+            'id_sucursal'      => $id_sucursal,
+            'id_inv_repuestos' => $id_inv_repuestos,
+            'id_inv_productos' => $id_inv_productos,
+            'id_dire_sucursal' => $id_dire_sucursal,
+            'id_localidad'     => $id_localidad,
+            'id_impuestos'     => $id_impuestos
+        ]);
 
     } elseif ($accion == 'insert_articulo_con_presupuesto') {
 

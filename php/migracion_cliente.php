@@ -20,7 +20,7 @@ $accion = $_POST['accion'];
 
 if ($accion == 'migrar_cliente_a_empleado') {
 
-    $campos = ['id_cliente', 'horas_trabajdas', 'horas_extra', 'jefe_sucursal', 'jefe_general', 'id_contrato_emple', 'id_sucursal', 'id_seguro'];
+    $campos = ['id_cliente', 'id_contrato_emple', 'id_sucursal', 'id_seguro'];
     foreach ($campos as $campo) {
         if (!isset($_POST[$campo]) || $_POST[$campo] === '') {
             echo json_encode(['estado' => 'error', 'mensaje' => "Campo requerido faltante: $campo"]);
@@ -29,10 +29,10 @@ if ($accion == 'migrar_cliente_a_empleado') {
     }
 
     $id_cliente      = intval($_POST['id_cliente']);
-    $horas_trabajdas = intval($_POST['horas_trabajdas']);
-    $horas_extra     = intval($_POST['horas_extra']);
-    $jefe_sucursal   = intval($_POST['jefe_sucursal']);
-    $jefe_general    = intval($_POST['jefe_general']);
+    $horas_trabajdas = 0;
+    $horas_extra     = 0;
+    $jefe_sucursal   = 0;
+    $jefe_general    = 0;
     $id_contrato_emple = intval($_POST['id_contrato_emple']);
     $id_sucursal     = intval($_POST['id_sucursal']);
     $id_seguro       = intval($_POST['id_seguro']);

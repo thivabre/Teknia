@@ -1,13 +1,8 @@
 /**
- * servicios-presupuestos.js — Listado y detalle de presupuestos de servicio.
- *
- * Usa tarjetas.js para el renderizado genérico y el modal de detalle.
- * Usa tablas.js para la verificación de sesión.
- *
- * Funcionalidad exclusiva:
- *   - Cargar presupuestos filtrados por rol (cliente ve solo los suyos)
- *   - Parsear el campo repuestos_detalle (formato "nombre|tipo|precio|mo;;...")
- *   - Renderizar una tabla de repuestos con subtotales en el modal
+servicios-presupuestos.js — Listado y detalle de presupuestos de servicio.
+
+Usa tarjetas.js para el renderizado genérico y el modal de detalle.
+Usa tablas.js para la verificación de sesión.
  */
 (function () {
     document.addEventListener('DOMContentLoaded', async function () {

@@ -1,13 +1,8 @@
 /**
  * personal-clientes.js — Listado y detalle de clientes.
- *
- * Usa tarjetas.js para el renderizado genérico de cards y el modal de detalle.
- * Usa tablas.js para la verificación de sesión (verificarSesion).
- *
- * Funcionalidad exclusiva de este archivo:
- *   - Construir los datos visuales de cada card de cliente (buildCard)
- *   - Renderizar el contenido del modal de detalle con los campos del cliente
- *   - Mostrar el formulario de ascenso a Empleado (solo para jefe_general)
+
+Usa tarjetas.js para el renderizado genérico de cards y el modal de detalle.
+Usa tablas.js para la verificación de sesión (verificarSesion).
  */
 (function () {
     document.addEventListener('DOMContentLoaded', async function () {

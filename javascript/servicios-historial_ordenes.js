@@ -1,10 +1,10 @@
 /**
- * servicios-historial_ordenes.js — Historial de órdenes finalizadas.
- *
- * Usa tablas.js para la verificación de sesión.
- *
- * Los clientes ven solo sus órdenes históricas.
- * El resto de los roles ve todas las órdenes del historial.
+servicios-historial_ordenes.js — Historial de órdenes finalizadas.
+
+Usa tablas.js para la verificación de sesión.
+
+Los clientes ven solo sus órdenes históricas.
+El resto de los roles ve todas las órdenes del historial.
  */
 (function () {
     document.addEventListener('DOMContentLoaded', async function () {

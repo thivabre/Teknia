@@ -1,11 +1,11 @@
 /**
- * sucursales-creacion.js — Formulario de creación de nueva sucursal.
- *
- * Usa tablas.js para la verificación de sesión.
- * Solo accesible para jefe_general (controlado por data-rol en el HTML).
- *
- * El formulario envía los datos a insercion.php con accion=crear_sucursal_nueva.
- * El PHP crea la sucursal junto con sus inventarios (repuestos y productos) e impuestos.
+sucursales-creacion.js — Formulario de creación de nueva sucursal.
+
+Usa tablas.js para la verificación de sesión.
+Solo accesible para jefe_general (controlado por data-rol en el HTML).
+
+El formulario envía los datos a insercion.php con accion=crear_sucursal_nueva.
+El PHP crea la sucursal junto con sus inventarios (repuestos y productos) e impuestos.
  */
 (function () {
     document.addEventListener('DOMContentLoaded', async function () {

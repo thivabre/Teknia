@@ -1,29 +1,3 @@
-/**
- * tablas.js — Núcleo del sistema Teknia.
- *
- * Este archivo se carga en TODAS las páginas y provee:
- *   1. Configuración de tablas (configTablas): define los campos y acciones
- *      CRUD de cada tabla de la base de datos.
- *   2. Autenticación y roles: verifica la sesión, oculta/muestra elementos
- *      según el rol del usuario y actualiza el navbar.
- *   3. Motor de tablas: renderiza tablas dinámicamente, maneja inserción,
- *      edición y eliminación de registros usando formularios genéricos.
- *
- * IMPORTANTE: Este archivo no depende de ningún otro JS propio del proyecto;
- * los demás archivos (tarjetas.js, estadisticas.js, etc.) sí dependen de él.
- */
-
-// ─── CONFIGURACIÓN DE TABLAS ──────────────────────────────────────────────
-/**
- * Cada clave corresponde al ID del <tbody> en el HTML y al nombre de la
- * tabla en la base de datos. Los valores definen:
- *   campos:            Array con los nombres exactos de las columnas (el primero siempre es la PK).
- *   accionInsertar:    Parámetro ?accion= enviado a insercion.php.
- *   accionActualizar:  Parámetro ?accion= enviado a actualizacion.php.
- *   accionEliminar:    Parámetro ?accion= enviado a eliminacion.php.
- *   accionConsutar:    Parámetro ?accion= enviado a consulta.php.
- *   camposAutoFecha:   (opcional) Campos que la DB llena automáticamente; no se muestran en el form.
- */
 const configTablas = {
     'sueldo': {
         campos: ['id_sueldo', 'sueldo_hora', 'sueldo_hora_ext', 'forma_pago'],
@@ -252,11 +226,8 @@ async function verificarSesion() {
 }
 
 /**
- * Muestra los elementos con [data-rol] que incluyen el rol actual
- * y oculta todos los demás.
- * Ejemplo en HTML: <li data-rol="jefe_sucursal jefe_general">
- *
- * @param {string} rol - El rol devuelto por get_rol.php.
+Muestra los elementos con [data-rol] que incluyen el rol actual
+y oculta todos los demás.
  */
 function aplicarRol(rol) {
     // Ocultar todos los elementos con restricción de rol
@@ -270,11 +241,7 @@ function aplicarRol(rol) {
 }
 
 /**
- * Actualiza el área de autenticación del navbar:
- *   - Con sesión:    muestra nombre del usuario, rol y botón de logout.
- *   - Sin sesión:    mantiene los botones por defecto del HTML (login / crear cuenta).
- *
- * @param {{nombre, rol}|null} sesion
+Actualiza el área de autenticación del navbar:
  */
 function actualizarNavAuth(sesion) {
     const navAuth = document.getElementById('nav-auth-area');
@@ -327,14 +294,13 @@ function actualizarNavAuth(sesion) {
 // ─── FORMULARIO DE INSERCIÓN ──────────────────────────────────────────────
 
 /**
- * Referencia al formulario de inserción presente en páginas con tablas CRUD.
- * Puede ser null en páginas sin formulario (como index.html).
+Referencia al formulario de inserción presente en páginas con tablas CRUD.
  */
 const formularioInsert = document.querySelector('.form-insert');
 
 /**
- * Listener de clic global para los botones "Agregar" (btn-agregar).
- * Detecta en qué tabla está el botón y abre el modal de inserción correspondiente.
+Listener de clic global para los botones "Agregar" (btn-agregar).
+Detecta en qué tabla está el botón y abre el modal de inserción correspondiente.
  */
 document.addEventListener('click', function (e) {
     if (e.target.classList.contains('btn-agregar')) {
@@ -347,10 +313,8 @@ document.addEventListener('click', function (e) {
 });
 
 /**
- * Construye dinámicamente el formulario de inserción según la configuración
- * de la tabla indicada y lo muestra deslizando el panel desde abajo.
- *
- * @param {string} nombreTabla - Clave en configTablas (= ID del tbody).
+Construye dinámicamente el formulario de inserción según la configuración
+de la tabla indicada y lo muestra deslizando el panel desde abajo.
  */
 function abrirModalInsertar(nombreTabla) {
     const conf = configTablas[nombreTabla];
@@ -403,7 +367,7 @@ function abrirModalInsertar(nombreTabla) {
 }
 
 /**
- * Oculta el panel del formulario de inserción (desliza hacia abajo).
+Oculta el panel del formulario de inserción (desliza hacia abajo).
  */
 function cerrarModal() {
     const contenedorForm = document.querySelector('.contenedor-form-desactivado, .contenedor-form-activado');
@@ -450,8 +414,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 // ─── INSERTAR DATOS ───────────────────────────────────────────────────────
 
 /**
- * Listener global de submit para el formulario de inserción.
- * Recopila los campos del form, los envía a insercion.php y recarga la tabla.
+Listener global de submit para el formulario de inserción.
+Recopila los campos del form, los envía a insercion.php y recarga la tabla.
  */
 document.addEventListener('submit', async function (event) {
     if (!event.target.classList.contains('form-insert')) return;
@@ -479,10 +443,8 @@ document.addEventListener('submit', async function (event) {
 // ─── CONSULTAR Y RENDERIZAR TABLA ─────────────────────────────────────────
 
 /**
- * Consulta consulta.php con la acción correspondiente a la tabla
- * y llama a renderizarTabla con los datos obtenidos.
- *
- * @param {string} nombreTabla - Clave en configTablas.
+Consulta consulta.php con la acción correspondiente a la tabla
+y llama a renderizarTabla con los datos obtenidos.
  */
 async function actualizarVistaTabla(nombreTabla) {
     if (!nombreTabla || !configTablas[nombreTabla]) {
@@ -505,15 +467,12 @@ async function actualizarVistaTabla(nombreTabla) {
 }
 
 /**
- * Renderiza las filas de una tabla a partir de un array de objetos.
- * Usa el <template id="molde-fila-{nombreTabla}"> presente en el HTML
- * como plantilla base para cada fila.
- *
- * El primer campo de la configuración (PK/ID) se oculta visualmente
- * pero permanece en el DOM para las operaciones de edición y eliminación.
- *
- * @param {Array}  listaDatos  - Array de objetos con los datos de la tabla.
- * @param {string} nombreTabla - Clave en configTablas.
+Renderiza las filas de una tabla a partir de un array de objetos.
+Usa el <template id="molde-fila-{nombreTabla}"> presente en el HTML
+como plantilla base para cada fila.
+
+El primer campo de la configuración (PK/ID) se oculta visualmente
+pero permanece en el DOM para las operaciones de edición y eliminación.
  */
 function renderizarTabla(listaDatos, nombreTabla) {
     const contenedor   = document.getElementById(nombreTabla);
@@ -566,10 +525,10 @@ function renderizarTabla(listaDatos, nombreTabla) {
 // ─── EDITAR / ELIMINAR / GUARDAR ──────────────────────────────────────────
 
 /**
- * Listener global de clic para los botones de acción en las filas de tabla:
- *   btn-eliminar → elimina el registro vía eliminacion.php
- *   btn-editar   → convierte las celdas en inputs editables
- *   btn-guardar  → envía los cambios a actualizacion.php y recarga la tabla
+Listener global de clic para los botones de acción en las filas de tabla
+  btn-eliminar: elimina el registro vía eliminacion.php
+  btn-editar: convierte las celdas en inputs editables
+  btn-guardar: envía los cambios a actualizacion.php y recarga la tabla
  */
 document.addEventListener('click', async function (event) {
     const boton = event.target;

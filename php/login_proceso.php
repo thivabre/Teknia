@@ -19,7 +19,6 @@ if (!isset($_POST['accion'])) {
 
 $accion = $_POST['accion'];
 
-// ── LOGIN EMPLEADO ──────────────────────────────────────────────────────────
 if ($accion == 'login_empleado') {
     $id_empleado  = intval($_POST['id_empleado'] ?? 0);
     $nombre_emple = $BD->real_escape_string($_POST['nombre_emple'] ?? '');
@@ -29,7 +28,6 @@ if ($accion == 'login_empleado') {
         exit();
     }
 
-    // El ID actúa como contraseña: ambos campos deben coincidir en la DB
     $sql = "SELECT id_empleado, nombre_emple, apellido_emple,
                    jefe_sucursal, jefe_general
             FROM empleado
@@ -46,7 +44,6 @@ if ($accion == 'login_empleado') {
 
     $fila = $resultado->fetch_assoc();
 
-    // Determinar rol según los campos booleanos de la tabla
     if ($fila['jefe_general'])        $rol = 'jefe_general';
     elseif ($fila['jefe_sucursal'])   $rol = 'jefe_sucursal';
     else                               $rol = 'empleado';
@@ -63,7 +60,6 @@ if ($accion == 'login_empleado') {
     exit();
 }
 
-// ── LOGIN CLIENTE ───────────────────────────────────────────────────────────
 if ($accion == 'login_cliente') {
     $id_cliente = intval($_POST['id_cliente'] ?? 0);
     $nombre_cli = $BD->real_escape_string($_POST['nombre_cli'] ?? '');
@@ -101,7 +97,6 @@ if ($accion == 'login_cliente') {
     exit();
 }
 
-// ── LOGOUT ──────────────────────────────────────────────────────────────────
 if ($accion == 'logout') {
     session_destroy();
     echo json_encode(['estado' => 'ok']);

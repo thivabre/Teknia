@@ -147,11 +147,6 @@ try {
         if (!$resultado) throw new \Exception("Error al actualizar inventario productos: " . $BD->error);
         echo json_encode(['estado' => 'ok', 'mensaje' => 'Inventario productos actualizado correctamente']);
 
-
-
-
-
-
     } elseif ($accion == 'update_inventario_repuestos') {
         $id_inv_repuestos = $_POST['id_inv_repuestos'];
         $cantidad_rep = $_POST['cantidad_rep'];
@@ -200,10 +195,6 @@ try {
         if (!$resultado) throw new \Exception("Error al actualizar proveedor: " . $BD->error);
         echo json_encode(['estado' => 'ok', 'mensaje' => 'Proveedor actualizado correctamente']);
 
-
-
-
-
     } elseif ($accion == 'update_presupuestos') {
         $id_presupuesto = $_POST['id_presupuesto'];
         $precio_reparacion_tot = $_POST['precio_reparacion_tot'];
@@ -225,9 +216,6 @@ try {
         if (!$resultado) throw new \Exception("Error al actualizar sucursal: " . $BD->error);
         echo json_encode(['estado' => 'ok', 'mensaje' => 'Sucursal actualizada correctamente']);
 
-
-
-
     } elseif ($accion == 'update_empleado') {
         $id_empleado = $_POST['id_empleado'];
         $nombre_emple = $_POST['nombre_emple'];
@@ -246,9 +234,6 @@ try {
         $resultado = $BD->query($sql);
         if (!$resultado) throw new \Exception("Error al actualizar empleado: " . $BD->error);
         echo json_encode(['estado' => 'ok', 'mensaje' => 'Empleado actualizado correctamente']);
-
-
-
 
     } elseif ($accion == 'update_orden_servicio') {
         $id_orden_servicio = $_POST['id_orden_servicio'];
@@ -286,9 +271,6 @@ try {
         if (!$resultado) throw new \Exception("Error al actualizar orden de entrega: " . $BD->error);
         echo json_encode(['estado' => 'ok', 'mensaje' => 'Orden de entrega actualizada correctamente']);
 
-
-
-
     } elseif ($accion == 'update_intermedia_inv_rep') {
         $id_inv_repuestos_old = $_POST['id_inv_repuestos_old'];
         $id_repuesto_old = $_POST['id_repuesto_old'];
@@ -315,8 +297,6 @@ try {
 
     } elseif ($accion == 'update_jefe_sucursal') {
         $id_empleado = $_POST['id_empleado'];
-
-        // Verificar que el empleado no sea ya jefe_general
         $sqlCheck = "SELECT jefe_general FROM empleado WHERE id_empleado = '$id_empleado'";
         $resCheck = $BD->query($sqlCheck);
         if (!$resCheck) throw new \Exception("Error al verificar empleado: " . $BD->error);
@@ -333,8 +313,6 @@ try {
 
     } elseif ($accion == 'update_jefe_general') {
         $id_empleado = $_POST['id_empleado'];
-
-        // Verificar si el empleado es jefe_sucursal; si lo es, quitarle ese rol antes de asignar jefe_general
         $sqlCheck = "SELECT jefe_sucursal FROM empleado WHERE id_empleado = '$id_empleado'";
         $resCheck = $BD->query($sqlCheck);
         if (!$resCheck) throw new \Exception("Error al verificar empleado: " . $BD->error);

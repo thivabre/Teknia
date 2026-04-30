@@ -381,9 +381,6 @@ if ($accion == 'consulta_proveedores_detalle') {
     consultarYResponder($BD, $sql);
 }
 
-
-// ─── NUEVAS CONSULTAS ─────────────────────────────────────────────────────────
-
 if ($accion == 'consulta_sucursales_completo') {
     $sql = "SELECT s.id_sucursal, s.cant_empleados, s.reparaciones_hechas,
     s.id_inv_repuestos, s.id_inv_productos, s.id_impuestos,
@@ -444,7 +441,6 @@ if ($accion == 'consulta_inv_repuestos_items') {
     consultarYResponder($BD, $sql);
 }
 
-// Repuestos que aún NO están en un inventario específico (para el select de agregar)
 if ($accion == 'consulta_repuestos_no_en_inv') {
     $id_inv = intval($_GET['id_inv_repuestos'] ?? 0);
     $sql = "SELECT r.id_repuesto, r.nombre_rep, r.tipo_rep, pr.precio_rep AS precio_unidad, pr.precio_mano_obra
@@ -472,8 +468,6 @@ if ($accion == 'consulta_garantias_lista') {
     consultarYResponder($BD, "SELECT id_garantia_servicio, tipo_garantia, tiempo_garantia FROM garantia_servicio ORDER BY tipo_garantia ASC");
 }
 
-
-// ── Órdenes activas SIN factura (para que el cliente pueda pagar) ──────────
 if ($accion == 'consulta_ordenes_sin_factura') {
     $sql = "SELECT os.id_orden_servicio, ar.nombre_art_rep, ar.tipo_art_rep,
     os.fecha_orden, os.fecha_est_fin, os.id_sucursal, os.id_cliente,

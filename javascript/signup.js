@@ -1,11 +1,11 @@
 /**
- * signup.js — Lógica del formulario de creación de cuenta de cliente.
- *
- * Escucha el submit de #form-registro, recopila los datos del cliente
- * y los envía a procesar_registro.php con accion=insert_cliente.
- *
- * Si el registro es exitoso, el servidor devuelve el ID asignado al cliente,
- * que funciona como su "contraseña" para iniciar sesión (junto a su nombre).
+signup.js — Lógica del formulario de creación de cuenta de cliente.
+
+Escucha el submit de #form-registro, recopila los datos del cliente
+y los envía a procesar_registro.php con accion=insert_cliente.
+
+Si el registro es exitoso, el servidor devuelve el ID asignado al cliente,
+que funciona como su "contraseña" para iniciar sesión (junto a su nombre).
  */
 document.getElementById('form-registro').addEventListener('submit', async function (e) {
     e.preventDefault();

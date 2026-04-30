@@ -1,5 +1,5 @@
 /**
-Renderiza una grilla de tarjetas a partir de un array de datos.
+Renderiza una grilla de tarjetas a partir de un array de datos. 
  */
 function renderCards(gridId, items, buildCard, onCardClick, mensajeVacio = 'No hay registros.') {
     const grid = document.getElementById(gridId);

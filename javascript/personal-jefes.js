@@ -1,13 +1,8 @@
 /**
- * personal-jefes.js — Listado y detalle de jefes generales.
- *
- * Usa tarjetas.js para el renderizado genérico y el modal de detalle.
- * Usa tablas.js para la verificación de sesión.
- *
- * Funcionalidad exclusiva:
- *   - Cargar jefes generales y sus contratos
- *   - Mostrar detalle completo con datos laborales
- *   - No tiene acción de ascenso (rango máximo)
+personal-jefes.js — Listado y detalle de jefes generales.
+
+Usa tarjetas.js para el renderizado genérico y el modal de detalle.
+Usa tablas.js para la verificación de sesión.
  */
 (function () {
     document.addEventListener('DOMContentLoaded', async function () {

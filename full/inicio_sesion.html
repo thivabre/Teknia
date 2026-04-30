@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teknia – Iniciar sesión</title>
+    <!-- Estilos compartidos de páginas de cuenta (login y registro) -->
+    <link rel="stylesheet" href="estilos_cuenta.css">
+</head>
+<body>
+    <!-- Formulario de inicio de sesión -->
+    <form class="formulario" id="form-login">
+        <h2>Iniciar sesión</h2>
+        <p class="subtitulo">Ingresá con tu nombre y tu número de ID</p>
+
+        <div class="campo">
+            <label for="tipo">Tipo de usuario</label>
+            <select id="tipo" name="tipo" required>
+                <option value="">— Seleccioná —</option>
+                <option value="cliente">Cliente</option>
+                <option value="empleado">Empleado / Jefe</option>
+            </select>
+        </div>
+
+        <div class="campo">
+            <label for="nombre">Nombre</label>
+            <input type="text" id="nombre" name="nombre" placeholder="Tu nombre (sin apellido)" required>
+        </div>
+
+        <div class="campo">
+            <label for="id_acceso">Número de ID</label>
+            <input type="number" id="id_acceso" name="id_acceso" placeholder="Tu ID de cliente o empleado" required>
+        </div>
+
+        <!-- Mensaje de error: oculto por defecto, visible si login falla -->
+        <div id="error-mensaje" hidden></div>
+
+        <button type="submit" class="iniciar">Iniciar sesión</button>
+
+        <p class="link-cuenta">¿No tenés cuenta? <a href="crear_cuenta.html">Creá una acá</a></p>
+    </form>
+
+    <!-- Lógica de envío del formulario de login -->
+    <script src="login.js"></script>
+</body>
+</html>

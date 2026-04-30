@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sucursales — Ubicación</title>
+<link href="estilos.css" rel="stylesheet"/>
+<link href="estilo_form_insert.css" rel="stylesheet"/>
+<link href="estilo_tabla_estatica.css" rel="stylesheet"/>
+</head>
+<body class="cargando-rol">
+<div class="contenedor-grid">
+<nav class="navbar">
+<ul>
+<div class="logo"><div class="logo-icon">T</div><span class="logo-name">Teknia</span></div>
+<li><a href="index.html">Inicio</a></li>
+<li data-rol="cliente empleado jefe_sucursal jefe_general"><a href="servicios-crear_oden.html">Servicios</a></li>
+<li data-rol="cliente empleado jefe_sucursal jefe_general"><a class="activo" href="sucursales-ubicacion.html">Sucursales</a></li>
+<li data-rol="empleado jefe_sucursal jefe_general"><a href="inventario-repuestos.html">Inventario</a></li>
+<li data-rol="jefe_sucursal jefe_general"><a href="finanzas-garantias.html">Finanzas</a></li>
+<li data-rol="empleado jefe_sucursal jefe_general"><a href="personal-clientes.html">Personal</a></li>
+<li data-rol="jefe_general"><a href="administracion-contratos.html">Administración</a></li>
+<li class="nav-auth" id="nav-auth-area"><a class="btn-sesion" href="inicio_sesion.html">Iniciar sesión</a><a class="btn-cuenta" href="crear_cuenta.html">Crear cuenta</a></li>
+</ul>
+</nav>
+<nav class="side-navbar">
+<div data-rol="cliente empleado jefe_sucursal jefe_general">
+<span class="seccion-label">Sucursales</span>
+<ul>
+<li data-rol="cliente empleado jefe_sucursal jefe_general"><a class="activo" href="sucursales-ubicacion.html">Ubicación de sucursales</a></li>
+<li data-rol="jefe_general"><a href="sucursales-informacion.html">Información de sucursales</a></li>
+<li data-rol="jefe_general"><a href="sucursales-creacion.html">Crear sucursal</a></li>
+</ul>
+</div>
+</nav>
+<div class="contenedor-padre">
+<div class="contenedor-tablas">
+<table>
+<caption class="titulo">Ubicación de sucursales</caption>
+<thead>
+<tr>
+<th>País</th>
+<th>Provincia</th>
+<th>Ciudad</th>
+<th>Barrio</th>
+<th>Cód. postal</th>
+<th>Dirección</th>
+</tr>
+</thead>
+<tbody id="ubicacion_sucursales"></tbody>
+</table>
+</div>
+</div>
+</div>
+<template id="molde-fila-ubicacion_sucursales"><tr></tr></template>
+<script src="tablas.js"></script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Servicios</title>
+<link href="estilos.css" rel="stylesheet"/>
+<link href="estilo_tabla_estatica.css" rel="stylesheet"/>
+<link href="estilo_form_insert.css" rel="stylesheet"/>
+</head>
+<body class="cargando-rol">
+<div class="contenedor-grid">
+<!-- ── TOP NAVBAR ── -->
+<nav class="navbar">
+<ul>
+<div class="logo"><div class="logo-icon">T</div><span class="logo-name">Teknia</span></div>
+<li><a href="index.html">Inicio</a></li>
+<li data-rol="cliente empleado jefe_sucursal jefe_general"><a class="activo" href="servicios-crear_oden.html">Servicios</a></li>
+<li data-rol="cliente empleado jefe_sucursal jefe_general"><a href="sucursales-ubicacion.html">Sucursales</a></li>
+<li data-rol="empleado jefe_sucursal jefe_general"><a href="inventario-repuestos.html">Inventario</a></li>
+<li data-rol="jefe_sucursal jefe_general"><a href="finanzas-garantias.html">Finanzas</a></li>
+<li data-rol="empleado jefe_sucursal jefe_general"><a href="personal-clientes.html">Personal</a></li>
+<li data-rol="jefe_general"><a href="administracion-contratos.html">Administración</a></li>
+<li class="nav-auth" id="nav-auth-area"><a class="btn-sesion" href="inicio_sesion.html">Iniciar sesión</a><a class="btn-cuenta" href="crear_cuenta.html">Crear cuenta</a></li>
+</ul>
+</nav>
+<nav class="side-navbar">
+<div data-rol="cliente empleado jefe_sucursal jefe_general">
+<span class="seccion-label">Servicios</span>
+<ul>
+<li data-rol="cliente empleado jefe_sucursal jefe_general"><a class="activo" href="servicios-crear_oden.html">Nueva orden</a></li>
+<li data-rol="cliente empleado jefe_sucursal jefe_general"><a href="servicios-ordenes_activas.html">Ordenes activas</a></li>
+<li data-rol="cliente empleado jefe_sucursal jefe_general"><a href="servicios-historial_ordenes.html">Historial de ordenes</a></li>
+</ul>
+</div>
+<div data-rol="cliente empleado jefe_sucursal jefe_general">
+<span class="seccion-label">Facturacion</span>
+<ul>
+<li data-rol="cliente empleado jefe_sucursal jefe_general"><a href="servicios-facturas.html">Facturas</a></li>
+<li data-rol="cliente empleado jefe_sucursal jefe_general"><a href="servicios-presupuestos.html">Presupuestos</a></li>
+</ul>
+</div>
+</nav>
+<div class="contenedor-padre">
+<div class="contenedor-tablas">
+  <!-- El form usa div en vez de <form> para manejar el submit manualmente -->
+  <div class="form-insert" id="form-nueva-orden">
+    <h2>Crear orden de servicio</h2>
+    <div class="campo-ingreso">
+
+      <!-- Campo: cliente (auto para cliente, input para empleado+) -->
+      <div class="campo" id="campo-cliente-id" style="display:none">
+        <label>ID del cliente</label>
+        <input id="input-id-cliente" min="1" placeholder="Ingrese el ID del cliente" type="number"/>
+      </div>
+
+      <div class="campo">
+        <label>Nombre del artículo</label>
+        <input id="input-nombre-art" placeholder="Ej: iPhone 16 Pro Max" type="text"/>
+      </div>
+
+      <div class="campo">
+        <label>Tipo de artículo</label>
+        <input id="input-tipo-art" placeholder="Ej: Celular" type="text"/>
+      </div>
+
+      <div class="campo">
+        <label>Sucursal</label>
+        <select id="sel-sucursal">
+          <option value="">Cargando sucursales…</option>
+        </select>
+      </div>
+
+      <div class="campo">
+        <label>Repuesto 1 (requerido)</label>
+        <select id="sel-repuesto-1">
+          <option value="">Cargando repuestos…</option>
+        </select>
+        <div id="info-rep-1" style="font-size:11px;color:var(--t3);margin-top:4px;min-height:16px"></div>
+      </div>
+
+      <div class="campo">
+        <label>Repuesto 2</label>
+        <select id="sel-repuesto-2">
+          <option value="0">Ninguno</option>
+        </select>
+        <div id="info-rep-2" style="font-size:11px;color:var(--t3);margin-top:4px;min-height:16px"></div>
+      </div>
+
+      <div class="campo">
+        <label>Repuesto 3</label>
+        <select id="sel-repuesto-3">
+          <option value="0">Ninguno</option>
+        </select>
+        <div id="info-rep-3" style="font-size:11px;color:var(--t3);margin-top:4px;min-height:16px"></div>
+      </div>
+
+      <div class="campo" style="flex: 1 1 100%">
+        <label>Fallas / descripción</label>
+        <textarea id="input-fallas" placeholder="Describa las fallas del artículo…" rows="3" style="width:100%;padding:8px;border:1px solid var(--bdr);border-radius:7px;font-size:12px;resize:vertical"></textarea>
+      </div>
+
+    </div><!-- /campo-ingreso -->
+    <div id="msg-orden" style="font-size:12px;margin-top:10px;padding:8px 12px;border-radius:7px;display:none"></div>
+    <button class="envio-insert" id="btn-crear-orden" style="margin-top:16px" type="button">Crear orden</button>
+  </div>
+</div>
+</div><!-- /contenedor-padre -->
+</div><!-- /contenedor-grid -->
+<script src="tablas.js"></script>
+<script src="servicios-crear_oden.js"></script>
+</body>
+</html>

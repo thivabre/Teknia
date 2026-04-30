@@ -1,0 +1,186 @@
+/* ============================================================
+   TEKNIA — Estilos para páginas de cuenta de usuario
+   Usado por: inicio_sesion.html, crear_cuenta.html
+   ============================================================ */
+
+/* ── LAYOUT GENERAL ────────────────────────────────────────── */
+body {
+    display: flex;
+    margin: 0;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: #f0f4f8;
+}
+
+/* Variante para páginas con mucho contenido (crear_cuenta) */
+body.scroll-layout {
+    align-items: flex-start;
+    padding: 30px 0;
+}
+
+/* ── TARJETA FORMULARIO ────────────────────────────────────── */
+.formulario {
+    background: #ffffff;
+    border: 1px solid rgba(15, 23, 42, 0.09);
+    border-radius: 20px;
+    box-shadow: 0 4px 24px rgba(15, 23, 42, 0.08);
+    min-width: 400px;
+    min-height: auto;
+    padding: 40px 40px 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+}
+
+/* Variante más ancha para el registro */
+.formulario.formulario-registro {
+    width: 560px;
+}
+
+/* ── TÍTULOS Y SUBTÍTULOS ────────────────────────────────── */
+h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 6px;
+    text-align: center;
+}
+
+.subtitulo {
+    color: #475569;
+    font-size: 13px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+/* ── ETIQUETA DE SECCIÓN ─────────────────────────────────── */
+.seccion-label {
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #94a3b8;
+    margin-top: 28px;
+    margin-bottom: -6px;
+    width: 100%;
+}
+
+/* ── CAMPOS DEL FORMULARIO ───────────────────────────────── */
+.campo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 24px;
+    width: 100%;
+}
+
+.campo label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: #64748b;
+    margin-bottom: 6px;
+}
+
+/* ── INPUTS ──────────────────────────────────────────────── */
+.campo input,
+.campo select {
+    width: 100%;
+    min-width: 320px;
+    min-height: 36px;
+    background-color: #f8fafc;
+    border: 1px solid rgba(15, 23, 42, 0.1);
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: inherit;
+    color: #0f172a;
+    padding: 0 12px;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+}
+
+.campo input:hover,
+.campo select:hover {
+    background-color: #ffffff;
+    border-color: rgba(15, 23, 42, 0.18);
+}
+
+.campo input:focus,
+.campo select:focus {
+    background-color: #ffffff;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px #dbeafe;
+}
+
+/* ── BOTÓN PRINCIPAL ─────────────────────────────────────── */
+.iniciar {
+    display: block;
+    min-height: 40px;
+    min-width: 280px;
+    margin: 32px auto 0;
+    padding: 0 24px;
+    background: #2563eb;
+    color: #ffffff;
+    border: none;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.15s;
+}
+
+.iniciar:hover {
+    background: #1d4ed8;
+    transform: scale(1.02);
+}
+
+/* ── MENSAJES DE ESTADO ──────────────────────────────────── */
+#registro-exitoso {
+    background: #d1fae5;
+    color: #065f46;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-top: 18px;
+    font-size: 13px;
+    text-align: center;
+    line-height: 1.5;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#error-mensaje {
+    color: #dc2626;
+    margin-top: 12px;
+    font-size: 13px;
+    text-align: center;
+    width: 100%;
+}
+
+/* ── LINKS DE NAVEGACIÓN ENTRE FORMULARIOS ───────────────── */
+.link-cuenta,
+.link-sesion {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 13px;
+    color: #475569;
+    width: 100%;
+}
+
+.link-cuenta a,
+.link-sesion a {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.link-cuenta a:hover,
+.link-sesion a:hover {
+    text-decoration: underline;
+}

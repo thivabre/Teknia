@@ -1,13 +1,8 @@
 /**
- * personal-empleados.js — Listado y detalle de empleados regulares.
- *
- * Usa tarjetas.js para el renderizado genérico y el modal de detalle.
- * Usa tablas.js para la verificación de sesión.
- *
- * Funcionalidad exclusiva de este archivo:
- *   - Cargar empleados y sus contratos asociados
- *   - Mostrar detalle laboral (turno, fecha contratación, horas)
- *   - Botón de ascenso a Jefe de Sucursal (solo jefe_general)
+personal-empleados.js — Listado y detalle de empleados regulares.
+
+Usa tarjetas.js para el renderizado genérico y el modal de detalle.
+Usa tablas.js para la verificación de sesión.
  */
 (function () {
     document.addEventListener('DOMContentLoaded', async function () {

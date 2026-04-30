@@ -1,13 +1,8 @@
 /**
- * personal-jefes_sucursal.js — Listado y detalle de jefes de sucursal.
- *
- * Usa tarjetas.js para el renderizado genérico y el modal de detalle.
- * Usa tablas.js para la verificación de sesión.
- *
- * Funcionalidad exclusiva:
- *   - Cargar jefes de sucursal y sus contratos
- *   - Mostrar detalle del modal con datos laborales
- *   - Botón de ascenso a Jefe General (solo jefe_general)
+personal-jefes_sucursal.js — Listado y detalle de jefes de sucursal.
+
+Usa tarjetas.js para el renderizado genérico y el modal de detalle.
+Usa tablas.js para la verificación de sesión.
  */
 (function () {
     document.addEventListener('DOMContentLoaded', async function () {

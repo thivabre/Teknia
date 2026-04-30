@@ -1,9 +1,4 @@
-/* ============================================================
-   TEKNIA — Estilos para páginas de cuenta de usuario
-   Usado por: inicio_sesion.html, crear_cuenta.html
-   ============================================================ */
 
-/* ── LAYOUT GENERAL ────────────────────────────────────────── */
 body {
     display: flex;
     margin: 0;
@@ -14,13 +9,11 @@ body {
     background: #f0f4f8;
 }
 
-/* Variante para páginas con mucho contenido (crear_cuenta) */
 body.scroll-layout {
     align-items: flex-start;
     padding: 30px 0;
 }
 
-/* ── TARJETA FORMULARIO ────────────────────────────────────── */
 .formulario {
     background: #ffffff;
     border: 1px solid rgba(15, 23, 42, 0.09);
@@ -35,12 +28,10 @@ body.scroll-layout {
     gap: 0;
 }
 
-/* Variante más ancha para el registro */
 .formulario.formulario-registro {
     width: 560px;
 }
 
-/* ── TÍTULOS Y SUBTÍTULOS ────────────────────────────────── */
 h2 {
     font-size: 22px;
     font-weight: 700;
@@ -56,7 +47,6 @@ h2 {
     text-align: center;
 }
 
-/* ── ETIQUETA DE SECCIÓN ─────────────────────────────────── */
 .seccion-label {
     display: block;
     font-size: 10px;
@@ -69,7 +59,6 @@ h2 {
     width: 100%;
 }
 
-/* ── CAMPOS DEL FORMULARIO ───────────────────────────────── */
 .campo {
     display: flex;
     flex-direction: column;
@@ -87,7 +76,6 @@ h2 {
     margin-bottom: 6px;
 }
 
-/* ── INPUTS ──────────────────────────────────────────────── */
 .campo input,
 .campo select {
     width: 100%;
@@ -118,7 +106,6 @@ h2 {
     box-shadow: 0 0 0 3px #dbeafe;
 }
 
-/* ── BOTÓN PRINCIPAL ─────────────────────────────────────── */
 .iniciar {
     display: block;
     min-height: 40px;
@@ -141,7 +128,6 @@ h2 {
     transform: scale(1.02);
 }
 
-/* ── MENSAJES DE ESTADO ──────────────────────────────────── */
 #registro-exitoso {
     background: #d1fae5;
     color: #065f46;
@@ -163,7 +149,6 @@ h2 {
     width: 100%;
 }
 
-/* ── LINKS DE NAVEGACIÓN ENTRE FORMULARIOS ───────────────── */
 .link-cuenta,
 .link-sesion {
     text-align: center;

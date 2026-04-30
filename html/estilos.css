@@ -24,15 +24,8 @@ html, body {
   color: var(--t1);
 }
 
-/* Ocultar por defecto todos los elementos restringidos por rol
-   hasta que tablas.js aplique el rol correcto (evita el flash inicial) */
 body.cargando-rol [data-rol] { display: none; }
 
-/* ── GRID PRINCIPAL ──────────────────────────────────────── */
-/*
-  Columnas: 15% sidebar | 85% contenido
-  Filas:    50px navbar  | resto contenido
-*/
 .contenedor-grid {
   display: grid;
   grid-template-columns: 15% 85%;
@@ -40,9 +33,9 @@ body.cargando-rol [data-rol] { display: none; }
   min-height: 100vh;
 }
 
-.navbar           { grid-area: 1 / 1 / 2 / 3; }  /* top: ocupa las 2 columnas */
-.side-navbar      { grid-area: 2 / 1 / 3 / 2; }  /* columna 1, fila 2 */
-.contenedor-padre { grid-area: 2 / 2 / 3 / 3; }  /* columna 2, fila 2 */
+.navbar           { grid-area: 1 / 1 / 2 / 3; }
+.side-navbar      { grid-area: 2 / 1 / 3 / 2; }
+.contenedor-padre { grid-area: 2 / 2 / 3 / 3; }
 
 .logo{
   display:flex;
@@ -78,8 +71,6 @@ body.cargando-rol [data-rol] { display: none; }
   z-index: 100;
 }
 
-/* El ul hereda la altura de la fila del grid (50px)
-   y estira sus hijos para que ocupen toda esa altura */
 .navbar ul {
   display: flex;
   align-items: stretch;
@@ -94,11 +85,10 @@ body.cargando-rol [data-rol] { display: none; }
   align-items: stretch;
 }
 
-/* Cada enlace llena la altura completa del navbar y centra el texto */
 .navbar li a {
   display: flex;
-  align-items: center;      /* centrado vertical */
-  justify-content: center;  /* centrado horizontal dentro del li */
+  align-items: center;
+  justify-content: center;
   height: 100%;
   padding: 0 16px;
   font-size: 12.5px;
@@ -120,7 +110,6 @@ body.cargando-rol [data-rol] { display: none; }
   border-bottom-color: #60a5fa;
 }
 
-/* Auth buttons empujados al final */
 .nav-auth {
   margin-left: auto;
   display: flex;
@@ -159,13 +148,11 @@ body.cargando-rol [data-rol] { display: none; }
   background: var(--blue-h) !important;
 }
 
-/* ── SIDE NAVBAR ─────────────────────────────────────────── */
 .side-navbar {
   background: var(--navy2);
   border-right: 1px solid rgba(255,255,255,0.05);
   padding: 14px 8px;
   overflow-y: auto;
-  /* La altura la controla el grid (fila 2 = 1fr = resto de la pantalla) */
   min-height: calc(100vh - 50px);
 }
 
@@ -175,7 +162,6 @@ body.cargando-rol [data-rol] { display: none; }
   margin: 0;
 }
 
-/* Etiqueta de grupo opcional: <span class="seccion-label">Texto</span> */
 .side-navbar .seccion-label {
   display: block;
   font-size: 9px;
@@ -201,7 +187,6 @@ body.cargando-rol [data-rol] { display: none; }
   cursor: pointer;
 }
 
-/* Punto decorativo antes de cada ítem */
 .side-navbar li a::before {
   content: '';
   width: 4px; height: 4px;
@@ -222,7 +207,6 @@ body.cargando-rol [data-rol] { display: none; }
   font-weight: 600;
 }
 
-/* ── ÁREA DE CONTENIDO ───────────────────────────────────── */
 .contenedor-padre {
   padding: 26px 24px 40px;
   background: var(--bg);

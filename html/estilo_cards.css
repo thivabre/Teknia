@@ -1,8 +1,3 @@
-/* ============================================================
-   TEKNIA — Sistema de tarjetas (cards) y panel de detalle
-   ============================================================ */
-
-/* ── GRID DE TARJETAS ────────────────────────────────────── */
 .cards-grid {
     display: flex;
     flex-wrap: wrap;
@@ -11,7 +6,6 @@
     align-content: flex-start;
 }
 
-/* ── TARJETA INDIVIDUAL ──────────────────────────────────── */
 .card-item {
     background: var(--card);
     border: 1px solid var(--bdr);
@@ -36,7 +30,6 @@
     transform: translateY(-1px);
 }
 
-/* Badge de rol / tipo en la esquina superior derecha */
 .card-badge {
     position: absolute;
     top: 12px;
@@ -80,7 +73,6 @@
     font-weight: 400;
 }
 
-/* ── MODAL DE DETALLE ────────────────────────────────────── */
 .detalle-modal {
     display: none;
     position: fixed;
@@ -172,7 +164,6 @@
     color: var(--t1);
 }
 
-/* ── GRID DE CAMPOS ──────────────────────────────────────── */
 .detalle-campos {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -204,7 +195,6 @@
     font-weight: 500;
 }
 
-/* ── TABLA INTERNA ───────────────────────────────────────── */
 .detalle-tabla {
     width: 100%;
     border-collapse: collapse;
@@ -214,7 +204,6 @@
     word-break: break-word;
 }
 
-/* Override global td min-width so modal tables don't overflow */
 .detalle-tabla th,
 .detalle-tabla td {
     min-width: unset;
@@ -251,7 +240,6 @@
     background: var(--bg);
 }
 
-/* ── TOTAL / FOOTER ──────────────────────────────────────── */
 .detalle-footer {
     display: flex;
     justify-content: flex-end;
@@ -276,7 +264,6 @@
     color: var(--blue);
 }
 
-/* ── BOTÓN ASCENDER ──────────────────────────────────────── */
 .detalle-acciones {
     margin-top: 20px;
     padding-top: 16px;
@@ -304,7 +291,6 @@
     transform: translateY(-1px);
 }
 
-/* ── SUB-FORM DE ASCENSO (cliente→empleado) ──────────────── */
 .ascenso-extra {
     display: none;
     flex-direction: column;
@@ -360,7 +346,6 @@
     background: #047857;
 }
 
-/* ── FORM ENTREGA (ordenes activas) ──────────────────────── */
 .entrega-campos {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -401,7 +386,6 @@
     border-color: var(--blue);
 }
 
-/* ── MENSAJE DE ESTADO ───────────────────────────────────── */
 .msg-estado {
     font-size: 12px;
     padding: 8px 12px;
@@ -422,7 +406,6 @@
     display: block;
 }
 
-/* ── ESTADO VACÍO ────────────────────────────────────────── */
 .cards-empty {
     width: 100%;
     padding: 48px 24px;
@@ -431,7 +414,6 @@
     font-size: 13px;
 }
 
-/* ── TABLA DE ORDENES ACTIVAS ────────────────────────────── */
 .btn-entregar {
     background: var(--blue);
     color: #fff;

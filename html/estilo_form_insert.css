@@ -1,8 +1,4 @@
-/* ============================================================
-   FORM INSERT — Estilos alineados con estilos.css
-   ============================================================ */
 
-/* ── OVERLAY BLUR ────────────────────────────────────────── */
 .blurr {
     background-color: rgba(15, 23, 42, 0.25);
     backdrop-filter: blur(4px);
@@ -19,7 +15,6 @@
     display: none;
 }
 
-/* ── FORM CONTAINER ──────────────────────────────────────── */
 .contenedor-form-desactivado,
 .contenedor-form-activado {
     background: var(--card);
@@ -40,7 +35,6 @@
 .contenedor-form-desactivado { bottom: -900px; }
 .contenedor-form-activado    { bottom: 250px; }
 
-/* ── FORM INTERIOR ───────────────────────────────────────── */
 .form-insert {
     width: 100%;
     padding: 24px 24px 72px;
@@ -48,7 +42,6 @@
     flex-direction: column;
 }
 
-/* ── TÍTULO — selector específico para no afectar otros h2 ── */
 .form-insert h2 {
     font-size: 14px !important;
     font-weight: 600 !important;
@@ -67,7 +60,6 @@
     box-shadow: none !important;
 }
 
-/* ── CAMPOS ──────────────────────────────────────────────── */
 .campo-ingreso {
     display: flex;
     flex-direction: row;
@@ -80,9 +72,8 @@
     display: flex;
     flex-direction: column;
     gap: 5px;
-    flex: 1 1 300px; /* eran 170px por si esta distinto*/
+    flex: 1 1 300px;
     min-width: 140px;
-    /* Reset completo del estilo viejo */
     padding: 0 !important;
     margin: 0 !important;
     border: none !important;
@@ -91,7 +82,6 @@
     background: transparent !important;
 }
 
-/* Label: mismo estilo que los <th> de la tabla */
 .campo label {
     font-size: 10px;
     font-weight: 700;
@@ -100,7 +90,6 @@
     color: var(--t3);
 }
 
-/* ── INPUTS — solo dentro del form ──────────────────────── */
 .form-insert input, select, textarea {
     width: 100%;
     height: 34px;
@@ -134,7 +123,6 @@
     background: var(--card);
 }
 
-/* ── BOTÓN ENVIAR ────────────────────────────────────────── */
 .envio-insert {
     position: absolute;
     bottom: 18px;
@@ -162,7 +150,6 @@
     transform: translateX(-50%) scale(1.03);
 }
 
-/* ── BOTÓN CERRAR ────────────────────────────────────────── */
 .cerrar {
     position: absolute;
     top: 14px;

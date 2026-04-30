@@ -480,8 +480,6 @@ function renderizarTabla(listaDatos, nombreTabla) {
     contenedor.innerHTML = '';
     const camposTabla    = configTablas[nombreTabla].campos;
 
-    // Fix: si la plantilla tiene celda de acciones, asegurar que thead también tenga su <th>
-    // para que el color de fondo de la cabecera cubra toda la fila (incluyendo la última columna).
     if (molde.content.querySelector('td.acciones')) {
         const table = contenedor.closest('table');
         if (table) {

@@ -1,14 +1,14 @@
 /**
- * login.js — Lógica del formulario de inicio de sesión.
- *
- * Escucha el submit de #form-login, valida los campos,
- * y envía las credenciales a login_proceso.php.
- * Si el servidor responde con estado "ok", redirige al panel principal.
- *
- * Tipos de acceso:
- *   - cliente   → login_proceso.php con accion=login_cliente
- *   - empleado  → login_proceso.php con accion=login_empleado
- *     (este tipo incluye a empleados, jefes de sucursal y jefes generales)
+login.js — Lógica del formulario de inicio de sesión.
+
+Escucha el submit de #form-login, valida los campos,
+y envía las credenciales a login_proceso.php.
+Si el servidor responde con estado "ok", redirige al panel principal.
+
+Tipos de acceso:
+ cliente: login_proceso.php con accion=login_cliente
+ empleado: login_proceso.php con accion=login_empleado
+ (este tipo incluye a empleados, jefes de sucursal y jefes generales)
  */
 document.getElementById('form-login').addEventListener('submit', async function (e) {
     e.preventDefault();

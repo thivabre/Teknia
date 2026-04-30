@@ -1,13 +1,7 @@
 /**
- * servicios-facturas.js — Gestión de facturas y pagos.
- *
- * Usa tablas.js para la verificación de sesión.
- *
- * Funcionalidad:
- *   - Listar facturas existentes filtradas por rol (cliente ve solo las suyas)
- *   - Mostrar formulario para registrar nuevo pago + factura
- *   - Poblar el select de órdenes sin factura y el de garantías
- *   - Enviar el pago a insercion.php con accion=insert_pago_y_factura
+servicios-facturas.js — Gestión de facturas y pagos.
+
+Usa tablas.js para la verificación de sesión.
  */
 (function () {
     document.addEventListener('DOMContentLoaded', async function () {
@@ -161,11 +155,10 @@
     });
 
     /**
-     * Consulta las facturas según el rol del usuario y las renderiza
-     * en el tbody #tbody-facturas.
-     * Los clientes ven solo sus facturas; el resto ve todas.
-     *
-     * @param {{rol, id_referencia}} sesion
+     Consulta las facturas según el rol del usuario y las renderiza
+     en el tbody #tbody-facturas.
+     Los clientes ven solo sus facturas; el resto ve todas.
+     
      */
     async function cargarFacturas(sesion) {
         const tbody = document.getElementById('tbody-facturas');

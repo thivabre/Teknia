@@ -1,13 +1,9 @@
 /**
- * inventario-repuestos.js — Listado y detalle de inventarios de repuestos.
- *
- * Usa tarjetas.js para el renderizado genérico y el modal de detalle.
- * Usa tablas.js para la verificación de sesión.
- *
- * Funcionalidad exclusiva de este archivo:
- *   - Cargar inventarios de repuestos con su sucursal asociada
- *   - Mostrar en el modal la tabla de repuestos del inventario
- *   - Permitir agregar repuestos al inventario desde el modal
+inventario-repuestos.js — Listado y detalle de inventarios de repuestos.
+
+Usa tarjetas.js para el renderizado genérico y el modal de detalle.
+
+Usa tablas.js para la verificación de sesión.
  */
 (function () {
     document.addEventListener('DOMContentLoaded', async function () {

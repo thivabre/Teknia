@@ -125,7 +125,7 @@ if ($accion == 'consulta_orden_servicio') {
 }
 
 if ($accion == 'consulta_cliente') {
-    consultarYResponder($BD, "SELECT id_cliente, nombre_cli, apellido_cli, dni_cli, telefono_cli, id_dire_cliente, id_orden_servicio FROM cliente ORDER BY apellido_cli ASC");
+    consultarYResponder($BD, "SELECT id_cliente, nombre_cli, apellido_cli, dni_cli, telefono_cli, id_dire_cliente FROM cliente WHERE migrado_a_empleado = 0 OR migrado_a_empleado IS NULL ORDER BY apellido_cli ASC");
 }
 
 if ($accion == 'consulta_orden_entrega') {
@@ -289,13 +289,15 @@ if ($accion == 'consulta_inv_repuestos_detalle') {
 
 if ($accion == 'consulta_inv_productos_detalle') {
     $sql = "SELECT ip.id_inv_productos,
+    ar.id_articulo_reparar,
     ar.nombre_art_rep AS nombre_producto,
     ar.tipo_art_rep   AS tipo_producto,
     ar.fallas,
     ip.cantidad_prod
     FROM inventario_productos ip
-    JOIN articulo_reparar ar ON ip.id_articulo_reparar = ar.id_articulo_reparar
-    ORDER BY ar.nombre_art_rep ASC";
+    LEFT JOIN intermedia_inv_prod iip ON ip.id_inv_productos = iip.id_inv_productos
+    LEFT JOIN articulo_reparar ar ON iip.id_articulo_reparar = ar.id_articulo_reparar
+    ORDER BY ip.id_inv_productos ASC, ar.nombre_art_rep ASC";
     consultarYResponder($BD, $sql);
 }
 
@@ -311,7 +313,8 @@ if ($accion == 'consulta_repuestos_detalle') {
 if ($accion == 'consulta_clientes_detalle') {
     $sql = "SELECT c.id_cliente, c.nombre_cli, c.apellido_cli, c.dni_cli, c.telefono_cli,
     CONCAT(dc.calle_cli, ' ', dc.altura_cli) AS direccion,
-    dc.cod_postal_cli
+    dc.cod_postal_cli,
+    (SELECT COUNT(*) FROM orden_servicio os WHERE os.id_cliente = c.id_cliente) AS total_ordenes
     FROM cliente c
     JOIN direccion_cliente dc ON c.id_dire_cliente = dc.id_dire_cliente
     ORDER BY c.apellido_cli ASC";
@@ -349,14 +352,14 @@ if ($accion == 'consulta_jefes_generales') {
     e.id_contrato_emple, e.id_sucursal, e.id_seguro
     FROM empleado e
     JOIN direccion_empleado de ON e.id_dire_empleado = de.id_dire_empleado
-    WHERE e.jefe_sucursal = 1 AND e.jefe_general = 1
+    WHERE e.jefe_general = 1
     ORDER BY e.apellido_emple ASC";
     consultarYResponder($BD, $sql);
 }
 
 if ($accion == 'consulta_contratos_detalle') {
     $sql = "SELECT ce.id_contrato_emple, ce.fecha_cont, ce.turno,
-    s.sueldo_hora, s.sueldo_hora_ext
+    s.sueldo_hora, s.sueldo_hora_ext, s.forma_pago
     FROM contrato_empleado ce
     JOIN sueldo s ON ce.id_sueldo = s.id_sueldo
     ORDER BY ce.fecha_cont ASC";
@@ -375,6 +378,179 @@ if ($accion == 'consulta_proveedores_detalle') {
     LEFT JOIN sucursales_proveedor sp ON prov.id_proveedor = sp.id_proveedor
     GROUP BY prov.id_proveedor
     ORDER BY prov.nombre_prov ASC";
+    consultarYResponder($BD, $sql);
+}
+
+
+// ─── NUEVAS CONSULTAS ─────────────────────────────────────────────────────────
+
+if ($accion == 'consulta_sucursales_completo') {
+    $sql = "SELECT s.id_sucursal, s.cant_empleados, s.reparaciones_hechas,
+    s.id_inv_repuestos, s.id_inv_productos, s.id_impuestos,
+    CONCAT(ds.calle_suc, ' ', ds.altura_suc) AS direccion,
+    ds.cod_postal_suc,
+    l.ciudad, l.barrio, l.provincia, l.pais
+    FROM sucursales s
+    JOIN direccion_sucursal ds ON s.id_dire_sucursal = ds.id_dire_sucursal
+    JOIN localidad l ON ds.id_localidad = l.id_localidad
+    ORDER BY s.id_sucursal ASC";
+    consultarYResponder($BD, $sql);
+}
+
+if ($accion == 'consulta_presupuestos_completo') {
+    $sql = "SELECT p.id_presupuesto, p.precio_reparacion_tot,
+    os.fecha_orden,
+    GROUP_CONCAT(
+        CONCAT(r.nombre_rep, '|', r.tipo_rep, '|', pr.precio_rep, '|', pr.precio_mano_obra)
+        ORDER BY r.nombre_rep SEPARATOR ';;'
+    ) AS repuestos_detalle
+    FROM presupuestos p
+    LEFT JOIN intermedia_rep_pres irp ON p.id_presupuesto = irp.id_presupuesto
+    LEFT JOIN repuestos r ON irp.id_repuesto = r.id_repuesto
+    LEFT JOIN precio pr ON r.id_precio = pr.id_precio
+    LEFT JOIN orden_servicio os ON os.id_presupuesto = p.id_presupuesto
+    GROUP BY p.id_presupuesto
+    ORDER BY p.id_presupuesto DESC";
+    consultarYResponder($BD, $sql);
+}
+
+if ($accion == 'consulta_presupuestos_completo_por_cliente') {
+    $id_cliente = intval($_GET['id_cliente'] ?? 0);
+    $sql = "SELECT p.id_presupuesto, p.precio_reparacion_tot,
+    os.fecha_orden,
+    GROUP_CONCAT(
+        CONCAT(r.nombre_rep, '|', r.tipo_rep, '|', pr.precio_rep, '|', pr.precio_mano_obra)
+        ORDER BY r.nombre_rep SEPARATOR ';;'
+    ) AS repuestos_detalle
+    FROM presupuestos p
+    LEFT JOIN intermedia_rep_pres irp ON p.id_presupuesto = irp.id_presupuesto
+    LEFT JOIN repuestos r ON irp.id_repuesto = r.id_repuesto
+    LEFT JOIN precio pr ON r.id_precio = pr.id_precio
+    JOIN orden_servicio os ON os.id_presupuesto = p.id_presupuesto
+    WHERE os.id_cliente = $id_cliente
+    GROUP BY p.id_presupuesto
+    ORDER BY p.id_presupuesto DESC";
+    consultarYResponder($BD, $sql);
+}
+
+if ($accion == 'consulta_inv_repuestos_items') {
+    $id_inv = intval($_GET['id_inv_repuestos'] ?? 0);
+    $sql = "SELECT r.id_repuesto, r.nombre_rep, r.tipo_rep, pr.precio_rep, pr.precio_mano_obra
+    FROM intermedia_inv_rep iir
+    JOIN repuestos r ON iir.id_repuesto = r.id_repuesto
+    JOIN precio pr ON r.id_precio = pr.id_precio
+    WHERE iir.id_inv_repuestos = $id_inv
+    ORDER BY r.nombre_rep ASC";
+    consultarYResponder($BD, $sql);
+}
+
+// Repuestos que aún NO están en un inventario específico (para el select de agregar)
+if ($accion == 'consulta_repuestos_no_en_inv') {
+    $id_inv = intval($_GET['id_inv_repuestos'] ?? 0);
+    $sql = "SELECT r.id_repuesto, r.nombre_rep, r.tipo_rep, pr.precio_rep AS precio_unidad, pr.precio_mano_obra
+    FROM repuestos r
+    JOIN precio pr ON r.id_precio = pr.id_precio
+    WHERE r.id_repuesto NOT IN (
+        SELECT id_repuesto FROM intermedia_inv_rep WHERE id_inv_repuestos = $id_inv
+    )
+    ORDER BY r.nombre_rep ASC";
+    consultarYResponder($BD, $sql);
+}
+
+if ($accion == 'consulta_inv_productos_items') {
+    $id_inv = intval($_GET['id_inv_productos'] ?? 0);
+    $sql = "SELECT ar.nombre_art_rep, ar.tipo_art_rep, ar.fallas, ip.cantidad_prod
+    FROM intermedia_inv_prod iip
+    JOIN articulo_reparar ar ON iip.id_articulo_reparar = ar.id_articulo_reparar
+    JOIN inventario_productos ip ON iip.id_inv_productos = ip.id_inv_productos
+    WHERE iip.id_inv_productos = $id_inv
+    ORDER BY ar.nombre_art_rep ASC";
+    consultarYResponder($BD, $sql);
+}
+
+if ($accion == 'consulta_garantias_lista') {
+    consultarYResponder($BD, "SELECT id_garantia_servicio, tipo_garantia, tiempo_garantia FROM garantia_servicio ORDER BY tipo_garantia ASC");
+}
+
+
+// ── Órdenes activas SIN factura (para que el cliente pueda pagar) ──────────
+if ($accion == 'consulta_ordenes_sin_factura') {
+    $sql = "SELECT os.id_orden_servicio, ar.nombre_art_rep, ar.tipo_art_rep,
+    os.fecha_orden, os.fecha_est_fin, os.id_sucursal, os.id_cliente,
+    pr.precio_reparacion_tot
+    FROM orden_servicio os
+    JOIN articulo_reparar ar ON os.id_articulo_reparar = ar.id_articulo_reparar
+    JOIN presupuestos pr ON os.id_presupuesto = pr.id_presupuesto
+    LEFT JOIN factura_servicio fs ON os.id_presupuesto = fs.id_presupuesto
+    WHERE fs.id_factura_servicio IS NULL
+    ORDER BY os.fecha_orden ASC";
+    consultarYResponder($BD, $sql);
+}
+
+if ($accion == 'consulta_ordenes_sin_factura_por_cliente') {
+    $id_cliente = intval($_GET['id_cliente']);
+    $sql = "SELECT os.id_orden_servicio, ar.nombre_art_rep, ar.tipo_art_rep,
+    os.fecha_orden, os.fecha_est_fin, os.id_sucursal, os.id_cliente,
+    pr.precio_reparacion_tot
+    FROM orden_servicio os
+    JOIN articulo_reparar ar ON os.id_articulo_reparar = ar.id_articulo_reparar
+    JOIN presupuestos pr ON os.id_presupuesto = pr.id_presupuesto
+    LEFT JOIN factura_servicio fs ON os.id_presupuesto = fs.id_presupuesto
+    WHERE fs.id_factura_servicio IS NULL
+    AND os.id_cliente = $id_cliente
+    ORDER BY os.fecha_orden ASC";
+    consultarYResponder($BD, $sql);
+}
+
+if ($accion == 'consulta_facturas_detalle') {
+    $sql = "SELECT fs.id_factura_servicio, fs.fecha_factura,
+    p.nombre_banco, p.numero_cuenta, p.comprobante,
+    pr.precio_reparacion_tot AS monto,
+    gs.tipo_garantia, gs.tiempo_garantia,
+    os.id_orden_servicio, ar.nombre_art_rep, ar.tipo_art_rep, os.id_cliente
+    FROM factura_servicio fs
+    JOIN pago p ON fs.id_pago = p.id_pago
+    JOIN presupuestos pr ON fs.id_presupuesto = pr.id_presupuesto
+    JOIN garantia_servicio gs ON fs.id_garantia_servicio = gs.id_garantia_servicio
+    JOIN orden_servicio os ON os.id_presupuesto = fs.id_presupuesto
+    JOIN articulo_reparar ar ON os.id_articulo_reparar = ar.id_articulo_reparar
+    ORDER BY fs.fecha_factura DESC";
+    consultarYResponder($BD, $sql);
+}
+
+if ($accion == 'consulta_facturas_por_cliente') {
+    $id_cliente = intval($_GET['id_cliente']);
+    $sql = "SELECT fs.id_factura_servicio, fs.fecha_factura,
+    p.nombre_banco, p.numero_cuenta, p.comprobante,
+    pr.precio_reparacion_tot AS monto,
+    gs.tipo_garantia, gs.tiempo_garantia,
+    os.id_orden_servicio, ar.nombre_art_rep, ar.tipo_art_rep, os.id_cliente
+    FROM factura_servicio fs
+    JOIN pago p ON fs.id_pago = p.id_pago
+    JOIN presupuestos pr ON fs.id_presupuesto = pr.id_presupuesto
+    JOIN garantia_servicio gs ON fs.id_garantia_servicio = gs.id_garantia_servicio
+    JOIN orden_servicio os ON os.id_presupuesto = fs.id_presupuesto
+    JOIN articulo_reparar ar ON os.id_articulo_reparar = ar.id_articulo_reparar
+    WHERE os.id_cliente = $id_cliente
+    ORDER BY fs.fecha_factura DESC";
+    consultarYResponder($BD, $sql);
+}
+
+if ($accion == 'consulta_contratos_disponibles') {
+    $sql = "SELECT ce.id_contrato_emple, ce.turno, ce.fecha_cont, s.sueldo_hora
+    FROM contrato_empleado ce
+    JOIN sueldo s ON ce.id_sueldo = s.id_sueldo
+    WHERE ce.id_contrato_emple NOT IN (
+        SELECT id_contrato_emple FROM empleado WHERE id_contrato_emple IS NOT NULL
+    )
+    ORDER BY ce.id_contrato_emple ASC";
+    consultarYResponder($BD, $sql);
+}
+
+if ($accion == 'consulta_seguros_disponibles') {
+    $sql = "SELECT sg.id_seguro, sg.tipo_seg, sg.nombre_aseg, sg.monto_aseg
+    FROM seguro sg
+    ORDER BY sg.nombre_aseg ASC";
     consultarYResponder($BD, $sql);
 }
 

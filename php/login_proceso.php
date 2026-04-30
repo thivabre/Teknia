@@ -77,6 +77,7 @@ if ($accion == 'login_cliente') {
             FROM cliente
             WHERE id_cliente = $id_cliente
               AND nombre_cli = '$nombre_cli'
+              AND (migrado_a_empleado IS NULL OR migrado_a_empleado = 0)
             LIMIT 1";
 
     $resultado = $BD->query($sql);

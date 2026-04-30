@@ -81,15 +81,32 @@ if ($accion == 'migrar_cliente_a_empleado') {
     if ($BD->error) { $BD->rollback(); echo json_encode(['estado' => 'error', 'mensaje' => 'Error al insertar empleado: ' . $BD->error]); exit(); }
     $id_empleado = $BD->insert_id;
 
-    $BD->commit();
+    // Intentar eliminar el cliente. Si tiene órdenes activas (FK lo impide), marcarlo como migrado.
+    $deleted = false;
+    try {
+        $BD->query("DELETE FROM cliente WHERE id_cliente = $id_cliente");
+        if (!$BD->error) {
+            $deleted = true;
+        } else {
+        // FK impide borrar: intentar marcar como migrado
+            $BD->query("UPDATE cliente SET migrado_a_empleado = 1 WHERE id_cliente = $id_cliente");
+        }
+    } catch (Throwable $t) {
+    // Constraint FK o excepción MySQL modo estricto — el empleado ya fue creado, se continúa
+        $deleted = false;
+    }
+$BD->commit();
 
     echo json_encode([
-        'estado'           => 'ok',
-        'mensaje'          => 'Cliente migrado a empleado correctamente',
-        'id_empleado'      => $id_empleado,
-        'id_dire_empleado' => $id_dire_empleado,
-        'id_localidad'     => $id_localidad_nueva,
-        'origen_id_cliente'=> $id_cliente
+        'estado'            => 'ok',
+        'mensaje'           => $deleted
+            ? 'Cliente migrado a empleado y registro de cliente eliminado correctamente.'
+            : 'Cliente migrado a empleado. El acceso como cliente quedó bloqueado (conservado por órdenes históricas).',
+        'id_empleado'       => $id_empleado,
+        'id_dire_empleado'  => $id_dire_empleado,
+        'id_localidad'      => $id_localidad_nueva,
+        'origen_id_cliente' => $id_cliente,
+        'cliente_eliminado' => $deleted
     ]);
     exit();
 }

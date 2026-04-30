@@ -1,20 +1,6 @@
-/**
- * servicios-ordenes_activas.js — Listado de órdenes activas y registro de entregas.
- *
- * Usa tablas.js para la verificación de sesión.
- *
- * Roles y funcionalidad:
- *   - cliente        → ve solo sus órdenes activas.
- *   - empleado/jefe  → ve todas las órdenes activas y puede registrar entregas o cancelar.
- *
- * Flujo de entrega:
- *   1. El empleado hace clic en 📦 → se abre el modal de entrega.
- *   2. El sistema verifica que exista una factura del cliente para esa orden.
- *   3. Si existe, se registra la orden de entrega en la DB (insercion.php).
- *   4. Si no existe, se informa que el cliente debe pagar primero.
- */
+// servicios-ordenes_activas.js — Gestión de órdenes activas y registro de entregas.
 (function () {
-    /** ID de la orden seleccionada en el modal de entrega. */
+    // ID de la orden seleccionada para entrega
     let idOrdenActual = null;
 
     document.addEventListener('DOMContentLoaded', async function () {
@@ -24,15 +10,14 @@
         const rolActual     = sesion.rol;
         const puedeEntregar = ['empleado', 'jefe_sucursal', 'jefe_general'].includes(rolActual);
 
-        // Mostrar la columna de "Acción" solo para quienes pueden entregar
+        // Mostrar columna de acciones solo a personal autorizado
         if (puedeEntregar) {
             document.getElementById('th-accion').style.display = '';
         }
 
-        // Cargar las órdenes activas al iniciar
         await cargarOrdenes(sesion, puedeEntregar);
 
-        // ── Eventos del modal de entrega ───────────────────────────
+        // Control del modal de entrega
         function cerrarModal() {
             document.getElementById('modal-entrega').classList.remove('activo');
             const msgEl = document.getElementById('msg-entrega');
@@ -44,7 +29,7 @@
         document.getElementById('btn-cancelar-entrega').addEventListener('click', cerrarModal);
         document.getElementById('backdrop-entrega').addEventListener('click', cerrarModal);
 
-        // ── Confirmación de entrega ────────────────────────────────
+        // Confirmar y registrar entrega
         document.getElementById('btn-confirmar-entrega').addEventListener('click', async function () {
             if (!idOrdenActual) return;
 
@@ -56,22 +41,22 @@
 
             try {
                 const fd = new FormData();
-                fd.append('accion',            'insert_orden_entrega');
+                fd.append('accion', 'insert_orden_entrega');
                 fd.append('id_orden_servicio', idOrdenActual);
 
                 const res   = await fetch('insercion.php', { method: 'POST', body: fd });
                 const datos = await res.json();
 
                 if (datos.estado === 'ok') {
-                    mostrar(`✔ Entrega registrada. Orden de entrega #${datos.id_orden_entrega}.`, 'ok');
+                    mostrar(`✔ Entrega registrada (#${datos.id_orden_entrega}).`, 'ok');
                     setTimeout(async () => {
                         cerrarModal();
                         await cargarOrdenes(sesion, puedeEntregar);
                     }, 1500);
                 } else {
-                    // Si el error menciona "factura", mostrar un mensaje específico
+                    // Validar si el error es por falta de pago
                     const msg = datos.mensaje.includes('factura')
-                        ? '⚠ El cliente aún no registró el pago. Debe hacerlo en la sección Facturas.'
+                        ? '⚠ El cliente debe pagar la factura primero.'
                         : 'Error: ' + datos.mensaje;
                     mostrar(msg, 'error');
                 }
@@ -85,13 +70,7 @@
         });
     });
 
-    /**
-     * Carga las órdenes activas desde el servidor y las renderiza en la tabla.
-     * Los clientes solo ven sus propias órdenes.
-     *
-     * @param {{rol, id_referencia}} sesion
-     * @param {boolean}              puedeEntregar - Si true, agrega columna de acciones.
-     */
+    // Carga y renderiza las órdenes según el rol
     async function cargarOrdenes(sesion, puedeEntregar) {
         const tbody = document.getElementById('tbody-ordenes');
         tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--t3);padding:20px">Cargando…</td></tr>';
@@ -122,13 +101,11 @@
                     <td>Sucursal #${o.id_sucursal}</td>
                 `;
 
-                // Agregar celda de acciones solo para empleados y jefes
                 if (puedeEntregar) {
                     const tdAccion = document.createElement('td');
                     tdAccion.className = 'acciones';
                     tdAccion.style.cssText = 'min-width:unset;width:90px;';
 
-                    // Botón de registrar entrega
                     const btnEntregar = document.createElement('button');
                     btnEntregar.className   = 'btn-editar';
                     btnEntregar.title       = 'Registrar entrega';
@@ -138,7 +115,6 @@
                         abrirModal(o.id_orden_servicio);
                     });
 
-                    // Botón de cancelar orden
                     const btnCancelar = document.createElement('button');
                     btnCancelar.className   = 'btn-eliminar';
                     btnCancelar.title       = 'Cancelar orden';
@@ -148,7 +124,7 @@
                         if (!confirm(`¿Cancelar la orden #${o.id_orden_servicio}?`)) return;
                         try {
                             const fd = new FormData();
-                            fd.append('accion',            'cancelar_orden_servicio');
+                            fd.append('accion', 'cancelar_orden_servicio');
                             fd.append('id_orden_servicio', o.id_orden_servicio);
                             const res   = await fetch('actualizacion.php', { method: 'POST', body: fd });
                             const datos = await res.json();
@@ -159,11 +135,10 @@
                             }
                         } catch (err) {
                             console.error(err);
-                            alert('Error de conexión al cancelar.');
+                            alert('Error de conexión.');
                         }
                     });
 
-                    // Contenedor de los dos botones en columna
                     const btnWrap = document.createElement('div');
                     btnWrap.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:4px;';
                     btnWrap.appendChild(btnEntregar);
@@ -175,16 +150,12 @@
                 tbody.appendChild(tr);
             });
         } catch (e) {
-            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#991b1b;padding:20px">Error al cargar órdenes.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#991b1b;padding:20px">Error al cargar datos.</td></tr>';
             console.error(e);
         }
     }
 
-    /**
-     * Abre el modal de registro de entrega para una orden específica.
-     *
-     * @param {number} idOrden - ID de la orden de servicio.
-     */
+    // Configura y muestra el modal de entrega
     function abrirModal(idOrden) {
         idOrdenActual = idOrden;
         document.getElementById('entrega-subtitulo').textContent = 'Orden #' + idOrden;

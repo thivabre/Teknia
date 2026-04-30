@@ -1,18 +1,7 @@
-/**
- * estadisticas.js — Estadísticas del panel de inicio (index.html).
- *
- * Según el rol del usuario logueado, consulta distintos endpoints
- * y genera tarjetas de estadísticas personalizadas en el grid #stats-grid.
- *
- * Roles y lo que ven:
- *   - cliente        → sus órdenes activas, historial, facturas, presupuestos
- *   - empleado       → órdenes activas totales, clientes, inventario
- *   - jefe_sucursal  → todo lo del empleado + garantías, impuestos, precios
- *   - jefe_general   → visión global: sucursales, empleados, finanzas, contratos
- */
+// estadisticas.js — Gestión de estadísticas del dashboard según rol de usuario
 
 document.addEventListener('DOMContentLoaded', async function () {
-    // verificarSesion() está definida en tablas.js
+    // verificarSesion definida en tablas.js
     const sesion = await verificarSesion();
     if (!sesion) return;
 
@@ -20,10 +9,9 @@ document.addEventListener('DOMContentLoaded', async function () {
     const label = document.getElementById('label-stats');
     if (!grid) return;
 
-    // Mostrar la etiqueta de sección
     if (label) label.style.display = '';
 
-    // Despachar la función de estadísticas según el rol
+    // Cargar estadísticas según el rol
     switch (sesion.rol) {
         case 'cliente':
             await cargarEstadisticasCliente(grid, sesion);
@@ -44,22 +32,11 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 // ─── UTILIDADES ────────────────────────────────────────────────────────────
 
-/**
- * Crea una tarjeta de estadística y la agrega al grid.
- *
- * @param {HTMLElement} grid    - Contenedor .stats-grid donde se inserta.
- * @param {Object}      config
- *   @param {string}   config.icono    - Emoji/ícono decorativo.
- *   @param {string}   config.label    - Texto descriptivo bajo el número.
- *   @param {string}   [config.href]   - URL destino (hace la card clickeable).
- *   @param {string}   [config.linkTxt]- Texto del link "Ver →".
- * @returns {HTMLElement} El elemento .stat-valor donde se escribirá el número.
- */
+// Crea e inserta una tarjeta de estadística en el grid
 function crearStatCard(grid, { icono, label, href, linkTxt }) {
     const card = document.createElement('div');
     card.className = 'stat-card' + (href ? ' linkeable' : '');
 
-    // Si tiene destino, toda la card es un link
     if (href) card.addEventListener('click', () => window.location.href = href);
 
     card.innerHTML = `
@@ -70,17 +47,10 @@ function crearStatCard(grid, { icono, label, href, linkTxt }) {
     `;
     grid.appendChild(card);
 
-    // Retornar el elemento del valor para que el llamador pueda escribir el dato
     return card.querySelector('.stat-valor');
 }
 
-/**
- * Obtiene un JSON de una URL y devuelve el array (o null si falla).
- * Evita repetir try/catch en cada función de estadísticas.
- *
- * @param {string} url
- * @returns {Promise<Array|null>}
- */
+// Wrapper de fetch para obtener JSON con manejo de errores
 async function fetchJSON(url) {
     try {
         const res  = await fetch(url);
@@ -92,13 +62,7 @@ async function fetchJSON(url) {
     }
 }
 
-/**
- * Escribe el valor final en un elemento stat-valor.
- * Si el dato es null, muestra un indicador de error.
- *
- * @param {HTMLElement} el    - El elemento .stat-valor.
- * @param {*}           valor - El valor a mostrar (número, string, etc.).
- */
+// Renderiza el valor en la tarjeta o muestra error si es nulo
 function setStatVal(el, valor) {
     if (valor === null || valor === undefined) {
         el.textContent = '—';
@@ -111,20 +75,15 @@ function setStatVal(el, valor) {
 
 // ─── ESTADÍSTICAS POR ROL ──────────────────────────────────────────────────
 
-/**
- * CLIENTE — Ve su actividad personal:
- *   órdenes activas, historial de órdenes, facturas propias y presupuestos.
- */
+// CLIENTE: Actividad personal
 async function cargarEstadisticasCliente(grid, sesion) {
     const id = sesion.id_referencia;
 
-    // Crear todas las cards de estadísticas del cliente
     const elOrdenes      = crearStatCard(grid, { icono: '🔧', label: 'Órdenes activas',    href: 'servicios-ordenes_activas.html',   linkTxt: 'Ver órdenes' });
     const elHistorial    = crearStatCard(grid, { icono: '🗂',  label: 'Órdenes en historial', href: 'servicios-historial_ordenes.html', linkTxt: 'Ver historial' });
     const elFacturas     = crearStatCard(grid, { icono: '🧾', label: 'Facturas emitidas',   href: 'servicios-facturas.html',          linkTxt: 'Ver facturas' });
     const elPresupuestos = crearStatCard(grid, { icono: '💰', label: 'Presupuestos',        href: 'servicios-presupuestos.html',      linkTxt: 'Ver presupuestos' });
 
-    // Consultar todos los endpoints en paralelo
     const [ordenes, historial, facturas, presupuestos] = await Promise.all([
         fetchJSON(`consulta.php?accion=consulta_ordenes_activas_por_cliente&id_cliente=${id}`),
         fetchJSON(`consulta.php?accion=consulta_historial_ordenes_por_cliente&id_cliente=${id}`),
@@ -132,18 +91,13 @@ async function cargarEstadisticasCliente(grid, sesion) {
         fetchJSON(`consulta.php?accion=consulta_presupuestos_completo_por_cliente&id_cliente=${id}`)
     ]);
 
-    // Escribir los resultados en cada tarjeta
     setStatVal(elOrdenes,      ordenes      ? ordenes.length      : null);
     setStatVal(elHistorial,    historial    ? historial.length    : null);
     setStatVal(elFacturas,     facturas     ? facturas.length     : null);
     setStatVal(elPresupuestos, presupuestos ? presupuestos.length : null);
 }
 
-/**
- * EMPLEADO — Ve la actividad operativa de la sucursal:
- *   órdenes activas totales, clientes registrados,
- *   repuestos en catálogo e inventarios de repuestos.
- */
+// EMPLEADO: Actividad operativa de sucursal
 async function cargarEstadisticasEmpleado(grid, sesion) {
     const elOrdenes     = crearStatCard(grid, { icono: '🔧', label: 'Órdenes activas',      href: 'servicios-ordenes_activas.html',   linkTxt: 'Ver órdenes' });
     const elClientes    = crearStatCard(grid, { icono: '👥', label: 'Clientes registrados', href: 'personal-clientes.html',           linkTxt: 'Ver clientes' });
@@ -163,10 +117,7 @@ async function cargarEstadisticasEmpleado(grid, sesion) {
     setStatVal(elInventarios, inventarios ? inventarios.length : null);
 }
 
-/**
- * JEFE DE SUCURSAL — Ve todo lo del empleado más la vista financiera:
- *   órdenes, empleados, garantías vigentes, impuestos configurados y precios.
- */
+// JEFE DE SUCURSAL: Operaciones, personal y finanzas de sucursal
 async function cargarEstadisticasJefeSucursal(grid, sesion) {
     const elOrdenes    = crearStatCard(grid, { icono: '🔧', label: 'Órdenes activas',    href: 'servicios-ordenes_activas.html',   linkTxt: 'Ver órdenes' });
     const elEmpleados  = crearStatCard(grid, { icono: '👤', label: 'Empleados',           href: 'personal-empleados.html',          linkTxt: 'Ver empleados' });
@@ -192,10 +143,7 @@ async function cargarEstadisticasJefeSucursal(grid, sesion) {
     setStatVal(elFacturas,  facturas  ? facturas.length  : null);
 }
 
-/**
- * JEFE GENERAL — Visión global del sistema:
- *   sucursales, empleados, jefes, clientes, contratos y órdenes históricas.
- */
+// JEFE GENERAL: Visión global corporativa
 async function cargarEstadisticasJefeGeneral(grid, sesion) {
     const elSucursales = crearStatCard(grid, { icono: '🏢', label: 'Sucursales',            href: 'sucursales-informacion.html',     linkTxt: 'Ver sucursales' });
     const elEmpleados  = crearStatCard(grid, { icono: '👤', label: 'Empleados',              href: 'personal-empleados.html',         linkTxt: 'Ver empleados' });

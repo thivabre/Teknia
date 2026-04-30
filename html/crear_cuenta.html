@@ -4,34 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teknia – Crear cuenta</title>
+    <!-- Estilos compartidos de páginas de cuenta (login y registro) -->
     <link rel="stylesheet" href="estilos_cuenta.css">
-    <style>
-        body { align-items: flex-start; padding: 30px 0; }
-        .formulario { min-height: auto; padding: 40px 40px 50px; width: 560px; }
-        h2 { margin-top: 0; margin-bottom: 4px; }
-        .subtitulo { color: #555; font-size: 13px; margin-bottom: 6px; text-align: center; }
-        .campo { margin-top: 22px; }
-        .seccion-label {
-            display: block; font-size: 10px; font-weight: 700;
-            text-transform: uppercase; letter-spacing: 1px;
-            color: #888; margin-top: 28px; margin-bottom: -6px;
-        }
-        #registro-exitoso {
-            background: #d4edda; color: #155724;
-            border-radius: 8px; padding: 12px 16px;
-            margin-top: 18px; font-size: 13px; text-align: center;
-            line-height: 1.5;
-        }
-        #error-mensaje {
-            color: red; margin-top: 12px;
-            font-size: 13px; text-align: center;
-        }
-        .link-sesion { text-align: center; margin-top: 20px; font-size: 13px; color: #555; }
-        .link-sesion a { color: #2563eb; text-decoration: none; font-weight: 600; }
-    </style>
 </head>
-<body>
-    <form class="formulario" id="form-registro">
+<!-- scroll-layout: alinea al tope para que el form largo no quede cortado -->
+<body class="scroll-layout">
+    <!-- Formulario de creación de cuenta de cliente -->
+    <form class="formulario formulario-registro" id="form-registro">
         <h2>Crear cuenta</h2>
         <p class="subtitulo">Completá todos los campos para registrarte como cliente</p>
 
@@ -88,7 +67,9 @@
             <input type="number" id="cod_postal_cli" name="cod_postal_cli" placeholder="1414" required>
         </div>
 
+        <!-- Mensaje de éxito: muestra el ID asignado -->
         <div id="registro-exitoso" hidden></div>
+        <!-- Mensaje de error -->
         <div id="error-mensaje" hidden></div>
 
         <button type="submit" class="iniciar">Crear cuenta</button>
@@ -96,6 +77,7 @@
         <p class="link-sesion">¿Ya tenés cuenta? <a href="inicio_sesion.html">Iniciá sesión</a></p>
     </form>
 
+    <!-- Lógica de envío del formulario de registro -->
     <script src="signup.js"></script>
 </body>
 </html>

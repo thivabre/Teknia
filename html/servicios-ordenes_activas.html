@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="es">
 <head>
 <meta charset="utf-8"/>
@@ -8,16 +7,13 @@
 <link href="estilos.css" rel="stylesheet"/>
 <link href="estilo_tabla_estatica.css" rel="stylesheet"/>
 <link href="estilo_form_insert.css" rel="stylesheet"/>
+<link href="estilo_cards.css" rel="stylesheet"/>
 </head>
 <body class="cargando-rol">
 <div class="contenedor-grid">
-<!-- ── TOP NAVBAR ── -->
 <nav class="navbar">
 <ul>
-<div class="logo">
-<div class="logo-icon">T</div>
-<span class="logo-name">Teknia</span>
-</div>
+<div class="logo"><div class="logo-icon">T</div><span class="logo-name">Teknia</span></div>
 <li><a href="index.html">Inicio</a></li>
 <li data-rol="cliente empleado jefe_sucursal jefe_general"><a class="activo" href="servicios-crear_oden.html">Servicios</a></li>
 <li data-rol="cliente empleado jefe_sucursal jefe_general"><a href="sucursales-ubicacion.html">Sucursales</a></li>
@@ -47,30 +43,55 @@
 </nav>
 <div class="contenedor-padre">
 <div class="contenedor-tablas">
-<table>
-<caption class="titulo">Ordenes activas</caption>
-<thead>
-<tr>
-<th>Nombre del articulo</th>
-<th>Tipo de articulo</th>
-<th>Fallas</th>
-<th>Fecha de creacion</th>
-<th>Fecha estimada de finalizacion</th>
-<th>N° sucursal a cargo</th>
-</tr>
-</thead>
-<tbody id="orden_servicio_activas"></tbody>
-</table>
+  <table>
+    <caption class="titulo">Órdenes activas</caption>
+    <thead>
+    <tr>
+      <th>N° Orden</th>
+      <th>Artículo</th>
+      <th>Tipo</th>
+      <th>Fallas</th>
+      <th>Fecha creación</th>
+      <th>Fecha est. fin</th>
+      <th>Sucursal</th>
+      <th id="th-accion" style="display:none">Acción</th>
+    </tr>
+    </thead>
+    <tbody id="tbody-ordenes"></tbody>
+  </table>
 </div>
-</div><!-- /contenedor-padre -->
-</div><!-- /contenedor-grid -->
-<template id="molde-fila-orden_servicio_activas">
-<tr>
-<td class="acciones">
-<button class="entregar">✔️</button>
-</td>
-</tr>
-</template>
+</div>
+</div>
+
+<!-- Modal de entrega simplificado (sin formulario de pago) -->
+<div class="detalle-modal" id="modal-entrega">
+  <div class="detalle-backdrop" id="backdrop-entrega"></div>
+  <div class="detalle-panel">
+    <div class="detalle-panel-inner">
+      <div class="detalle-header">
+        <div>
+          <h2>Registrar entrega</h2>
+          <p id="entrega-subtitulo">Orden #</p>
+        </div>
+        <button class="detalle-cerrar" id="cerrar-modal-entrega">×</button>
+      </div>
+
+      <p style="font-size:12px;color:var(--t3);margin-bottom:14px">
+        El pago debe haber sido registrado por el cliente en la sección
+        <strong>Facturas</strong> antes de poder confirmar la entrega.
+      </p>
+
+      <div id="msg-entrega" class="msg-estado"></div>
+
+      <div class="detalle-acciones">
+        <button class="btn-ascender" id="btn-confirmar-entrega">Confirmar entrega</button>
+        <button id="btn-cancelar-entrega" style="background:none;border:1px solid var(--bdr);border-radius:8px;padding:9px 16px;font-size:12px;cursor:pointer;color:var(--t2)">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="tablas.js"></script>
+<script src="servicios-ordenes_activas.js"></script>
 </body>
 </html>

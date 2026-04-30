@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-
-<html lang="en">
+<html lang="es">
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
@@ -8,16 +7,12 @@
 <link href="estilos.css" rel="stylesheet"/>
 <link href="estilo_form_insert.css" rel="stylesheet"/>
 <link href="estilo_tabla_estatica.css" rel="stylesheet"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 </head>
 <body class="cargando-rol">
 <div class="contenedor-grid">
 <nav class="navbar">
 <ul>
-<div class="logo">
-<div class="logo-icon">T</div>
-<span class="logo-name">Teknia</span>
-</div>
+<div class="logo"><div class="logo-icon">T</div><span class="logo-name">Teknia</span></div>
 <li><a href="index.html">Inicio</a></li>
 <li data-rol="cliente empleado jefe_sucursal jefe_general"><a href="servicios-crear_oden.html">Servicios</a></li>
 <li data-rol="cliente empleado jefe_sucursal jefe_general"><a class="activo" href="sucursales-ubicacion.html">Sucursales</a></li>
@@ -40,48 +35,53 @@
 </nav>
 <div class="contenedor-padre">
 <div class="contenedor-tablas">
-<form class="form-insert">
-<h2>Crear ubicacion de sucursal</h2>
-<div class="campo-ingreso">
-<div class="campo">
-<label>Pais</label>
-<input placeholder="Argentina" type="text"/>
-</div>
-<div class="campo">
-<label>Provincia</label>
-<input placeholder="C.A.B.A" type="text"/>
-</div>
-<div class="campo">
-<label>Ciudad</label>
-<input placeholder="C.A.B.A" type="text"/>
-</div>
-<div class="campo">
-<label>Barrio</label>
-<input placeholder="Saavedra" type="text"/>
-</div>
-<div class="campo">
-<label>Calle</label>
-<input placeholder="Nuñez" type="text"/>
-</div>
-<div class="campo">
-<label>Altura</label>
-<input placeholder="2520" type="text"/>
-</div>
-<div class="campo">
-<label>Codigo postal</label>
-<input placeholder="1430" type="text"/>
-</div>
-<div class="campo">
-<label>Impuesto aplicado</label>
-<select>
-<option value="none">Ninguno</option>
-</select>
-</div>
-</div>
-<button class="envio-insert" type="submit">Insertar</button>
-</form>
+  <div class="form-insert" id="form-crear-sucursal">
+    <h2>Crear nueva sucursal</h2>
+    <div class="campo-ingreso">
+
+      <div class="campo">
+        <label>País</label>
+        <input id="suc-pais" placeholder="Argentina" type="text"/>
+      </div>
+      <div class="campo">
+        <label>Provincia</label>
+        <input id="suc-provincia" placeholder="C.A.B.A" type="text"/>
+      </div>
+      <div class="campo">
+        <label>Ciudad</label>
+        <input id="suc-ciudad" placeholder="C.A.B.A" type="text"/>
+      </div>
+      <div class="campo">
+        <label>Barrio</label>
+        <input id="suc-barrio" placeholder="Saavedra" type="text"/>
+      </div>
+      <div class="campo">
+        <label>Calle</label>
+        <input id="suc-calle" placeholder="Av. Nuñez" type="text"/>
+      </div>
+      <div class="campo">
+        <label>Altura</label>
+        <input id="suc-altura" min="1" placeholder="2520" type="number"/>
+      </div>
+      <div class="campo">
+        <label>Código postal</label>
+        <input id="suc-cod-postal" min="1" placeholder="1430" type="number"/>
+      </div>
+      <div class="campo">
+        <label>Tipo de impuesto</label>
+        <select id="sel-tipo-imp">
+          <option value="">Cargando impuestos…</option>
+        </select>
+      </div>
+
+    </div><!-- /campo-ingreso -->
+    <div id="msg-sucursal" style="font-size:12px;margin-top:10px;padding:8px 12px;border-radius:7px;display:none"></div>
+    <button class="envio-insert" id="btn-crear-sucursal" style="margin-top:16px" type="button">Crear sucursal</button>
+  </div>
 </div>
 </div><!-- /contenedor-padre -->
 </div><!-- /contenedor-grid -->
-<script src="tablas.js"></script></body>
+<script src="tablas.js"></script>
+<script src="sucursales-creacion.js"></script>
+</body>
 </html>

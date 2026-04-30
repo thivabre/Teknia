@@ -1,23 +1,19 @@
 <!DOCTYPE html>
-
-<html lang="en">
+<html lang="es">
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Teknia</title>
+<title>Sucursales — Información</title>
 <link href="estilos.css" rel="stylesheet"/>
-<link href="estilo_form_insert.css" rel="stylesheet"/>
 <link href="estilo_tabla_estatica.css" rel="stylesheet"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="estilo_form_insert.css" rel="stylesheet"/>
+<link href="estilo_cards.css" rel="stylesheet"/>
 </head>
 <body class="cargando-rol">
 <div class="contenedor-grid">
 <nav class="navbar">
 <ul>
-<div class="logo">
-<div class="logo-icon">T</div>
-<span class="logo-name">Teknia</span>
-</div>
+<div class="logo"><div class="logo-icon">T</div><span class="logo-name">Teknia</span></div>
 <li><a href="index.html">Inicio</a></li>
 <li data-rol="cliente empleado jefe_sucursal jefe_general"><a href="servicios-crear_oden.html">Servicios</a></li>
 <li data-rol="cliente empleado jefe_sucursal jefe_general"><a class="activo" href="sucursales-ubicacion.html">Sucursales</a></li>
@@ -40,8 +36,29 @@
 </nav>
 <div class="contenedor-padre">
 <div class="contenedor-tablas">
+  <div class="cards-grid" id="cards-sucursales">
+    <div class="cards-empty">Cargando sucursales…</div>
+  </div>
 </div>
-</div><!-- /contenedor-padre -->
-</div><!-- /contenedor-grid -->
-<script src="tablas.js"></script></body>
+</div>
+</div>
+
+<!-- ── MODAL ── -->
+<div class="detalle-modal" id="modal-detalle">
+  <div class="detalle-backdrop" id="backdrop-detalle"></div>
+  <div class="detalle-panel">
+    <div class="detalle-panel-inner">
+      <div class="detalle-header">
+        <div><h2 id="detalle-titulo">—</h2><p id="detalle-subtitulo">Sucursal</p></div>
+        <button class="detalle-cerrar" id="btn-cerrar-detalle">×</button>
+      </div>
+      <div id="detalle-contenido"></div>
+    </div>
+  </div>
+</div>
+
+<script src="tablas.js"></script>
+<script src="tarjetas.js"></script>
+<script src="sucursales-informacion.js"></script>
+</body>
 </html>

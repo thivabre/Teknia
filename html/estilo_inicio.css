@@ -1,0 +1,141 @@
+/* ============================================================
+   TEKNIA — Estilos de la página de inicio (index.html)
+   Incluye: sección de bienvenida y tarjetas de estadísticas
+   ============================================================ */
+
+/* ── SECCIÓN DE BIENVENIDA ────────────────────────────────── */
+.bienvenida {
+    padding: 40px 32px 0;
+    max-width: 900px;
+    width: 100%;
+}
+
+.bienvenida h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--t1);
+    margin-bottom: 6px;
+}
+
+.bienvenida p {
+    font-size: 13px;
+    color: var(--t2);
+    line-height: 1.6;
+    margin-bottom: 28px;
+}
+
+/* ── GRID DE ESTADÍSTICAS ─────────────────────────────────── */
+/*
+   Usamos un grid de columnas auto-fill de 200px mínimo,
+   para que se adapte a cualquier cantidad de tarjetas
+   sin importar cuántas estadísticas se muestren.
+*/
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+    padding: 24px 32px 40px;
+    width: 100%;
+    max-width: 900px;
+}
+
+/* ── TARJETA DE ESTADÍSTICA INDIVIDUAL ────────────────────── */
+.stat-card {
+    background: var(--card);
+    border: 1px solid var(--bdr);
+    border-radius: 14px;
+    padding: 20px 20px 16px;
+    box-shadow: 0 1px 4px rgba(15, 23, 42, 0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    transition: box-shadow 0.2s, border-color 0.2s, transform 0.18s;
+    text-decoration: none;
+    color: inherit;
+    cursor: default;
+}
+
+/* Tarjetas que contienen un link se vuelven clicables */
+.stat-card.linkeable {
+    cursor: pointer;
+}
+
+.stat-card.linkeable:hover {
+    box-shadow: 0 6px 24px rgba(37, 99, 235, 0.12);
+    border-color: var(--blue);
+    transform: translateY(-2px);
+}
+
+/* Ícono decorativo en la parte superior */
+.stat-icono {
+    font-size: 20px;
+    line-height: 1;
+    margin-bottom: 4px;
+}
+
+/* Número principal de la estadística */
+.stat-valor {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--t1);
+    line-height: 1.1;
+}
+
+/* Texto descriptivo bajo el número */
+.stat-label {
+    font-size: 12px;
+    color: var(--t2);
+    font-weight: 500;
+}
+
+/* Estado mientras carga el valor */
+.stat-valor.cargando {
+    color: var(--t3);
+    font-size: 18px;
+}
+
+/* Estado de error al no poder cargar el dato */
+.stat-valor.error {
+    color: #dc2626;
+    font-size: 14px;
+}
+
+/* Link "Ver todos →" al pie de la tarjeta */
+.stat-link {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 11px;
+    color: var(--blue);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.stat-link:hover {
+    text-decoration: underline;
+}
+
+/* ── SEPARADOR DE SECCIÓN ─────────────────────────────────── */
+.stats-seccion-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--t3);
+    padding: 0 32px;
+    margin-top: 4px;
+    width: 100%;
+    max-width: 900px;
+}
+
+/* ── CONTENEDOR COMPLETO DEL INICIO ──────────────────────── */
+/*
+   Sobreescribe el contenedor-padre de estilos.css para el index:
+   usamos flex-column para poder apilar las secciones verticalmente.
+*/
+.contenedor-padre.inicio-layout {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0;
+    gap: 0;
+}

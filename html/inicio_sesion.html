@@ -4,37 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teknia – Iniciar sesión</title>
+    <!-- Estilos compartidos de páginas de cuenta (login y registro) -->
     <link rel="stylesheet" href="estilos_cuenta.css">
-    <style>
-        .formulario { min-height: auto; padding: 40px 40px 50px; gap: 0; }
-        h2 { margin-top: 0; margin-bottom: 8px; }
-        .subtitulo { color: #555; font-size: 13px; margin-bottom: 10px; text-align: center; }
-        .campo { margin-top: 30px; }
-        select {
-            background-color: transparent;
-            min-width: 350px;
-            min-height: 30px;
-            border: none;
-            border-bottom: 2px #000 solid;
-            border-radius: 6px;
-            font-size: 14px;
-            padding: 4px 0;
-        }
-        select:focus { outline: none; border-bottom: 3px #000 solid; }
-        #registro-exitoso {
-            background: #d4edda; color: #155724;
-            border-radius: 8px; padding: 10px 14px;
-            margin-top: 16px; font-size: 13px; text-align: center;
-        }
-        #error-mensaje {
-            color: red; margin-top: 12px;
-            font-size: 13px; text-align: center;
-        }
-        .link-cuenta { text-align: center; margin-top: 20px; font-size: 13px; color: #555; }
-        .link-cuenta a { color: #2563eb; text-decoration: none; font-weight: 600; }
-    </style>
 </head>
 <body>
+    <!-- Formulario de inicio de sesión -->
     <form class="formulario" id="form-login">
         <h2>Iniciar sesión</h2>
         <p class="subtitulo">Ingresá con tu nombre y tu número de ID</p>
@@ -58,6 +32,7 @@
             <input type="number" id="id_acceso" name="id_acceso" placeholder="Tu ID de cliente o empleado" required>
         </div>
 
+        <!-- Mensaje de error: oculto por defecto, visible si login falla -->
         <div id="error-mensaje" hidden></div>
 
         <button type="submit" class="iniciar">Iniciar sesión</button>
@@ -65,6 +40,7 @@
         <p class="link-cuenta">¿No tenés cuenta? <a href="crear_cuenta.html">Creá una acá</a></p>
     </form>
 
+    <!-- Lógica de envío del formulario de login -->
     <script src="login.js"></script>
 </body>
 </html>

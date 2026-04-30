@@ -1,23 +1,17 @@
 <!DOCTYPE html>
-
 <html lang="es">
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Servicios</title>
+<title>Servicios — Historial de órdenes</title>
 <link href="estilos.css" rel="stylesheet"/>
 <link href="estilo_tabla_estatica.css" rel="stylesheet"/>
-<link href="estilo_form_insert.css" rel="stylesheet"/>
 </head>
 <body class="cargando-rol">
 <div class="contenedor-grid">
-<!-- ── TOP NAVBAR ── -->
 <nav class="navbar">
 <ul>
-<div class="logo">
-<div class="logo-icon">T</div>
-<span class="logo-name">Teknia</span>
-</div>
+<div class="logo"><div class="logo-icon">T</div><span class="logo-name">Teknia</span></div>
 <li><a href="index.html">Inicio</a></li>
 <li data-rol="cliente empleado jefe_sucursal jefe_general"><a class="activo" href="servicios-crear_oden.html">Servicios</a></li>
 <li data-rol="cliente empleado jefe_sucursal jefe_general"><a href="sucursales-ubicacion.html">Sucursales</a></li>
@@ -33,12 +27,12 @@
 <span class="seccion-label">Servicios</span>
 <ul>
 <li data-rol="cliente empleado jefe_sucursal jefe_general"><a href="servicios-crear_oden.html">Nueva orden</a></li>
-<li data-rol="cliente empleado jefe_sucursal jefe_general"><a href="servicios-ordenes_activas.html">Ordenes activas</a></li>
-<li data-rol="cliente empleado jefe_sucursal jefe_general"><a class="activo" href="servicios-historial_ordenes.html">Historial de ordenes</a></li>
+<li data-rol="cliente empleado jefe_sucursal jefe_general"><a href="servicios-ordenes_activas.html">Órdenes activas</a></li>
+<li data-rol="cliente empleado jefe_sucursal jefe_general"><a class="activo" href="servicios-historial_ordenes.html">Historial de órdenes</a></li>
 </ul>
 </div>
 <div data-rol="cliente empleado jefe_sucursal jefe_general">
-<span class="seccion-label">Facturacion</span>
+<span class="seccion-label">Facturación</span>
 <ul>
 <li data-rol="cliente empleado jefe_sucursal jefe_general"><a href="servicios-facturas.html">Facturas</a></li>
 <li data-rol="cliente empleado jefe_sucursal jefe_general"><a href="servicios-presupuestos.html">Presupuestos</a></li>
@@ -48,29 +42,26 @@
 <div class="contenedor-padre">
 <div class="contenedor-tablas">
 <table>
-<caption class="titulo">Historial de ordenes</caption>
+<caption class="titulo">Historial de órdenes</caption>
 <thead>
 <tr>
-<th>Nombre del articulo</th>
-<th>Tipo de articulo</th>
+<th>N° Orden</th>
+<th>Nombre del artículo</th>
+<th>Tipo de artículo</th>
 <th>Fallas</th>
-<th>Fecha de creacion</th>
+<th>Fecha de creación</th>
 <th>Fecha de entrega</th>
-<th>N° sucursal a cargo</th>
-<th>Fecha de facturacion</th>
+<th>N° sucursal</th>
+<th>Fecha de facturación</th>
 </tr>
 </thead>
-<tbody id="historial_orden_servicio"></tbody>
+<tbody id="tbody-historial"></tbody>
 </table>
 </div>
-</div><!-- /contenedor-padre -->
-</div><!-- /contenedor-grid -->
-<template id="molde-fila-historial_orden_servicio">
-<tr>
-<td class="acciones">
-</td>
-</tr>
-</template>
+</div>
+</div>
+
 <script src="tablas.js"></script>
+<script src="servicios-historial_ordenes.js"></script>
 </body>
 </html>

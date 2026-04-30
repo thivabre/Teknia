@@ -1,23 +1,18 @@
 <!DOCTYPE html>
-
-<html lang="en">
+<html lang="es">
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Teknia</title>
+<title>Sucursales — Ubicación</title>
 <link href="estilos.css" rel="stylesheet"/>
 <link href="estilo_form_insert.css" rel="stylesheet"/>
 <link href="estilo_tabla_estatica.css" rel="stylesheet"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 </head>
 <body class="cargando-rol">
 <div class="contenedor-grid">
 <nav class="navbar">
 <ul>
-<div class="logo">
-<div class="logo-icon">T</div>
-<span class="logo-name">Teknia</span>
-</div>
+<div class="logo"><div class="logo-icon">T</div><span class="logo-name">Teknia</span></div>
 <li><a href="index.html">Inicio</a></li>
 <li data-rol="cliente empleado jefe_sucursal jefe_general"><a href="servicios-crear_oden.html">Servicios</a></li>
 <li data-rol="cliente empleado jefe_sucursal jefe_general"><a class="activo" href="sucursales-ubicacion.html">Sucursales</a></li>
@@ -32,8 +27,8 @@
 <div data-rol="cliente empleado jefe_sucursal jefe_general">
 <span class="seccion-label">Sucursales</span>
 <ul>
-<li data-rol="cliente empleado jefe_sucursal jefe_general"><a class="activo" href="sucursales-ubicacion.html">Ubicacion de sucursales</a></li>
-<li data-rol="jefe_general"><a href="sucursales-informacion.html">Informacion de sucursales</a></li>
+<li data-rol="cliente empleado jefe_sucursal jefe_general"><a class="activo" href="sucursales-ubicacion.html">Ubicación de sucursales</a></li>
+<li data-rol="jefe_general"><a href="sucursales-informacion.html">Información de sucursales</a></li>
 <li data-rol="jefe_general"><a href="sucursales-creacion.html">Crear sucursal</a></li>
 </ul>
 </div>
@@ -41,21 +36,23 @@
 <div class="contenedor-padre">
 <div class="contenedor-tablas">
 <table>
-<caption class="titulo">Ubicacion de sucursales</caption>
+<caption class="titulo">Ubicación de sucursales</caption>
 <thead>
 <tr>
-<th>Pais</th>
+<th>País</th>
 <th>Provincia</th>
 <th>Ciudad</th>
 <th>Barrio</th>
-<th>Codigo postal</th>
-<th>Direccion</th>
+<th>Cód. postal</th>
+<th>Dirección</th>
 </tr>
 </thead>
 <tbody id="ubicacion_sucursales"></tbody>
 </table>
 </div>
-</div><!-- /contenedor-padre -->
-</div><!-- /contenedor-grid -->
-<script src="tablas.js"></script></body>
+</div>
+</div>
+<template id="molde-fila-ubicacion_sucursales"><tr></tr></template>
+<script src="tablas.js"></script>
+</body>
 </html>

@@ -4,54 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teknia</title>
+    <!-- Estilos generales del sistema -->
     <link rel="stylesheet" href="estilos.css">
-    <style>
-        .bienvenida {
-            padding: 60px 32px;
-            max-width: 700px;
-        }
-        .bienvenida h1 {
-            font-size: 26px;
-            font-weight: 700;
-            color: var(--t1);
-            margin-bottom: 10px;
-        }
-        .bienvenida p {
-            font-size: 14px;
-            color: var(--t2);
-            line-height: 1.7;
-            margin-bottom: 24px;
-        }
-        .accesos-rapidos {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 8px;
-        }
-        .acceso-card {
-            background: var(--card);
-            border: 1px solid var(--bdr);
-            border-radius: 10px;
-            padding: 16px 20px;
-            text-decoration: none;
-            color: var(--t1);
-            font-size: 13px;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: box-shadow .15s, border-color .15s;
-        }
-        .acceso-card:hover {
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-            border-color: var(--blue);
-            color: var(--blue);
-        }
-    </style>
+    <!-- Estilos específicos de la página de inicio (bienvenida + estadísticas) -->
+    <link rel="stylesheet" href="estilo_inicio.css">
 </head>
 <body class="cargando-rol">
     <div class="contenedor-grid">
 
+        <!-- ── NAVBAR SUPERIOR ──────────────────────────────────── -->
         <nav class="navbar">
             <ul>
                 <div class="logo">
@@ -84,54 +45,32 @@
             </ul>
         </nav>
 
-        <!-- No side navbar on index -->
+        <!-- Columna lateral vacía en el inicio (sin side-navbar) -->
         <div style="grid-area: 2/1/3/2; background: var(--navy2); border-right: 1px solid rgba(255,255,255,0.05);"></div>
 
-        <div class="contenedor-padre">
+        <!-- ── ÁREA DE CONTENIDO PRINCIPAL ──────────────────────── -->
+        <!-- inicio-layout: cambia el flex a columna para apilar secciones -->
+        <div class="contenedor-padre inicio-layout">
+
+            <!-- Encabezado de bienvenida -->
             <div class="bienvenida">
                 <h1>Bienvenido a Teknia, <span id="nombre-usuario">usuario</span></h1>
-                <p>Usá el menú de navegación o los accesos rápidos de abajo para ir a la sección que necesitás.</p>
-
-                <div class="accesos-rapidos">
-                    <a href="servicios-crear_oden.html" class="acceso-card" data-rol="cliente empleado jefe_sucursal jefe_general">
-                        🔧 Nueva orden de servicio
-                    </a>
-                    <a href="servicios-ordenes_activas.html" class="acceso-card" data-rol="cliente empleado jefe_sucursal jefe_general">
-                        📋 Órdenes activas
-                    </a>
-                    <a href="servicios-historial_ordenes.html" class="acceso-card" data-rol="cliente empleado jefe_sucursal jefe_general">
-                        🗂 Historial de órdenes
-                    </a>
-                    <a href="servicios-facturas.html" class="acceso-card" data-rol="cliente empleado jefe_sucursal jefe_general">
-                        🧾 Facturas
-                    </a>
-                    <a href="servicios-presupuestos.html" class="acceso-card" data-rol="cliente empleado jefe_sucursal jefe_general">
-                        💰 Presupuestos
-                    </a>
-                    <a href="sucursales-ubicacion.html" class="acceso-card" data-rol="cliente empleado jefe_sucursal jefe_general">
-                        📍 Sucursales
-                    </a>
-                    <a href="inventario-repuestos.html" class="acceso-card" data-rol="empleado jefe_sucursal jefe_general">
-                        📦 Inventario repuestos
-                    </a>
-                    <a href="inventario-productos.html" class="acceso-card" data-rol="empleado jefe_sucursal jefe_general">
-                        🛒 Inventario productos
-                    </a>
-                    <a href="finanzas-garantias.html" class="acceso-card" data-rol="jefe_sucursal jefe_general">
-                        📊 Finanzas
-                    </a>
-                    <a href="personal-clientes.html" class="acceso-card" data-rol="empleado jefe_sucursal jefe_general">
-                        👥 Personal
-                    </a>
-                    <a href="administracion-contratos.html" class="acceso-card" data-rol="jefe_general">
-                        ⚙️ Administración
-                    </a>
-                </div>
+                <p id="subtitulo-inicio">Aquí vas a encontrar un resumen de tu actividad en el sistema.</p>
             </div>
+
+            <!-- Etiqueta de sección estadísticas (se oculta si no aplica) -->
+            <p class="stats-seccion-label" id="label-stats" style="display:none">Tu actividad</p>
+
+            <!-- Grid de tarjetas de estadísticas — se genera dinámicamente desde estadisticas.js -->
+            <div class="stats-grid" id="stats-grid"></div>
+
         </div>
 
     </div>
 
+    <!-- tablas.js: sesión, roles y utilidades compartidas -->
     <script src="tablas.js"></script>
+    <!-- estadisticas.js: carga y renderiza las estadísticas según el rol -->
+    <script src="estadisticas.js"></script>
 </body>
 </html>

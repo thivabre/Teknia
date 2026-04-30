@@ -1,30 +1,5 @@
 /**
- * tarjetas.js — Motor genérico de tarjetas (cards) y panel de detalle.
- *
- * Este archivo centraliza toda la lógica compartida entre las páginas que
- * usan el patrón "grilla de cards + modal de detalle":
- *   personal-clientes.js, personal-empleados.js, personal-jefes.js,
- *   personal-jefes_sucursal.js, inventario-repuestos.js,
- *   inventario-productos.js, sucursales-informacion.js,
- *   servicios-presupuestos.js
- *
- * Las funciones se exponen de forma global (sin módulos ES) para que
- * puedan usarse desde cualquier script cargado con <script src="...">.
- */
-
-// ─── RENDERIZADO DE CARDS ──────────────────────────────────────────────────
-
-/**
- * Renderiza una grilla de tarjetas a partir de un array de datos.
- *
- * @param {string}   gridId       - ID del elemento .cards-grid en el DOM.
- * @param {Array}    items        - Array de objetos de datos a mostrar.
- * @param {Function} buildCard    - Función (item) => { badge, badgeStyle,
- *                                  avatarContent, avatarStyle, nombre, subs }
- *                                  que devuelve los datos visuales de cada card.
- * @param {Function} onCardClick  - Función (item, cardEl) => void
- *                                  llamada al hacer clic en una tarjeta.
- * @param {string}   [mensajeVacio] - Texto a mostrar si el array está vacío.
+Renderiza una grilla de tarjetas a partir de un array de datos.
  */
 function renderCards(gridId, items, buildCard, onCardClick, mensajeVacio = 'No hay registros.') {
     const grid = document.getElementById(gridId);
@@ -66,12 +41,8 @@ function renderCards(gridId, items, buildCard, onCardClick, mensajeVacio = 'No h
 // ─── MODAL DE DETALLE ──────────────────────────────────────────────────────
 
 /**
- * Inicializa los eventos de cierre de un modal de detalle.
- * Debe llamarse una vez por página, en el DOMContentLoaded.
- *
- * @param {string} modalId    - ID del elemento .detalle-modal.
- * @param {string} backdropId - ID del .detalle-backdrop (fondo oscuro).
- * @param {string} closeBtnId - ID del botón de cerrar (×).
+Inicializa los eventos de cierre de un modal de detalle.
+Debe llamarse una vez por página, en el DOMContentLoaded.
  */
 function initModal(modalId, backdropId, closeBtnId) {
     const cerrar = () => cerrarModal(modalId);
@@ -84,20 +55,7 @@ function initModal(modalId, backdropId, closeBtnId) {
 }
 
 /**
- * Abre el modal de detalle e inyecta su contenido dinámicamente.
- * Funciona con cualquier página que tenga la estructura estándar del modal:
- *   #detalle-titulo, #detalle-subtitulo, #detalle-contenido, #detalle-acciones-wrap
- *
- * @param {string} modalId - ID del .detalle-modal a abrir.
- * @param {Object} config
- *   @param {string}   config.titulo        - Título principal del modal.
- *   @param {string}   config.subtitulo     - Subtítulo (rol, categoría, etc.).
- *   @param {string}   config.contenidoHtml - HTML interno para #detalle-contenido.
- *   @param {string}   [config.accionesHtml]- HTML para #detalle-acciones-wrap
- *                                            (opcional: botones de acción).
- *   @param {Function} [config.onReady]     - Callback invocado después de
- *                                            insertar el HTML en el DOM.
- *                                            Útil para agregar event listeners.
+Abre el modal de detalle e inyecta su contenido dinámicamente.
  */
 function abrirModal(modalId, { titulo, subtitulo, contenidoHtml, accionesHtml = '', onReady } = {}) {
     const tituloEl    = document.getElementById('detalle-titulo');
@@ -118,9 +76,7 @@ function abrirModal(modalId, { titulo, subtitulo, contenidoHtml, accionesHtml = 
 }
 
 /**
- * Cierra el modal de detalle quitando la clase 'activo'.
- *
- * @param {string} modalId - ID del .detalle-modal a cerrar.
+Cierra el modal de detalle quitando la clase 'activo'.
  */
 function cerrarModal(modalId) {
     const modal = document.getElementById(modalId);

@@ -1,13 +1,8 @@
 /**
- * servicios-crear_oden.js — Formulario de creación de órdenes de servicio.
- *
- * Usa tablas.js para la verificación de sesión.
- *
- * Funcionalidad:
- *   - Los empleados/jefes deben ingresar el ID del cliente manualmente.
- *   - Los clientes usan su propio ID de sesión automáticamente.
- *   - Se seleccionan hasta 3 repuestos; el sistema calcula el precio de M.O.
- *   - Se envía el formulario a insercion.php con accion=crear_orden_completa.
+servicios-crear_oden.js — Formulario de creación de órdenes de servicio.
+
+Usa tablas.js para la verificación de sesión.
+
  */
 (function () {
     document.addEventListener('DOMContentLoaded', async function () {

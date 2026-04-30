@@ -1,12 +1,8 @@
 /**
- * sucursales-informacion.js — Listado y detalle de sucursales.
- *
- * Usa tarjetas.js para el renderizado genérico y el modal de detalle.
- * Usa tablas.js para la verificación de sesión.
- *
- * Funcionalidad exclusiva:
- *   - Cargar sucursales con información de dirección completa
- *   - Mostrar detalle con datos operativos (empleados, reparaciones, IDs)
+sucursales-informacion.js — Listado y detalle de sucursales.
+
+Usa tarjetas.js para el renderizado genérico y el modal de detalle.
+Usa tablas.js para la verificación de sesión.
  */
 (function () {
     document.addEventListener('DOMContentLoaded', async function () {

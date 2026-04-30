@@ -153,14 +153,14 @@ El sistema controla el acceso a cada sección según el rol del usuario logueado
 
 ## Base de datos
 
-La base de datos `servicio_tecnico_db` contiene 28 tablas organizadas en los siguientes grupos:
+La base de datos `servicio_tecnico_db` contiene 25 tablas organizadas en los siguientes grupos:
 
-- **Entidades principales:** `cliente`, `empleado`, `sucursales`, `proveedor`
+- **Entidades principales:** `cliente`, `empleado`, `sucursales`
 - **Operaciones:** `orden_servicio`, `orden_entrega`, `factura_servicio`, `presupuestos`
 - **Inventario:** `inventario_repuestos`, `inventario_productos`, `repuestos`, `articulo_reparar`
-- **Tablas intermedias (N:M):** `intermedia_inv_rep`, `intermedia_inv_prod`, `intermedia_rep_pres`, `sucursales_proveedor`
+- **Tablas intermedias (N:M):** `intermedia_inv_rep`, `intermedia_inv_prod`, `intermedia_rep_pres`
 - **Configuración:** `sueldo`, `seguro`, `impuestos`, `precio`, `garantia_servicio`, `pago`
-- **Direcciones:** `direccion_empleado`, `direccion_cliente`, `direccion_sucursal`, `direccion_proveedor`, `localidad`
+- **Direcciones:** `direccion_empleado`, `direccion_cliente`, `direccion_sucursal`, `localidad`
 
 ---
 

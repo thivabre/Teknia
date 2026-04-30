@@ -1,12 +1,8 @@
 /**
- * inventario-productos.js — Listado y detalle de inventarios de productos.
- *
- * Usa tarjetas.js para el renderizado genérico y el modal de detalle.
- * Usa tablas.js para la verificación de sesión.
- *
- * Funcionalidad exclusiva:
- *   - Agrupar productos por ID de inventario
- *   - Cargar los artículos de cada inventario de forma diferida en el modal
+inventario-productos.js — Listado y detalle de inventarios de productos.
+
+Usa tarjetas.js para el renderizado genérico y el modal de detalle.
+Usa tablas.js para la verificación de sesión.
  */
 (function () {
     document.addEventListener('DOMContentLoaded', async function () {

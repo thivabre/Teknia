@@ -137,8 +137,8 @@ Usa tablas.js para la verificación de sesión.
         }
 
         /**
-         * Limpia los campos del formulario de nueva factura
-         * y resetea el mensaje de estado.
+         Limpia los campos del formulario de nueva factura
+         y resetea el mensaje de estado.
          */
         function limpiarForm() {
             ['fac-banco', 'fac-cuenta', 'fac-comprobante'].forEach(id => {

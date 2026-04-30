@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Servicios — Presupuestos</title>
+<link href="estilos.css" rel="stylesheet"/>
+<link href="estilo_tabla_estatica.css" rel="stylesheet"/>
+<link href="estilo_form_insert.css" rel="stylesheet"/>
+<link href="estilo_cards.css" rel="stylesheet"/>
+</head>
+<body class="cargando-rol">
+<div class="contenedor-grid">
+<nav class="navbar">
+<ul>
+<div class="logo"><div class="logo-icon">T</div><span class="logo-name">Teknia</span></div>
+<li><a href="index.html">Inicio</a></li>
+<li data-rol="cliente empleado jefe_sucursal jefe_general"><a class="activo" href="servicios-crear_oden.html">Servicios</a></li>
+<li data-rol="cliente empleado jefe_sucursal jefe_general"><a href="sucursales-ubicacion.html">Sucursales</a></li>
+<li data-rol="empleado jefe_sucursal jefe_general"><a href="inventario-repuestos.html">Inventario</a></li>
+<li data-rol="jefe_sucursal jefe_general"><a href="finanzas-garantias.html">Finanzas</a></li>
+<li data-rol="empleado jefe_sucursal jefe_general"><a href="personal-clientes.html">Personal</a></li>
+<li data-rol="jefe_general"><a href="administracion-contratos.html">Administración</a></li>
+<li class="nav-auth" id="nav-auth-area"><a class="btn-sesion" href="inicio_sesion.html">Iniciar sesión</a><a class="btn-cuenta" href="crear_cuenta.html">Crear cuenta</a></li>
+</ul>
+</nav>
+<nav class="side-navbar">
+<div data-rol="cliente empleado jefe_sucursal jefe_general">
+<span class="seccion-label">Servicios</span>
+<ul>
+<li data-rol="cliente empleado jefe_sucursal jefe_general"><a href="servicios-crear_oden.html">Nueva orden</a></li>
+<li data-rol="cliente empleado jefe_sucursal jefe_general"><a href="servicios-ordenes_activas.html">Ordenes activas</a></li>
+<li data-rol="cliente empleado jefe_sucursal jefe_general"><a href="servicios-historial_ordenes.html">Historial de ordenes</a></li>
+</ul>
+</div>
+<div data-rol="cliente empleado jefe_sucursal jefe_general">
+<span class="seccion-label">Facturacion</span>
+<ul>
+<li data-rol="cliente empleado jefe_sucursal jefe_general"><a href="servicios-facturas.html">Facturas</a></li>
+<li data-rol="cliente empleado jefe_sucursal jefe_general"><a class="activo" href="servicios-presupuestos.html">Presupuestos</a></li>
+</ul>
+</div>
+</nav>
+<div class="contenedor-padre">
+<div class="contenedor-tablas">
+  <div class="cards-grid" id="cards-presupuestos">
+    <div class="cards-empty">Cargando presupuestos…</div>
+  </div>
+</div>
+</div>
+</div>
+<div class="detalle-modal" id="modal-detalle">
+  <div class="detalle-backdrop" id="backdrop-detalle"></div>
+  <div class="detalle-panel">
+    <div class="detalle-panel-inner">
+      <div class="detalle-header">
+        <div><h2 id="detalle-titulo">—</h2><p id="detalle-subtitulo">Presupuesto</p></div>
+        <button class="detalle-cerrar" id="btn-cerrar-detalle">×</button>
+      </div>
+      <div id="detalle-contenido"></div>
+    </div>
+  </div>
+</div>
+<script src="tablas.js"></script>
+<script src="tarjetas.js"></script>
+<script src="servicios-presupuestos.js"></script>
+</body>
+</html>

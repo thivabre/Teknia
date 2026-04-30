@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teknia – Crear cuenta</title>
+    <link rel="stylesheet" href="estilos_cuenta.css">
+</head>
+<body class="scroll-layout">
+    <form class="formulario formulario-registro" id="form-registro">
+        <h2>Crear cuenta</h2>
+        <p class="subtitulo">Completá todos los campos para registrarte como cliente</p>
+        <span class="seccion-label">Datos personales</span>
+        <div class="campo">
+            <label for="nombre_cli">Nombre</label>
+            <input type="text" id="nombre_cli" name="nombre_cli" placeholder="Tu nombre" required>
+        </div>
+        <div class="campo">
+            <label for="apellido_cli">Apellido</label>
+            <input type="text" id="apellido_cli" name="apellido_cli" placeholder="Tu apellido" required>
+        </div>
+        <div class="campo">
+            <label for="dni_cli">DNI</label>
+            <input type="number" id="dni_cli" name="dni_cli" placeholder="Ej: 38123456" required>
+        </div>
+        <div class="campo">
+            <label for="telefono_cli">Teléfono</label>
+            <input type="tel" id="telefono_cli" name="telefono_cli" placeholder="Ej: 1145678901" required>
+        </div>
+        <span class="seccion-label">Ubicación</span>
+        <div class="campo">
+            <label for="pais">País</label>
+            <input type="text" id="pais" name="pais" placeholder="Argentina" required>
+        </div>
+        <div class="campo">
+            <label for="provincia">Provincia</label>
+            <input type="text" id="provincia" name="provincia" placeholder="Buenos Aires" required>
+        </div>
+        <div class="campo">
+            <label for="ciudad">Ciudad</label>
+            <input type="text" id="ciudad" name="ciudad" placeholder="CABA" required>
+        </div>
+        <div class="campo">
+            <label for="barrio">Barrio</label>
+            <input type="text" id="barrio" name="barrio" placeholder="Palermo" required>
+        </div>
+        <span class="seccion-label">Dirección</span>
+        <div class="campo">
+            <label for="calle_cli">Calle</label>
+            <input type="text" id="calle_cli" name="calle_cli" placeholder="Av. Corrientes" required>
+        </div>
+        <div class="campo">
+            <label for="altura_cli">Altura</label>
+            <input type="number" id="altura_cli" name="altura_cli" placeholder="1234" required>
+        </div>
+        <div class="campo">
+            <label for="cod_postal_cli">Código postal</label>
+            <input type="number" id="cod_postal_cli" name="cod_postal_cli" placeholder="1414" required>
+        </div>
+        <div id="registro-exitoso" hidden></div>
+        <div id="error-mensaje" hidden></div>
+        <button type="submit" class="iniciar">Crear cuenta</button>
+        <p class="link-sesion">¿Ya tenés cuenta? <a href="inicio_sesion.html">Iniciá sesión</a></p>
+    </form>
+    <script src="signup.js"></script>
+</body>
+</html>

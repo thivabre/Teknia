@@ -202,10 +202,8 @@ let tablaActiva = '';
 // ─── ROL Y SESIÓN ─────────────────────────────────────────────────────────
 
 /**
- * Consulta get_rol.php para verificar si hay una sesión activa.
- * Si no hay sesión, redirige automáticamente al login.
- *
- * @returns {Promise<{rol, nombre, id_referencia}|null>}
+Consulta get_rol.php para verificar si hay una sesión activa.
+Si no hay sesión, redirige automáticamente al login.
  */
 async function verificarSesion() {
     try {
